@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="prefJabberIdKey">prefJabberIdKey</string>
+	<string name="prefPasswordKey">prefPasswordKey</string>
+	<string name="prefResourceKey">prefResourceKey</string>
+	<string name="prefResourcePriorityKey">prefResourcePriorityKey</string>
+
+	<string name="prefServerKey">prefServerKey</string>
+	<string name="prefServerPortKey">prefServerPortKey</string>
+	<string name="prefEnableTlsKey">prefEnableTlsKey</string>
+	<string name="prefEnableSaslKey">prefEnableSaslKey</string>
+	<string name="prefAllowPlainPasswdKey">prefAllowPlainPasswdKey</string>
+	
+	<string name="prefLogMessagesKey">prefLogMessagesKey</string>
+	<string name="prefShowOfflineKey">prefShowOfflineKey</string>
+	<string name="prefWakeLockKey">prefWakeLockKey</string>
+	
+	<string name="prefNotifLEDKey">prefNotifLEDKey</string>
+	<string name="prefNotifSoundKey">prefNotifSoundKey</string>
+	<string name="prefNotifVibrationKey">prefNotifVibrationKey</string>
+
+<string name="prefShowGroupAllContactsKey">prefShowGroupAllContactsKey</string>
+<string name="prefShowGroupUngroupedKey">prefShowGroupUngroupedKey</string>
+<string name="prefAutoStartKey">prefAutoStartKey</string>
+</resources>

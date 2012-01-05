@@ -1,0 +1,7 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/menuPrefReset"
+		android:title="@string/menuPrefReset" 
+		android:alphabeticShortcut="r"
+		android:icon="@drawable/ic_menu_preferences"
+		></item>
+</menu>

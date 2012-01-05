@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/contactlist_item"
+    android:paddingTop="10dip"
+    android:paddingBottom="10dip">
+
+	<ImageView xmlns:android="http://schemas.android.com/apk/res/android" 
+		android:id="@+id/contactlist_pic" 
+ 		android:layout_width="wrap_content" 
+ 		android:layout_height="wrap_content"
+ 		android:paddingTop="2dip"
+        android:paddingLeft="11dip"
+		android:src="@drawable/jabber_offline"/>
+	
+	<LinearLayout android:orientation="vertical"
+		android:layout_height="wrap_content"
+		android:paddingTop="1dip"
+		android:paddingLeft="5dip"
+		android:layout_width="wrap_content">
+
+	    <TextView android:layout_height="wrap_content"
+	    	android:padding="0dip"
+	    	android:paddingLeft="6dip"
+	    	android:textSize="16sp"
+	    	android:paddingBottom="3dip"
+	    	android:textColor="#ffffff"
+	    	android:text="Contact name"
+	    	android:textStyle="bold"
+	    	android:id="@+id/contactlist_name"
+	    	android:layout_width="wrap_content"
+	    	android:typeface="sans"/> 
+	
+	 	<TextView android:id="@+id/contactlist_status"
+	 		android:layout_height="wrap_content"
+	 		style="@style/spinner_item"
+	 		android:padding="0dip"
+	 		android:paddingLeft="6dip"
+	 		android:paddingBottom="3dip"
+	 		android:textSize="12sp"
+	 		android:textStyle="normal"
+	 		android:text="Contact status"
+	 		android:textColor="#cccccc"
+	 		android:layout_width="wrap_content"
+	 		android:typeface="sans"/> 
+ 	</LinearLayout>
+</LinearLayout>

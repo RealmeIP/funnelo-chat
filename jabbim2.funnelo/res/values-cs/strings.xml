@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<string name="RosterContextOpenChat">Otevřít rozhovor</string>
+
+	<string name="ChatYouAreOffline">Nejste připojen a nemůžete posílat zprávy</string>
+	<string name="ChatClose">Zavřít rozhovor</string>
+	<string name="ChatLeave">Opustit rozhovor</string>
+	<string name="ChatListClose">Zavřít rozhovor</string>
+	<string name="ChatListEnter">Otevřít rozhovor</string>
+
+	<string name="Notify1">Nová zpráva od</string>
+	<string name="Notify2">Máte novou zprávu!</string>
+	<string name="NotifyFrom">Od:</string>
+
+	<string name="DialogConnecting1">Připojování</string>
+	<string name="DialogConnecting2">Počkejte, než se připojím k</string>
+	<string name="DialogConnecting3">Stisknutím klávesy Zpět přerušíte připojování.</string>
+
+	<string name="menuMainPref">Nastavení</string>
+	<string name="menuMainAddContact">Přidat kontakt</string>
+	<string name="menuMainSetStatus">Zpráva o stavu</string>
+	<string name="menuMainShowChats">Seznam rozhovorů</string>
+	<string name="menuMainExit">Konec</string>
+	
+	<string name="MainAddUser">Přidat nového uživatele</string>
+	<string name="MainSetStatus">Nastavit váš stav</string>
+	<string name="MainStatusAbort">Nastavení stavu přerušeno</string>	
+
+    <string name="app_name">Jabbim</string>
+    <string name="settings_name">Nastavení Jabbimu</string>
+    <string name="conversationList_name">Jabbim - otevřené rozhovory</string>
+    <string name="conversation_name">Jabbim</string>
+    <string name="setYourStatus">Nastavit stav:</string>
+    <string name="status">...</string>
+    <string name="confirm">Potvrdit</string>
+    <string name="cancel">Storno</string>
+    <string name="save">Uložit</string>
+    <string name="ok">OK</string>
+    <string name="apply">Použít</string>
+    <string name="send">Poslat</string>
+    <string name="sendhint">Zde napište vaši zprávu</string>
+    <string name="addUserDialog_entryLabel">Jabber ID:</string>
+    <string name="addUserDialog_groupSwitcherLabel">Vybrat skupinu:</string>
+    <string name="statusMessageDialog_msgLabel">Vložit zprávu:</string>
+    <string name="statusMessageDialog_msgSwitcherLabel">Uložené zprávy:</string>
+    <string name="conversationList_noNewMessage">Není pro vás uložena žádná nový zpráva</string>
+    <string name="conversationList_noOpenConversation">Žádný nový nebo otevřený rozhovor.</string>
+    
+    
+    <!-- Preferences -->
+    <string name="prefAccount">Nastavení Jabber účtu</string>
+    <string name="prefConn">Nastavení spojení</string>
+    <string name="prefPriv">Soukromí</string>
+    <string name="prefJabberId">Jabber ID</string>
+    <string name="prefJabberIdHint">uživatel@doména.cz</string>
+    <string name="prefJabberIdSummary">Jméno vašeho účtu, například uživatel@jabbim.cz </string>
+	<string name="prefPassword">Heslo</string>
+    <string name="prefPasswordSummary">Heslo pro zadaný účet. Pokud není zadané, budete ho muset vložit při každém přihlášení.</string>
+    <string name="prefPasswordDialog">Heslo k vašemu Jabber účtu.</string>
+    <string name="prefResource">Název zdroje</string>
+    <string name="prefResourceHint">Popis zdroje (odkud se připojujete), např. \'Doma\'</string>
+    <string name="prefResourceSummary">Tímto názvem odlišujete jednotlivé klienty, pokud se přihlašujete z více míst.</string>
+    <string name="prefResourcePriority">Priorita zdroje</string>
+    <string name="prefResourcePrioritySummary">Nastavte prioritu, aby server věděl, kam má standardně poslat zprávy, pokud se přihlašujete z více míst.</string>
+    
+    <string name="prefServer">Nastavit server ručně</string>
+    <string name="prefServerSummary">V případě, že nemá být použit výchozí.</string>
+    <string name="prefServerPort">Číslo portu</string>
+    <string name="prefServerPortHint">Číslo mezi 0 a 65000</string>
+    <string name="prefServerPortSummary">V případě, že nemá být použit výchozí.</string>
+    <string name="prefEnableTls">Použít TLS</string>
+    <string name="prefEnableTlsSummary">Vynutit šifrované spojení, doporučeno.</string>
+    <string name="prefEnableSasl">Použít SASL</string>
+    <string name="prefEnableSaslSummary">Obsluhuje šifrování spojení a autentizace, doporučeno.</string>
+    <string name="prefAllowPlainPasswd">Povolit autentizaci čistým textem</string>
+    <string name="prefAllowPlainPasswdSummary">Povoluje klientu autentizaci pomocí nešifrovaného hesla</string>
+     
+    <string name="prefHideSystem">Neposílat informaci o vašem klientu</string>
+    <string name="prefHideSystemSummary">Neposílat informace o vašem klientu a operačním systému</string>
+    <string name="prefHideNotifications">Posílat oznámení o činnosti</string>
+    <string name="prefHideNotificationsSummary">Zavřel okno, právě píše, atd.</string>
+    <string name="prefLogMessages">Ukládat zprávy</string>
+    <string name="prefLogMessagesSummary">Ukládat příchozí a odchozí zprávy.</string>
+    <string name="prefShowOffline">Zobrazovat offline kontakty</string>
+    <string name="prefShowOfflineSummary">Zobrazovat v seznamu kontaktů i nepřipojené uživatele.</string>
+    <string name="prefWakeLock">Blokovat uspání CPU telefonu</string>
+    <string name="prefWakeLockSummary">Blokuje uspání procesoru, pokud jste online.(Vyšší spotřeba energie)</string>
+
+	<!-- Notifications prefs -->
+	<string name="prefNotif">Oznámení nové zprávy</string>
+    <string name="prefNotifLED">Blikat LED diodou</string>
+    <string name="prefNotifLEDSummary">Blikat LED diodou, pokud mi přijde nová zpráva.</string>
+    <string name="prefNotifSound">Upozornit zvukem</string>
+    <string name="prefNotifSoundSummary">Použít standardní zvuk při nové zprávě.</string>	
+    <string name="prefNotifVibration">Vibrovat</string>
+    <string name="prefNotifVibrationSummary">Vibrovat při příchodu nové zprávy.</string>
+    
+    <!--  Menus -->
+    <string name="menuCloseConv">Zavřít</string>
+    <string name="menuCloseGoContact">Zavřít &amp; seznam kontaktů</string>
+    <string name="menuReturnContact">Seznam kontaktů</string>
+    
+    <!-- Virtual groups -->
+	<string name="virtualGroupAllContacts">Všechny kontakty</string>
+	<string name="virtualGroupUngrouped">Bez skupiny</string>
+<string name="prefShowGroupAllContacts">Zobrazit skupinu @Všechny kontakty</string>
+<string name="prefShowGroupAllContactsSummary">Zobrazit virtuální skupinu @Všechny kontakty. V této skupiny budou zobrazeny všechny kontakty.</string>
+<string name="prefView">Zobrazení</string>
+<string name="prefShowGroupUngrouped">Zobrazit skupinu @Bez skupiny.</string>
+<string name="prefShowGroupUngroupedSummary">Zobrazit skupinu @Bez skupiny. V této skupině se zobrazí kontakty bez přiřazení k skupinám.</string>
+<string name="RosterContextOpenChatResource">Otevřít rozhovor se zdrojem</string>
+<string name="DialogRosterProgress">Načítání kontaktů</string>
+</resources>

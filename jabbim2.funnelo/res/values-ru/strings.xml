@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<string name="RosterContextOpenChat">Открыть разговор</string>
+
+	<string name="ChatYouAreOffline">Вы не в сети и не можете начать разговор</string>	
+	<string name="ChatClose">Закрыть разговор</string>
+	<string name="ChatLeave">Покинуть разговор</string>
+	<string name="ChatListClose">Закрыть разговор</string>
+	<string name="ChatListEnter">Начать разговор</string>
+
+	<string name="Notify1">Новое сообщение от</string>
+	<string name="Notify2">Вы получили новое сообщение</string>
+	<string name="NotifyFrom">От:</string>
+	<string name="ConnectionFailedTitle">Сбой соединения!</string>
+	<string name="ConnectionFailedText">Соединение с сервером не установлено. Проверьте настройки и попробуйте еще раз.</string>
+
+	<string name="DialogConnecting1">Соединяемся</string>
+	<string name="DialogConnecting2">Подождите пока происходит соединение</string>
+	<string name="DialogConnecting3">Нажмите кнопку Back для прерывания соединения.</string>
+
+	<string name="menuMainPref">Настройки</string>
+	<string name="menuMainAddContact">Добавить контакт</string>
+	<string name="menuMainSetStatus">Сообщение о статусе</string>
+	<string name="menuMainShowChats">Показать разговоры</string>
+		
+	<string name="MainAddUser">Добавление пользователя</string>
+	<string name="MainSetStatus">Введите сообщение к вашему статусу</string>
+	<string name="MainStatusAbort">Status Abort</string>	
+	
+    <string name="app_name">Jabbim</string>
+    <string name="settings_name">Настройки Jabbim</string>
+    <string name="conversationList_name">Открытые разговоры Jabbim</string>
+    <string name="conversation_name">Jabbim</string>
+    <string name="setYourStatus">Установите ваш статус:</string>
+    <string name="status">moo</string>
+    <string name="confirm">Готово</string>
+    <string name="cancel">Отмена</string>
+    <string name="save">Сохранить</string>
+    <string name="ok">OK</string>
+    <string name="apply">Применить</string>
+    <string name="send">Отправить</string>
+    <string name="sendhint">Наберите текст сообщения и нажмите кнопку</string>
+    <string name="addUserDialog_entryLabel">Jabber ID:</string>
+    <string name="addUserDialog_groupSwitcherLabel">Выберите группу:</string>
+    <string name="statusMessageDialog_msgLabel">Введите сообщение:</string>
+    <string name="statusMessageDialog_msgSwitcherLabel">Сохраненные сообщения:</string>
+    <string name="conversationList_noNewMessage">Новых сообщений нет</string>
+    <string name="conversationList_noOpenConversation">Нет  начатых разговоров.</string>
+    
+    
+    <!-- Preferences -->
+    <string name="prefAccount">Управление учетной записью Jabber</string>
+    <string name="prefConn">Настройки соединения</string>
+    <string name="prefPriv">Безопасность</string>
+    <string name="prefJabberId">Jabber ID</string>
+    <string name="prefJabberIdHint">username@domain.com</string>
+    <string name="prefJabberIdSummary">Имя вашей учетной записи наподобие user@jabbim.com </string>
+	<string name="prefPassword">Пароль</string>
+    <string name="prefPasswordSummary">Пароль для этой учетной записи. Если оставите пустым, будете вводить каждый раз при соединении с сервером.</string>
+    <string name="prefPasswordDialog">Ваш пароль для учетной записи Jabber</string>
+    <string name="prefResource">Название ресурса</string>
+    <string name="prefResourceHint">A simple word (about resource) like \'Home\'</string>
+    <string name="prefResourceSummary">Identifier if you have several places from where you login.</string>
+    <string name="prefResourcePriority">Приоритет ресурса</string>
+    <string name="prefResourcePrioritySummary">Установка приоритета, чтобы сервер знал какому клиенту посылать сообщения, в случаях нескольких подключений клиента.</string>
+    
+    <string name="prefServer">Уточнить адрес сервера</string>
+    <string name="prefServerSummary">Если поумолчанию не получается.</string>
+    <string name="prefServerPort">Номер порта сервера</string>
+    <string name="prefServerPortHint">Значение между 0 и 65000</string>
+    <string name="prefServerPortSummary">Если стандартный не подходит.</string>
+    <string name="prefEnableTls">Использовать TLS</string>
+    <string name="prefEnableTlsSummary">Гарантировано использовать шифрование. Рекомендуется.</string>
+    <string name="prefEnableSasl">Использовать SASL</string>
+    <string name="prefEnableSaslSummary">Поддерживать аутентификацию и шифрование. Рекомендуется.</string>
+    <string name="prefAllowPlainPasswd">Разрешить аутентификацию "открытым" паролем</string>
+    <string name="prefAllowPlainPasswdSummary">Разрешить клиенту использовать небезопасный пароль для аутентификации</string>
+     
+    <string name="prefHideSystem">Скрыть информацию о системе.</string>
+    <string name="prefHideSystemSummary">Не посылать информацию о вашей программе-клиенте и системе.</string>
+    <string name="prefHideNotifications">Посылать уведомления.</string>
+    <string name="prefHideNotificationsSummary">Уведомления о закрытии окна, "набирает сообщение" и т.д.</string>
+    <string name="prefLogMessages">Вести журнал</string>
+    <string name="prefLogMessagesSummary">Сохранять входящие и исходящие сообщения.</string>
+    <string name="prefShowOffline">Показывать контакты не в сети</string>
+    <string name="prefShowOfflineSummary">Переключение отображение контактов не в сети в ростере.</string>
+    <string name="prefWakeLock">Блокирование засыпания телефона</string>
+    <string name="prefWakeLockSummary">Предотвращает засыпание CPU когда в сети.(Расходует батарею)</string>
+    
+    <!-- Notifications prefs -->
+    <string name="prefNotif">Уведомления</string>
+    <string name="prefNotifLED">Уведомления светодиодом</string>
+    <string name="prefNotifLEDSummary">Использовать моргание светодиода для уведомлений.</string>
+    <string name="prefNotifSound">Звуковые уведомления</string>
+    <string name="prefNotifSoundSummary">Использовать стандартное звуковое уведомление при поступлении новых сообщений.</string>	
+    <string name="prefNotifVibration">Вибрация</string>
+    <string name="prefNotifVibrationSummary">Тактильное уведомление при получении новых сообщений.</string>
+    
+    <!--  Menus -->
+    <string name="menuCloseConv">Закрыть</string>
+    <string name="menuCloseGoContact">Close &amp; Contactlist</string>
+    <string name="menuReturnContact">Contactlist</string>
+    <string name="menuMainExit">Выход</string>
+    <string name="menuPrefReset">Сброс</string>
+    
+    <!-- Virtual groups -->
+	<string name="virtualGroupAllContacts">Все контакты</string>
+	<string name="virtualGroupUngrouped">Вне групп</string>
+<string name="prefView">Список контактов</string>
+<string name="prefShowGroupAllContacts">Показывать @Все контакты</string>
+<string name="prefShowGroupAllContactsSummary">Показывать виртуальную группу @All contacts. В ней отображаются все контакты.</string>
+<string name="prefShowGroupUngrouped">Показывать @Вне групп</string>
+<string name="prefShowGroupUngroupedSummary">Показывать виртуальную группу @Вне групп. В ней отображаются контакты не относящиеся ни к одной группе.</string>
+<string name="RosterContextOpenChatResource">Open chat with resource</string>
+<string name="DialogRosterProgress">Загружаются контакты</string>
+<string name="prefAutoStart">Автозапуск</string>
+<string name="prefAutoStartSummary">Автоматически запускаться при загрузке телефона. Переприсоединяться по возможности.</string>
+</resources>

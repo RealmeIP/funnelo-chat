@@ -1,0 +1,27 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/menuMainPref"
+		android:title="@string/menuMainPref" 
+		android:alphabeticShortcut="p"
+		android:icon="@drawable/ic_menu_preferences"
+		></item>
+	<item android:id="@+id/menuMainAddContact"
+		android:title="@string/menuMainAddContact" 
+		android:alphabeticShortcut="a"
+		android:icon="@drawable/ic_menu_add"
+		></item>
+	<item android:id="@+id/menuMainSetStatus"
+		android:title="@string/menuMainSetStatus" 
+		android:alphabeticShortcut="s"
+		android:icon="@drawable/ic_menu_emoticons"
+		/>	
+	<item android:id="@+id/menuMainShowChats"
+		android:title="@string/menuMainShowChats" 
+		android:alphabeticShortcut="c"
+		android:icon="@drawable/ic_menu_friendslist"
+		/>
+		<item android:id="@+id/menuMainExit"
+		android:title="@string/menuMainExit" 
+		android:alphabeticShortcut="x"
+		android:icon="@drawable/ic_lock_power_off"
+		/>
+</menu>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry kind="lib" path="libs/asmack-android-7-beem.jar"/>
+	<classpathentry kind="lib" path="libs/lcrypto-jdk16-146-20110415.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

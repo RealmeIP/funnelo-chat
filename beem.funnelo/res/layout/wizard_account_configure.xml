@@ -10,13 +10,13 @@
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:layout_marginTop="15dp"
 		android:layout_marginBottom="30dp"
-		android:src="@drawable/logo"/>
-	    <TextView
+		android:src="@drawable/funnelo_icon"/>
+	    <!--  <TextView
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:layout_alignParentTop="true"
 		android:text="@string/account_wizard_configure_text"
 		android:textSize="18sp"
-		android:paddingBottom="10dip" />
+		android:paddingBottom="10dip" /> -->
 	    <TextView
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:text="@string/JabberID" style="@style/Label" />
@@ -24,7 +24,7 @@
 		android:inputType="textEmailAddress" android:imeOptions="actionNext"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:singleLine="true" 
-		android:hint="beem@beem-project.com "
+		android:hint="user@funnelo.com "
 		android:contentDescription="@string/JabberID"/>
 	    <TextView
 		android:layout_width="fill_parent" android:layout_height="wrap_content"

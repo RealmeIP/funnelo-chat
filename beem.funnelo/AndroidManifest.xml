@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.beem.project.beem" android:versionCode="9"
-	android:versionName="0.1.6">
+	android:versionName="0.0.1">
 	<application android:label="@string/app_name"
-		android:icon="@drawable/beem_launcher_icon_silver" android:theme="@style/Theme.BEEM.Default"
+		android:icon="@drawable/funnelo_icon" android:theme="@style/Theme.BEEM.Default"
 		android:name=".BeemApplication">
 		<activity android:name=".ui.Login" android:label="@string/app_name"
 			android:launchMode="standard">

@@ -1,6 +1,5 @@
 /*
  * otr4j, the open source java otr library.
- *
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
@@ -33,7 +32,6 @@ import net.java.otr4j.io.messages.RevealSignatureMessage;
 import net.java.otr4j.io.messages.SignatureMessage;
 
 /**
- * 
  * @author George Politis
  */
 class AuthContextImpl implements AuthContext {
@@ -78,8 +76,7 @@ class AuthContextImpl implements AuthContext {
 		this.protocolVersion = protoVersion;
 	}
 
-	private static Logger logger = Logger.getLogger(AuthContextImpl.class
-			.getName());
+	private static Logger logger = Logger.getLogger(AuthContextImpl.class.getName());
 
 	class MessageFactory {
 
@@ -90,76 +87,59 @@ class AuthContextImpl implements AuthContext {
 		}
 
 		private DHCommitMessage getDHCommitMessage() throws OtrException {
-			return new DHCommitMessage(getProtocolVersion(),
-					getLocalDHPublicKeyHash(), getLocalDHPublicKeyEncrypted());
+			return new DHCommitMessage(getProtocolVersion(), getLocalDHPublicKeyHash(), getLocalDHPublicKeyEncrypted());
 		}
 
 		private DHKeyMessage getDHKeyMessage() throws OtrException {
-			return new DHKeyMessage(getProtocolVersion(),
-					(DHPublicKey) getLocalDHKeyPair().getPublic());
+			return new DHKeyMessage(getProtocolVersion(), (DHPublicKey) getLocalDHKeyPair().getPublic());
 		}
 
-		private RevealSignatureMessage getRevealSignatureMessage()
-				throws OtrException {
+		private RevealSignatureMessage getRevealSignatureMessage() throws OtrException {
 			try {
-				SignatureM m = new SignatureM((DHPublicKey) getLocalDHKeyPair()
-						.getPublic(), getRemoteDHPublicKey(),
-						getLocalLongTermKeyPair().getPublic(),
-						getLocalDHKeyPairID());
+				SignatureM m = new SignatureM((DHPublicKey) getLocalDHKeyPair().getPublic(), getRemoteDHPublicKey(),
+						getLocalLongTermKeyPair().getPublic(), getLocalDHKeyPairID());
 
 				OtrCryptoEngine otrCryptoEngine = new OtrCryptoEngineImpl();
-				byte[] mhash = otrCryptoEngine.sha256Hmac(SerializationUtils
-						.toByteArray(m), getM1());
-				byte[] signature = otrCryptoEngine.sign(mhash,
-						getLocalLongTermKeyPair().getPrivate());
+				byte[] mhash = otrCryptoEngine.sha256Hmac(SerializationUtils.toByteArray(m), getM1());
+				byte[] signature = otrCryptoEngine.sign(mhash, getLocalLongTermKeyPair().getPrivate());
 
-				SignatureX mysteriousX = new SignatureX(
-						getLocalLongTermKeyPair().getPublic(),
-						getLocalDHKeyPairID(), signature);
-				byte[] xEncrypted = otrCryptoEngine.aesEncrypt(getC(), null,
-						SerializationUtils.toByteArray(mysteriousX));
+				SignatureX mysteriousX = new SignatureX(getLocalLongTermKeyPair().getPublic(), getLocalDHKeyPairID(),
+						signature);
+				byte[] xEncrypted = otrCryptoEngine.aesEncrypt(getC(), null, SerializationUtils
+						.toByteArray(mysteriousX));
 
 				byte[] tmp = SerializationUtils.writeData(xEncrypted);
 
-				byte[] xEncryptedHash = otrCryptoEngine.sha256Hmac160(tmp,
-						getM2());
-				return new RevealSignatureMessage(getProtocolVersion(),
-						xEncrypted, xEncryptedHash, getR());
+				byte[] xEncryptedHash = otrCryptoEngine.sha256Hmac160(tmp, getM2());
+				return new RevealSignatureMessage(getProtocolVersion(), xEncrypted, xEncryptedHash, getR());
 			} catch (IOException e) {
 				throw new OtrException(e);
 			}
 		}
 
 		private SignatureMessage getSignatureMessage() throws OtrException {
-			SignatureM m = new SignatureM((DHPublicKey) getLocalDHKeyPair()
-					.getPublic(), getRemoteDHPublicKey(),
-					getLocalLongTermKeyPair().getPublic(),
-					getLocalDHKeyPairID());
+			SignatureM m = new SignatureM((DHPublicKey) getLocalDHKeyPair().getPublic(), getRemoteDHPublicKey(),
+					getLocalLongTermKeyPair().getPublic(), getLocalDHKeyPairID());
 
 			OtrCryptoEngine otrCryptoEngine = new OtrCryptoEngineImpl();
 			byte[] mhash;
 			try {
-				mhash = otrCryptoEngine.sha256Hmac(SerializationUtils
-						.toByteArray(m), getM1p());
+				mhash = otrCryptoEngine.sha256Hmac(SerializationUtils.toByteArray(m), getM1p());
 			} catch (IOException e) {
 				throw new OtrException(e);
 			}
 
-			byte[] signature = otrCryptoEngine.sign(mhash,
-					getLocalLongTermKeyPair().getPrivate());
+			byte[] signature = otrCryptoEngine.sign(mhash, getLocalLongTermKeyPair().getPrivate());
 
-			SignatureX mysteriousX = new SignatureX(getLocalLongTermKeyPair()
-					.getPublic(), getLocalDHKeyPairID(), signature);
+			SignatureX mysteriousX = new SignatureX(getLocalLongTermKeyPair().getPublic(), getLocalDHKeyPairID(),
+					signature);
 
 			byte[] xEncrypted;
 			try {
-				xEncrypted = otrCryptoEngine.aesEncrypt(getCp(), null,
-						SerializationUtils.toByteArray(mysteriousX));
+				xEncrypted = otrCryptoEngine.aesEncrypt(getCp(), null, SerializationUtils.toByteArray(mysteriousX));
 				byte[] tmp = SerializationUtils.writeData(xEncrypted);
-				byte[] xEncryptedHash = otrCryptoEngine.sha256Hmac160(tmp,
-						getM2p());
-				return new SignatureMessage(getProtocolVersion(), xEncrypted,
-						xEncryptedHash);
+				byte[] xEncryptedHash = otrCryptoEngine.sha256Hmac160(tmp, getM2p());
+				return new SignatureMessage(getProtocolVersion(), xEncrypted, xEncryptedHash);
 			} catch (IOException e) {
 				throw new OtrException(e);
 			}
@@ -219,12 +199,9 @@ class AuthContextImpl implements AuthContext {
 	private void setRemoteDHPublicKey(DHPublicKey dhPublicKey) {
 		// Verifies that Alice's gy is a legal value (2 <= gy <= modulus-2)
 		if (dhPublicKey.getY().compareTo(OtrCryptoEngine.MODULUS_MINUS_TWO) > 0) {
-			throw new IllegalArgumentException(
-					"Illegal D-H Public Key value, Ignoring message.");
-		} else if (dhPublicKey.getY().compareTo(OtrCryptoEngine.BIGINTEGER_TWO) < 0) {
-			throw new IllegalArgumentException(
-					"Illegal D-H Public Key value, Ignoring message.");
-		}
+			throw new IllegalArgumentException("Illegal D-H Public Key value, Ignoring message.");
+		} else if (dhPublicKey.getY().compareTo(OtrCryptoEngine.BIGINTEGER_TWO) < 0) { throw new IllegalArgumentException(
+				"Illegal D-H Public Key value, Ignoring message."); }
 		logger.finest("Received D-H Public Key is a legal value.");
 
 		this.remoteDHPublicKey = dhPublicKey;
@@ -266,8 +243,7 @@ class AuthContextImpl implements AuthContext {
 
 	private byte[] getLocalDHPublicKeyHash() throws OtrException {
 		if (localDHPublicKeyHash == null) {
-			localDHPublicKeyHash = new OtrCryptoEngineImpl()
-					.sha256Hash(getLocalDHPublicKeyBytes());
+			localDHPublicKeyHash = new OtrCryptoEngineImpl().sha256Hash(getLocalDHPublicKeyBytes());
 			logger.finest("Hashed local D-H public key.");
 		}
 		return localDHPublicKeyHash;
@@ -275,8 +251,7 @@ class AuthContextImpl implements AuthContext {
 
 	private byte[] getLocalDHPublicKeyEncrypted() throws OtrException {
 		if (localDHPublicKeyEncrypted == null) {
-			localDHPublicKeyEncrypted = new OtrCryptoEngineImpl().aesEncrypt(
-					getR(), null, getLocalDHPublicKeyBytes());
+			localDHPublicKeyEncrypted = new OtrCryptoEngineImpl().aesEncrypt(getR(), null, getLocalDHPublicKeyBytes());
 			logger.finest("Encrypted our D-H public key.");
 		}
 		return localDHPublicKeyEncrypted;
@@ -284,8 +259,7 @@ class AuthContextImpl implements AuthContext {
 
 	public BigInteger getS() throws OtrException {
 		if (s == null) {
-			s = new OtrCryptoEngineImpl().generateSecret(this
-					.getLocalDHKeyPair().getPrivate(), this
+			s = new OtrCryptoEngineImpl().generateSecret(this.getLocalDHKeyPair().getPrivate(), this
 					.getRemoteDHPublicKey());
 			logger.finest("Generated shared secret.");
 		}
@@ -293,8 +267,7 @@ class AuthContextImpl implements AuthContext {
 	}
 
 	private byte[] getC() throws OtrException {
-		if (c != null)
-			return c;
+		if (c != null) return c;
 
 		byte[] h2 = h2(C_START);
 		ByteBuffer buff = ByteBuffer.wrap(h2);
@@ -306,8 +279,7 @@ class AuthContextImpl implements AuthContext {
 	}
 
 	private byte[] getM1() throws OtrException {
-		if (m1 != null)
-			return m1;
+		if (m1 != null) return m1;
 
 		byte[] h2 = h2(M1_START);
 		ByteBuffer buff = ByteBuffer.wrap(h2);
@@ -319,8 +291,7 @@ class AuthContextImpl implements AuthContext {
 	}
 
 	private byte[] getM2() throws OtrException {
-		if (m2 != null)
-			return m2;
+		if (m2 != null) return m2;
 
 		byte[] h2 = h2(M2_START);
 		ByteBuffer buff = ByteBuffer.wrap(h2);
@@ -332,8 +303,7 @@ class AuthContextImpl implements AuthContext {
 	}
 
 	private byte[] getCp() throws OtrException {
-		if (cp != null)
-			return cp;
+		if (cp != null) return cp;
 
 		byte[] h2 = h2(C_START);
 		ByteBuffer buff = ByteBuffer.wrap(h2);
@@ -346,8 +316,7 @@ class AuthContextImpl implements AuthContext {
 	}
 
 	private byte[] getM1p() throws OtrException {
-		if (m1p != null)
-			return m1p;
+		if (m1p != null) return m1p;
 
 		byte[] h2 = h2(M1p_START);
 		ByteBuffer buff = ByteBuffer.wrap(h2);
@@ -359,8 +328,7 @@ class AuthContextImpl implements AuthContext {
 	}
 
 	private byte[] getM2p() throws OtrException {
-		if (m2p != null)
-			return m2p;
+		if (m2p != null) return m2p;
 
 		byte[] h2 = h2(M2p_START);
 		ByteBuffer buff = ByteBuffer.wrap(h2);
@@ -398,8 +366,7 @@ class AuthContextImpl implements AuthContext {
 		if (localDHPublicKeyBytes == null) {
 			try {
 				this.localDHPublicKeyBytes = SerializationUtils
-						.writeMpi(((DHPublicKey) getLocalDHKeyPair()
-								.getPublic()).getY());
+						.writeMpi(((DHPublicKey) getLocalDHKeyPair().getPublic()).getY());
 
 			} catch (IOException e) {
 				throw new OtrException(e);
@@ -432,8 +399,7 @@ class AuthContextImpl implements AuthContext {
 	private void handleSignatureMessage(SignatureMessage m) throws OtrException {
 		Session session = getSession();
 		SessionID sessionID = session.getSessionID();
-		logger.finest(sessionID.getAccountID()
-				+ " received a signature message from " + sessionID.getUserID()
+		logger.finest(sessionID.getAccountID() + " received a signature message from " + sessionID.getUserID()
 				+ " throught " + sessionID.getProtocolName() + ".");
 		if (!session.getSessionPolicy().getAllowV2()) {
 			logger.finest("Policy does not allow OTRv2, ignoring message.");
@@ -444,8 +410,7 @@ class AuthContextImpl implements AuthContext {
 		case AWAITING_SIG:
 			// Verify MAC.
 			if (!m.verify(this.getM2p())) {
-				logger
-						.finest("Signature MACs are not equal, ignoring message.");
+				logger.finest("Signature MACs are not equal, ignoring message.");
 				return;
 			}
 
@@ -459,20 +424,17 @@ class AuthContextImpl implements AuthContext {
 			}
 			// Compute signature.
 			PublicKey remoteLongTermPublicKey = remoteX.longTermPublicKey;
-			SignatureM remoteM = new SignatureM(this.getRemoteDHPublicKey(),
-					(DHPublicKey) this.getLocalDHKeyPair().getPublic(),
-					remoteLongTermPublicKey, remoteX.dhKeyID);
+			SignatureM remoteM = new SignatureM(this.getRemoteDHPublicKey(), (DHPublicKey) this.getLocalDHKeyPair()
+					.getPublic(), remoteLongTermPublicKey, remoteX.dhKeyID);
 			OtrCryptoEngine otrCryptoEngine = new OtrCryptoEngineImpl();
 			// Verify signature.
 			byte[] signature;
 			try {
-				signature = otrCryptoEngine.sha256Hmac(SerializationUtils
-						.toByteArray(remoteM), this.getM1p());
+				signature = otrCryptoEngine.sha256Hmac(SerializationUtils.toByteArray(remoteM), this.getM1p());
 			} catch (IOException e) {
 				throw new OtrException(e);
 			}
-			if (!otrCryptoEngine.verify(signature, remoteLongTermPublicKey,
-					remoteX.signature)) {
+			if (!otrCryptoEngine.verify(signature, remoteLongTermPublicKey, remoteX.signature)) {
 				logger.finest("Signature verification failed.");
 				return;
 			}
@@ -481,20 +443,16 @@ class AuthContextImpl implements AuthContext {
 			this.setRemoteLongTermPublicKey(remoteLongTermPublicKey);
 			break;
 		default:
-			logger
-					.finest("We were not expecting a signature, ignoring message.");
+			logger.finest("We were not expecting a signature, ignoring message.");
 			return;
 		}
 	}
 
-	private void handleRevealSignatureMessage(RevealSignatureMessage m)
-			throws OtrException {
+	private void handleRevealSignatureMessage(RevealSignatureMessage m) throws OtrException {
 		Session session = getSession();
 		SessionID sessionID = session.getSessionID();
-		logger.finest(sessionID.getAccountID()
-				+ " received a reveal signature message from "
-				+ sessionID.getUserID() + " throught "
-				+ sessionID.getProtocolName() + ".");
+		logger.finest(sessionID.getAccountID() + " received a reveal signature message from " + sessionID.getUserID()
+				+ " throught " + sessionID.getProtocolName() + ".");
 
 		if (!session.getSessionPolicy().getAllowV2()) {
 			logger.finest("Policy does not allow OTRv2, ignoring message.");
@@ -520,14 +478,12 @@ class AuthContextImpl implements AuthContext {
 
 			OtrCryptoEngine otrCryptoEngine = new OtrCryptoEngineImpl();
 			// Uses r to decrypt the value of gx sent earlier
-			byte[] remoteDHPublicKeyDecrypted = otrCryptoEngine.aesDecrypt(
-					m.revealedKey, null, this.getRemoteDHPublicKeyEncrypted());
+			byte[] remoteDHPublicKeyDecrypted = otrCryptoEngine.aesDecrypt(m.revealedKey, null, this
+					.getRemoteDHPublicKeyEncrypted());
 
 			// Verifies that HASH(gx) matches the value sent earlier
-			byte[] remoteDHPublicKeyHash = otrCryptoEngine
-					.sha256Hash(remoteDHPublicKeyDecrypted);
-			if (!Arrays.equals(remoteDHPublicKeyHash, this
-					.getRemoteDHPublicKeyHash())) {
+			byte[] remoteDHPublicKeyHash = otrCryptoEngine.sha256Hash(remoteDHPublicKeyDecrypted);
+			if (!Arrays.equals(remoteDHPublicKeyHash, this.getRemoteDHPublicKeyHash())) {
 				logger.finest("Hashes don't match, ignoring message.");
 				return;
 			}
@@ -536,19 +492,16 @@ class AuthContextImpl implements AuthContext {
 			// modulus-2)
 			BigInteger remoteDHPublicKeyMpi;
 			try {
-				remoteDHPublicKeyMpi = SerializationUtils
-						.readMpi(remoteDHPublicKeyDecrypted);
+				remoteDHPublicKeyMpi = SerializationUtils.readMpi(remoteDHPublicKeyDecrypted);
 			} catch (IOException e) {
 				throw new OtrException(e);
 			}
 
-			this.setRemoteDHPublicKey(otrCryptoEngine
-					.getDHPublicKey(remoteDHPublicKeyMpi));
+			this.setRemoteDHPublicKey(otrCryptoEngine.getDHPublicKey(remoteDHPublicKeyMpi));
 
 			// Verify received Data.
 			if (!m.verify(this.getM2())) {
-				logger
-						.finest("Signature MACs are not equal, ignoring message.");
+				logger.finest("Signature MACs are not equal, ignoring message.");
 				return;
 			}
 
@@ -563,21 +516,18 @@ class AuthContextImpl implements AuthContext {
 
 			// Compute signature.
 			PublicKey remoteLongTermPublicKey = remoteX.longTermPublicKey;
-			SignatureM remoteM = new SignatureM(this.getRemoteDHPublicKey(),
-					(DHPublicKey) this.getLocalDHKeyPair().getPublic(),
-					remoteLongTermPublicKey, remoteX.dhKeyID);
+			SignatureM remoteM = new SignatureM(this.getRemoteDHPublicKey(), (DHPublicKey) this.getLocalDHKeyPair()
+					.getPublic(), remoteLongTermPublicKey, remoteX.dhKeyID);
 
 			// Verify signature.
 			byte[] signature;
 			try {
-				signature = otrCryptoEngine.sha256Hmac(SerializationUtils
-						.toByteArray(remoteM), this.getM1());
+				signature = otrCryptoEngine.sha256Hmac(SerializationUtils.toByteArray(remoteM), this.getM1());
 			} catch (IOException e) {
 				throw new OtrException(e);
 			}
 
-			if (!otrCryptoEngine.verify(signature, remoteLongTermPublicKey,
-					remoteX.signature)) {
+			if (!otrCryptoEngine.verify(signature, remoteLongTermPublicKey, remoteX.signature)) {
 				logger.finest("Signature verification failed.");
 				return;
 			}
@@ -598,8 +548,7 @@ class AuthContextImpl implements AuthContext {
 	private void handleDHKeyMessage(DHKeyMessage m) throws OtrException {
 		Session session = getSession();
 		SessionID sessionID = session.getSessionID();
-		logger.finest(sessionID.getAccountID()
-				+ " received a D-H key message from " + sessionID.getUserID()
+		logger.finest(sessionID.getAccountID() + " received a D-H key message from " + sessionID.getUserID()
 				+ " throught " + sessionID.getProtocolName() + ".");
 
 		if (!session.getSessionPolicy().getAllowV2()) {
@@ -614,8 +563,7 @@ class AuthContextImpl implements AuthContext {
 			// AUTHSTATE_AWAITING_SIG
 			this.setRemoteDHPublicKey(m.dhPublicKey);
 			this.setAuthenticationState(AuthContext.AWAITING_SIG);
-			getSession().injectMessage(
-					messageFactory.getRevealSignatureMessage());
+			getSession().injectMessage(messageFactory.getRevealSignatureMessage());
 			logger.finest("Sent Reveal Signature.");
 			break;
 		case AWAITING_SIG:
@@ -625,8 +573,7 @@ class AuthContextImpl implements AuthContext {
 				// earlier (when you entered AUTHSTATE_AWAITING_SIG):
 				// Retransmit
 				// your Reveal Signature Message.
-				getSession().injectMessage(
-						messageFactory.getRevealSignatureMessage());
+				getSession().injectMessage(messageFactory.getRevealSignatureMessage());
 				logger.finest("Resent Reveal Signature.");
 			} else {
 				// Otherwise: Ignore the message.
@@ -642,10 +589,8 @@ class AuthContextImpl implements AuthContext {
 	private void handleDHCommitMessage(DHCommitMessage m) throws OtrException {
 		Session session = getSession();
 		SessionID sessionID = session.getSessionID();
-		logger.finest(sessionID.getAccountID()
-				+ " received a D-H commit message from "
-				+ sessionID.getUserID() + " throught "
-				+ sessionID.getProtocolName() + ".");
+		logger.finest(sessionID.getAccountID() + " received a D-H commit message from " + sessionID.getUserID()
+				+ " throught " + sessionID.getProtocolName() + ".");
 
 		if (!session.getSessionPolicy().getAllowV2()) {
 			logger.finest("ALLOW_V2 is not set, ignore this message.");
@@ -677,8 +622,7 @@ class AuthContextImpl implements AuthContext {
 			// Commit Message with the one you received, considered as
 			// 32-byte
 			// unsigned big-endian values.
-			BigInteger ourHash = new BigInteger(1, this
-					.getLocalDHPublicKeyHash());
+			BigInteger ourHash = new BigInteger(1, this.getLocalDHPublicKeyHash());
 			BigInteger theirHash = new BigInteger(1, m.dhPublicKeyHash);
 
 			if (theirHash.compareTo(ourHash) == -1) {
@@ -686,8 +630,7 @@ class AuthContextImpl implements AuthContext {
 				// D-H
 				// Commit message.
 				getSession().injectMessage(messageFactory.getDHCommitMessage());
-				logger
-						.finest("Ignored the incoming D-H Commit message, but resent our D-H Commit message.");
+				logger.finest("Ignored the incoming D-H Commit message, but resent our D-H Commit message.");
 			} else {
 				// *Forget* your old gx value that you sent (encrypted)
 				// earlier,
@@ -732,8 +675,7 @@ class AuthContextImpl implements AuthContext {
 	}
 
 	public void startV2Auth() throws OtrException {
-		logger
-				.finest("Starting Authenticated Key Exchange, sending query message");
+		logger.finest("Starting Authenticated Key Exchange, sending query message");
 		getSession().injectMessage(messageFactory.getQueryMessage());
 	}
 

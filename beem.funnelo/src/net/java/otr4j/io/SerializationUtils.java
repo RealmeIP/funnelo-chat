@@ -1,6 +1,5 @@
 /*
  * otr4j, the open source java otr library.
- *
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
@@ -37,10 +36,10 @@ import net.java.otr4j.io.messages.SignatureMessage;
 import net.java.otr4j.io.messages.SignatureX;
 
 /**
- * 
  * @author George Politis
  */
 public class SerializationUtils {
+
 	// Mysterious X IO.
 	public static SignatureX toMysteriousX(byte[] b) throws IOException {
 		ByteArrayInputStream in = new ByteArrayInputStream(b);
@@ -134,11 +133,9 @@ public class SerializationUtils {
 			if (plaintxt.versions != null && plaintxt.versions.size() > 0) {
 				writer.write(" \\t  \\t\\t\\t\\t \\t \\t \\t  ");
 				for (int version : plaintxt.versions) {
-					if (version == 1)
-						writer.write("  \\t\\t  \\t ");
+					if (version == 1) writer.write("  \\t\\t  \\t ");
 
-					if (version == 2)
-						writer.write(" \\t \\t  \\t ");
+					if (version == 2) writer.write(" \\t \\t  \\t ");
 				}
 			}
 			break;
@@ -221,25 +218,20 @@ public class SerializationUtils {
 			.compile("( \\t  \\t\\t\\t\\t \\t \\t \\t  )(  \\t\\t  \\t )?( \\t \\t  \\t )?");
 
 	public static AbstractMessage toMessage(String s) throws IOException {
-		if (s == null || s.length() <= 1)
-			return null;
+		if (s == null || s.length() <= 1) return null;
 
-		if (s.indexOf(SerializationConstants.HEAD) != 0
-				|| s.length() <= SerializationConstants.HEAD.length()) {
+		if (s.indexOf(SerializationConstants.HEAD) != 0 || s.length() <= SerializationConstants.HEAD.length()) {
 			// Try to detect whitespace tag.
 			final Matcher matcher = patternWhitespace.matcher(s);
 
 			boolean v1 = false;
 			boolean v2 = false;
 			while (matcher.find()) {
-				if (!v1 && matcher.start(2) > -1)
-					v1 = true;
+				if (!v1 && matcher.start(2) > -1) v1 = true;
 
-				if (!v2 && matcher.start(3) > -1)
-					v2 = true;
+				if (!v2 && matcher.start(3) > -1) v2 = true;
 
-				if (v1 && v2)
-					break;
+				if (v1 && v2) break;
 			}
 
 			String cleanText = matcher.replaceAll("");
@@ -254,18 +246,15 @@ public class SerializationUtils {
 			} else if (v2) {
 				versions = new Vector<Integer>(1);
 				versions.add(2);
-			} else
-				versions = null;
+			} else versions = null;
 
 			return new PlainTextMessage(versions, cleanText);
 		} else {
 			char contentType = s.charAt(SerializationConstants.HEAD.length());
-			String content = s
-					.substring(SerializationConstants.HEAD.length() + 1);
+			String content = s.substring(SerializationConstants.HEAD.length() + 1);
 			switch (contentType) {
 			case SerializationConstants.HEAD_ENCODED:
-				ByteArrayInputStream bin = new ByteArrayInputStream(Base64
-						.decode(content.getBytes()));
+				ByteArrayInputStream bin = new ByteArrayInputStream(Base64.decode(content.getBytes()));
 				OtrInputStream otr = new OtrInputStream(bin);
 				// We have an encoded message.
 				int protocolVersion = otr.readShort();
@@ -280,14 +269,12 @@ public class SerializationUtils {
 					byte[] encryptedMessage = otr.readData();
 					byte[] mac = otr.readMac();
 					byte[] oldMacKeys = otr.readMac();
-					return new DataMessage(protocolVersion, flags, senderKeyID,
-							recipientKeyID, nextDH, ctr, encryptedMessage, mac,
-							oldMacKeys);
+					return new DataMessage(protocolVersion, flags, senderKeyID, recipientKeyID, nextDH, ctr,
+							encryptedMessage, mac, oldMacKeys);
 				case AbstractEncodedMessage.MESSAGE_DH_COMMIT:
 					byte[] dhPublicKeyEncrypted = otr.readData();
 					byte[] dhPublicKeyHash = otr.readData();
-					return new DHCommitMessage(protocolVersion,
-							dhPublicKeyHash, dhPublicKeyEncrypted);
+					return new DHCommitMessage(protocolVersion, dhPublicKeyHash, dhPublicKeyEncrypted);
 				case AbstractEncodedMessage.MESSAGE_DHKEY:
 					DHPublicKey dhPublicKey = otr.readDHPublicKey();
 					return new DHKeyMessage(protocolVersion, dhPublicKey);
@@ -295,14 +282,12 @@ public class SerializationUtils {
 					byte[] revealedKey = otr.readData();
 					byte[] xEncrypted = otr.readData();
 					byte[] xEncryptedMac = otr.readMac();
-					return new RevealSignatureMessage(protocolVersion,
-							xEncrypted, xEncryptedMac, revealedKey);
+					return new RevealSignatureMessage(protocolVersion, xEncrypted, xEncryptedMac, revealedKey);
 				}
 				case AbstractEncodedMessage.MESSAGE_SIGNATURE: {
 					byte[] xEncryted = otr.readData();
 					byte[] xEncryptedMac = otr.readMac();
-					return new SignatureMessage(protocolVersion, xEncryted,
-							xEncryptedMac);
+					return new SignatureMessage(protocolVersion, xEncryted, xEncryptedMac);
 				}
 				default:
 					throw new IOException("Illegal message type.");
@@ -316,8 +301,7 @@ public class SerializationUtils {
 				if (SerializationConstants.HEAD_QUERY_Q == contentType) {
 					versions.add(1);
 					if (content.charAt(0) == 'v') {
-						versionString = content.substring(1, content
-								.indexOf('?'));
+						versionString = content.substring(1, content.indexOf('?'));
 					}
 				} else if (SerializationConstants.HEAD_QUERY_V == contentType) {
 					versionString = content.substring(0, content.indexOf('?'));
@@ -327,9 +311,7 @@ public class SerializationUtils {
 					StringReader sr = new StringReader(versionString);
 					int c;
 					while ((c = sr.read()) != -1)
-						if (!versions.contains(c))
-							versions.add(Integer.parseInt(String
-									.valueOf((char) c)));
+						if (!versions.contains(c)) versions.add(Integer.parseInt(String.valueOf((char) c)));
 				}
 				QueryMessage query = new QueryMessage(versions);
 				return query;

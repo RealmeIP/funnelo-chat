@@ -17,8 +17,7 @@ import javax.crypto.interfaces.DHPublicKey;
 import net.java.otr4j.crypto.OtrCryptoEngineImpl;
 import net.java.otr4j.io.messages.SignatureX;
 
-public class OtrInputStream extends FilterInputStream implements
-		SerializationConstants {
+public class OtrInputStream extends FilterInputStream implements SerializationConstants {
 
 	public OtrInputStream(InputStream in) {
 		super(in);
@@ -116,8 +115,7 @@ public class OtrInputStream extends FilterInputStream implements
 	}
 
 	public byte[] readSignature(PublicKey pubKey) throws IOException {
-		if (!pubKey.getAlgorithm().equals("DSA"))
-			throw new UnsupportedOperationException();
+		if (!pubKey.getAlgorithm().equals("DSA")) throw new UnsupportedOperationException();
 
 		DSAPublicKey dsaPubKey = (DSAPublicKey) pubKey;
 		DSAParams dsaParams = dsaPubKey.getParams();

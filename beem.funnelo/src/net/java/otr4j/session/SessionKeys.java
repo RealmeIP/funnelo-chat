@@ -18,8 +18,7 @@ interface SessionKeys {
 
 	public abstract void setLocalPair(KeyPair keyPair, int localPairKeyID);
 
-	public abstract void setRemoteDHPublicKey(DHPublicKey pubKey,
-			int remoteKeyID);
+	public abstract void setRemoteDHPublicKey(DHPublicKey pubKey, int remoteKeyID);
 
 	public abstract void incrementSendingCtr();
 

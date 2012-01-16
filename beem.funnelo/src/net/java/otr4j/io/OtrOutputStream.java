@@ -16,8 +16,7 @@ import net.java.otr4j.io.messages.SignatureX;
 
 import org.bouncycastle2.util.BigIntegers;
 
-public class OtrOutputStream extends FilterOutputStream implements
-		SerializationConstants {
+public class OtrOutputStream extends FilterOutputStream implements SerializationConstants {
 
 	public OtrOutputStream(OutputStream out) {
 		super(out);
@@ -44,8 +43,7 @@ public class OtrOutputStream extends FilterOutputStream implements
 	public void writeData(byte[] b) throws IOException {
 		int len = (b == null || b.length < 0) ? 0 : b.length;
 		writeNumber(len, DATA_LEN);
-		if (len > 0)
-			write(b);
+		if (len > 0) write(b);
 	}
 
 	public void writeInt(int i) throws IOException {
@@ -59,15 +57,13 @@ public class OtrOutputStream extends FilterOutputStream implements
 	}
 
 	public void writeMac(byte[] mac) throws IOException {
-		if (mac == null || mac.length != TYPE_LEN_MAC)
-			throw new IllegalArgumentException();
+		if (mac == null || mac.length != TYPE_LEN_MAC) throw new IllegalArgumentException();
 
 		write(mac);
 	}
 
 	public void writeCtr(byte[] ctr) throws IOException {
-		if (ctr == null || ctr.length < 1)
-			return;
+		if (ctr == null || ctr.length < 1) return;
 
 		int i = 0;
 		while (i < TYPE_LEN_CTR && i < ctr.length) {
@@ -82,9 +78,8 @@ public class OtrOutputStream extends FilterOutputStream implements
 	}
 
 	public void writePublicKey(PublicKey pubKey) throws IOException {
-		if (!(pubKey instanceof DSAPublicKey))
-			throw new UnsupportedOperationException(
-					"Key types other than DSA are not supported at the moment.");
+		if (!(pubKey instanceof DSAPublicKey)) throw new UnsupportedOperationException(
+				"Key types other than DSA are not supported at the moment.");
 
 		DSAPublicKey dsaKey = (DSAPublicKey) pubKey;
 
@@ -101,14 +96,11 @@ public class OtrOutputStream extends FilterOutputStream implements
 	public void writeTlvData(byte[] b) throws IOException {
 		int len = (b == null || b.length < 0) ? 0 : b.length;
 		writeNumber(len, TLV_LEN);
-		if (len > 0)
-			write(b);
+		if (len > 0) write(b);
 	}
 
-	public void writeSignature(byte[] signature, PublicKey pubKey)
-			throws IOException {
-		if (!pubKey.getAlgorithm().equals("DSA"))
-			throw new UnsupportedOperationException();
+	public void writeSignature(byte[] signature, PublicKey pubKey) throws IOException {
+		if (!pubKey.getAlgorithm().equals("DSA")) throw new UnsupportedOperationException();
 		out.write(signature);
 	}
 

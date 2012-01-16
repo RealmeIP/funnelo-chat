@@ -1,15 +1,12 @@
 /*
  * otr4j, the open source java otr library.
- *
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
 package net.java.otr4j.session;
 
 /**
- * 
  * @author George Politis
- * 
  */
 public final class SessionID {
 
@@ -49,15 +46,12 @@ public final class SessionID {
 	}
 
 	public String toString() {
-		return this.getAccountID() + "_" + this.getProtocolName() + "_"
-				+ this.getUserID();
+		return this.getAccountID() + "_" + this.getProtocolName() + "_" + this.getUserID();
 	}
 
 	public boolean equals(Object obj) {
-		if (obj == this)
-			return true;
-		if (obj == null || obj.getClass() != this.getClass())
-			return false;
+		if (obj == this) return true;
+		if (obj == null || obj.getClass() != this.getClass()) return false;
 
 		SessionID sessionID = (SessionID) obj;
 

@@ -1,6 +1,5 @@
 /*
  * otr4j, the open source java otr library.
- *
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
@@ -14,24 +13,22 @@ import net.java.otr4j.crypto.OtrCryptoEngineImpl;
 import net.java.otr4j.io.SerializationUtils;
 
 /**
- * 
  * @author George Politis
  */
 public class SignatureMessage extends AbstractEncodedMessage {
+
 	// Fields.
 	public byte[] xEncrypted;
 	public byte[] xEncryptedMAC;
 
 	// Ctor.
-	protected SignatureMessage(int messageType, int protocolVersion,
-			byte[] xEncrypted, byte[] xEncryptedMAC) {
+	protected SignatureMessage(int messageType, int protocolVersion, byte[] xEncrypted, byte[] xEncryptedMAC) {
 		super(messageType, protocolVersion);
 		this.xEncrypted = xEncrypted;
 		this.xEncryptedMAC = xEncryptedMAC;
 	}
 
-	public SignatureMessage(int protocolVersion, byte[] xEncrypted,
-			byte[] xEncryptedMAC) {
+	public SignatureMessage(int protocolVersion, byte[] xEncrypted, byte[] xEncryptedMAC) {
 		this(MESSAGE_SIGNATURE, protocolVersion, xEncrypted, xEncryptedMAC);
 	}
 
@@ -49,8 +46,7 @@ public class SignatureMessage extends AbstractEncodedMessage {
 			throw new OtrException(e);
 		}
 
-		byte[] xEncryptedMAC = new OtrCryptoEngineImpl().sha256Hmac160(
-				xbEncrypted, key);
+		byte[] xEncryptedMAC = new OtrCryptoEngineImpl().sha256Hmac160(xbEncrypted, key);
 		// Verify signature.
 		return Arrays.equals(xEncryptedMAC, xEncryptedMAC);
 	}
@@ -66,17 +62,12 @@ public class SignatureMessage extends AbstractEncodedMessage {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		if (this == obj) return true;
+		if (!super.equals(obj)) return false;
+		if (getClass() != obj.getClass()) return false;
 		SignatureMessage other = (SignatureMessage) obj;
-		if (!Arrays.equals(xEncrypted, other.xEncrypted))
-			return false;
-		if (!Arrays.equals(xEncryptedMAC, other.xEncryptedMAC))
-			return false;
+		if (!Arrays.equals(xEncrypted, other.xEncrypted)) return false;
+		if (!Arrays.equals(xEncryptedMAC, other.xEncryptedMAC)) return false;
 		return true;
 	}
 }

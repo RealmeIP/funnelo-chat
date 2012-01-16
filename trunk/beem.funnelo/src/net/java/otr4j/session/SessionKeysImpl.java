@@ -1,6 +1,5 @@
 /*
  * otr4j, the open source java otr library.
- *
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
@@ -20,41 +19,33 @@ import net.java.otr4j.crypto.OtrCryptoEngineImpl;
 import net.java.otr4j.io.SerializationUtils;
 
 /**
- * 
  * @author George Politis
  */
 class SessionKeysImpl implements SessionKeys {
 
-	private static Logger logger = Logger.getLogger(SessionKeysImpl.class
-			.getName());
+	private static Logger logger = Logger.getLogger(SessionKeysImpl.class.getName());
 	private String keyDescription;
 
 	public SessionKeysImpl(int localKeyIndex, int remoteKeyIndex) {
-		if (localKeyIndex == 0)
-			keyDescription = "(Previous local, ";
-		else
-			keyDescription = "(Most recent local, ";
+		if (localKeyIndex == 0) keyDescription = "(Previous local, ";
+		else keyDescription = "(Most recent local, ";
 
-		if (remoteKeyIndex == 0)
-			keyDescription += "Previous remote)";
-		else
-			keyDescription += "Most recent remote)";
+		if (remoteKeyIndex == 0) keyDescription += "Previous remote)";
+		else keyDescription += "Most recent remote)";
 
 	}
 
 	public void setLocalPair(KeyPair keyPair, int localPairKeyID) {
 		this.localPair = keyPair;
 		this.setLocalKeyID(localPairKeyID);
-		logger.finest(keyDescription + " current local key ID: "
-				+ this.getLocalKeyID());
+		logger.finest(keyDescription + " current local key ID: " + this.getLocalKeyID());
 		this.reset();
 	}
 
 	public void setRemoteDHPublicKey(DHPublicKey pubKey, int remoteKeyID) {
 		this.setRemoteKey(pubKey);
 		this.setRemoteKeyID(remoteKeyID);
-		logger.finest(keyDescription + " current remote key ID: "
-				+ this.getRemoteKeyID());
+		logger.finest(keyDescription + " current remote key ID: " + this.getRemoteKeyID());
 		this.reset();
 	}
 
@@ -62,14 +53,13 @@ class SessionKeysImpl implements SessionKeys {
 	private byte[] receivingCtr = new byte[16];
 
 	public void incrementSendingCtr() {
-		logger.finest("Incrementing counter for (localkeyID, remoteKeyID) = ("
-				+ getLocalKeyID() + "," + getRemoteKeyID() + ")");
+		logger.finest("Incrementing counter for (localkeyID, remoteKeyID) = (" + getLocalKeyID() + ","
+				+ getRemoteKeyID() + ")");
 		// logger.debug("Counter prior increament: " +
 		// Utils.dump(sendingCtr,
 		// true, 16));
 		for (int i = 7; i >= 0; i--)
-			if (++sendingCtr[i] != 0)
-				break;
+			if (++sendingCtr[i] != 0) break;
 		// logger.debug("Counter after increament: " +
 		// Utils.dump(sendingCtr,
 		// true, 16));
@@ -99,8 +89,8 @@ class SessionKeysImpl implements SessionKeys {
 		this.setIsUsedReceivingMACKey(false);
 		this.s = null;
 		if (getLocalPair() != null && getRemoteKey() != null) {
-			this.isHigh = ((DHPublicKey) getLocalPair().getPublic()).getY()
-					.abs().compareTo(getRemoteKey().getY().abs()) == 1;
+			this.isHigh = ((DHPublicKey) getLocalPair().getPublic()).getY().abs()
+					.compareTo(getRemoteKey().getY().abs()) == 1;
 		}
 
 	}
@@ -122,12 +112,10 @@ class SessionKeysImpl implements SessionKeys {
 	}
 
 	public byte[] getSendingAESKey() throws OtrException {
-		if (sendingAESKey != null)
-			return sendingAESKey;
+		if (sendingAESKey != null) return sendingAESKey;
 
 		byte sendbyte = LOW_SEND_BYTE;
-		if (this.isHigh)
-			sendbyte = HIGH_SEND_BYTE;
+		if (this.isHigh) sendbyte = HIGH_SEND_BYTE;
 
 		byte[] h1 = h1(sendbyte);
 
@@ -140,12 +128,10 @@ class SessionKeysImpl implements SessionKeys {
 	}
 
 	public byte[] getReceivingAESKey() throws OtrException {
-		if (receivingAESKey != null)
-			return receivingAESKey;
+		if (receivingAESKey != null) return receivingAESKey;
 
 		byte receivebyte = LOW_RECEIVE_BYTE;
-		if (this.isHigh)
-			receivebyte = HIGH_RECEIVE_BYTE;
+		if (this.isHigh) receivebyte = HIGH_RECEIVE_BYTE;
 
 		byte[] h1 = h1(receivebyte);
 
@@ -159,8 +145,7 @@ class SessionKeysImpl implements SessionKeys {
 	}
 
 	public byte[] getSendingMACKey() throws OtrException {
-		if (sendingMACKey != null)
-			return sendingMACKey;
+		if (sendingMACKey != null) return sendingMACKey;
 
 		sendingMACKey = new OtrCryptoEngineImpl().sha1Hash(getSendingAESKey());
 		logger.finest("Calculated sending MAC key.");
@@ -169,8 +154,7 @@ class SessionKeysImpl implements SessionKeys {
 
 	public byte[] getReceivingMACKey() throws OtrException {
 		if (receivingMACKey == null) {
-			receivingMACKey = new OtrCryptoEngineImpl()
-					.sha1Hash(getReceivingAESKey());
+			receivingMACKey = new OtrCryptoEngineImpl().sha1Hash(getReceivingAESKey());
 			logger.finest("Calculated receiving AES key.");
 		}
 		return receivingMACKey;
@@ -178,8 +162,7 @@ class SessionKeysImpl implements SessionKeys {
 
 	private BigInteger getS() throws OtrException {
 		if (s == null) {
-			s = new OtrCryptoEngineImpl().generateSecret(getLocalPair()
-					.getPrivate(), getRemoteKey());
+			s = new OtrCryptoEngineImpl().generateSecret(getLocalPair().getPrivate(), getRemoteKey());
 			logger.finest("Calculating shared secret S.");
 		}
 		return s;

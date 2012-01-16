@@ -1,6 +1,5 @@
 /*
  * otr4j, the open source java otr librar
- *
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
@@ -19,15 +18,12 @@ import net.java.otr4j.session.SessionImpl;
 import net.java.otr4j.session.SessionStatus;
 
 /**
- * 
  * @author George Politis
- * 
  */
 public class OtrEngineImpl implements OtrEngine {
 
 	public OtrEngineImpl(OtrEngineHost host) {
-		if (host == null)
-			throw new IllegalArgumentException("OtrEgineHost is required.");
+		if (host == null) throw new IllegalArgumentException("OtrEgineHost is required.");
 
 		this.setHost(host);
 	}
@@ -37,11 +33,9 @@ public class OtrEngineImpl implements OtrEngine {
 
 	private Session getSession(SessionID sessionID) {
 
-		if (sessionID == null || sessionID.equals(SessionID.Empty))
-			throw new IllegalArgumentException();
+		if (sessionID == null || sessionID.equals(SessionID.Empty)) throw new IllegalArgumentException();
 
-		if (sessions == null)
-			sessions = new Hashtable<SessionID, Session>();
+		if (sessions == null) sessions = new Hashtable<SessionID, Session>();
 
 		if (!sessions.containsKey(sessionID)) {
 			Session session = new SessionImpl(sessionID, getHost());
@@ -55,21 +49,18 @@ public class OtrEngineImpl implements OtrEngine {
 				}
 			});
 			return session;
-		} else
-			return sessions.get(sessionID);
+		} else return sessions.get(sessionID);
 	}
 
 	public SessionStatus getSessionStatus(SessionID sessionID) {
 		return this.getSession(sessionID).getSessionStatus();
 	}
 
-	public String transformReceiving(SessionID sessionID, String msgText)
-			throws OtrException {
+	public String transformReceiving(SessionID sessionID, String msgText) throws OtrException {
 		return this.getSession(sessionID).transformReceiving(msgText);
 	}
 
-	public String transformSending(SessionID sessionID, String msgText)
-			throws OtrException {
+	public String transformSending(SessionID sessionID, String msgText) throws OtrException {
 		return this.getSession(sessionID).transformSending(msgText, null);
 	}
 
@@ -101,8 +92,7 @@ public class OtrEngineImpl implements OtrEngine {
 
 	public void addOtrEngineListener(OtrEngineListener l) {
 		synchronized (listeners) {
-			if (!listeners.contains(l))
-				listeners.add(l);
+			if (!listeners.contains(l)) listeners.add(l);
 		}
 	}
 

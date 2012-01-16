@@ -6,32 +6,27 @@ import net.java.otr4j.session.SessionID;
 import net.java.otr4j.session.SessionStatus;
 
 /**
- * 
  * @author George Politis
- * 
  */
 public interface OtrEngine {
 
 	/**
-	 * 
 	 * @param sessionID
 	 *            The session identifier.
 	 * @param content
 	 *            The message content to be transformed.
 	 * @return The transformed message content.
-	 * @throws OtrException 
+	 * @throws OtrException
 	 */
-	public abstract String transformReceiving(SessionID sessionID,
-			String content) throws OtrException;
+	public abstract String transformReceiving(SessionID sessionID, String content) throws OtrException;
 
 	/**
-	 * 
 	 * @param sessionID
 	 *            The session identifier.
 	 * @param content
 	 *            The message content to be transformed.
 	 * @return The transformed message content.
-	 * @throws OtrException 
+	 * @throws OtrException
 	 */
 	public abstract String transformSending(SessionID sessionID, String content) throws OtrException;
 
@@ -40,7 +35,7 @@ public interface OtrEngine {
 	 * 
 	 * @param sessionID
 	 *            The session identifier.
-	 * @throws OtrException 
+	 * @throws OtrException
 	 */
 	public abstract void startSession(SessionID sessionID) throws OtrException;
 
@@ -49,7 +44,7 @@ public interface OtrEngine {
 	 * 
 	 * @param sessionID
 	 *            The session identifier.
-	 * @throws OtrException 
+	 * @throws OtrException
 	 */
 	public abstract void endSession(SessionID sessionID) throws OtrException;
 
@@ -58,12 +53,11 @@ public interface OtrEngine {
 	 * 
 	 * @param sessionID
 	 *            The session identifier.
-	 * @throws OtrException 
+	 * @throws OtrException
 	 */
 	public abstract void refreshSession(SessionID sessionID) throws OtrException;
 
 	/**
-	 * 
 	 * @param sessionID
 	 *            The session identifier.
 	 * @return The status of an Off-the-Record session.
@@ -71,7 +65,6 @@ public interface OtrEngine {
 	public abstract SessionStatus getSessionStatus(SessionID sessionID);
 
 	/**
-	 * 
 	 * @param sessionID
 	 *            The session identifier.
 	 * @return The remote public key.

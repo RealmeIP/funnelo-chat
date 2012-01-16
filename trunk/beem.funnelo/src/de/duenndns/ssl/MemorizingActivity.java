@@ -1,18 +1,15 @@
-/* MemorizingTrustManager - a TrustManager which asks the user about invalid
- *  certificates and memorizes their decision.
- *
+/*
+ * MemorizingTrustManager - a TrustManager which asks the user about invalid
+ * certificates and memorizes their decision.
  * Copyright (c) 2010 Georg Lukas <georg@op-co.de>
- *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,7 +19,6 @@
  * THE SOFTWARE.
  */
 package de.duenndns.ssl;
-
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -34,13 +30,13 @@ import android.util.Log;
 
 import com.beem.project.beem.R;
 
-public class MemorizingActivity extends Activity
-		implements OnClickListener,OnCancelListener {
+public class MemorizingActivity extends Activity implements OnClickListener, OnCancelListener {
+
 	final static String TAG = "MemorizingActivity";
 
 	int decisionId;
 	String app;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		Log.d(TAG, "onCreate");
@@ -56,13 +52,9 @@ public class MemorizingActivity extends Activity
 		String cert = i.getStringExtra(MemorizingTrustManager.DECISION_INTENT_CERT);
 		Log.d(TAG, "onResume with " + i.getExtras() + " decId=" + decisionId);
 		Log.d(TAG, "data: " + i.getData());
-		new AlertDialog.Builder(this).setTitle(R.string.mtm_accept_cert)
-			.setMessage(cert)
-			.setPositiveButton(R.string.mtm_decision_always, this)
-			.setNeutralButton(R.string.mtm_decision_once, this)
-			.setNegativeButton(R.string.mtm_decision_abort, this)
-			.setOnCancelListener(this)
-			.create().show();
+		new AlertDialog.Builder(this).setTitle(R.string.mtm_accept_cert).setMessage(cert).setPositiveButton(
+				R.string.mtm_decision_always, this).setNeutralButton(R.string.mtm_decision_once, this)
+				.setNegativeButton(R.string.mtm_decision_abort, this).setOnCancelListener(this).create().show();
 	}
 
 	void sendDecision(int decision) {

@@ -1,6 +1,5 @@
 /*
  * otr4j, the open source java otr library.
- *
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
@@ -48,19 +47,15 @@ import org.bouncycastle2.crypto.signers.DSASigner;
 import org.bouncycastle2.util.BigIntegers;
 
 /**
- * 
  * @author George Politis
- * 
  */
 public class OtrCryptoEngineImpl implements OtrCryptoEngine {
 
 	public KeyPair generateDHKeyPair() throws OtrCryptoException {
 
 		// Generate a AsymmetricCipherKeyPair using BC.
-		DHParameters dhParams = new DHParameters(MODULUS, GENERATOR, null,
-				DH_PRIVATE_KEY_MINIMUM_BIT_LENGTH);
-		DHKeyGenerationParameters params = new DHKeyGenerationParameters(
-				new SecureRandom(), dhParams);
+		DHParameters dhParams = new DHParameters(MODULUS, GENERATOR, null, DH_PRIVATE_KEY_MINIMUM_BIT_LENGTH);
+		DHKeyGenerationParameters params = new DHKeyGenerationParameters(new SecureRandom(), dhParams);
 		DHKeyPairGenerator kpGen = new DHKeyPairGenerator();
 
 		kpGen.init(params);
@@ -68,22 +63,17 @@ public class OtrCryptoEngineImpl implements OtrCryptoEngine {
 
 		// Convert this AsymmetricCipherKeyPair to a standard JCE KeyPair.
 		DHPublicKeyParameters pub = (DHPublicKeyParameters) pair.getPublic();
-		DHPrivateKeyParameters priv = (DHPrivateKeyParameters) pair
-				.getPrivate();
+		DHPrivateKeyParameters priv = (DHPrivateKeyParameters) pair.getPrivate();
 
 		try {
 			KeyFactory keyFac = KeyFactory.getInstance("DH");
 
-			DHPublicKeySpec pubKeySpecs = new DHPublicKeySpec(pub.getY(),
-					MODULUS, GENERATOR);
-			DHPublicKey pubKey = (DHPublicKey) keyFac
-					.generatePublic(pubKeySpecs);
+			DHPublicKeySpec pubKeySpecs = new DHPublicKeySpec(pub.getY(), MODULUS, GENERATOR);
+			DHPublicKey pubKey = (DHPublicKey) keyFac.generatePublic(pubKeySpecs);
 
 			DHParameters dhParameters = priv.getParameters();
-			DHPrivateKeySpec privKeySpecs = new DHPrivateKeySpec(priv.getX(),
-					dhParameters.getP(), dhParameters.getG());
-			DHPrivateKey privKey = (DHPrivateKey) keyFac
-					.generatePrivate(privKeySpecs);
+			DHPrivateKeySpec privKeySpecs = new DHPrivateKeySpec(priv.getX(), dhParameters.getP(), dhParameters.getG());
+			DHPrivateKey privKey = (DHPrivateKey) keyFac.generatePrivate(privKeySpecs);
 
 			return new KeyPair(pubKey, privKey);
 		} catch (Exception e) {
@@ -91,14 +81,12 @@ public class OtrCryptoEngineImpl implements OtrCryptoEngine {
 		}
 	}
 
-	public DHPublicKey getDHPublicKey(byte[] mpiBytes)
-			throws OtrCryptoException {
+	public DHPublicKey getDHPublicKey(byte[] mpiBytes) throws OtrCryptoException {
 		return getDHPublicKey(new BigInteger(mpiBytes));
 	}
 
 	public DHPublicKey getDHPublicKey(BigInteger mpi) throws OtrCryptoException {
-		DHPublicKeySpec pubKeySpecs = new DHPublicKeySpec(mpi, MODULUS,
-				GENERATOR);
+		DHPublicKeySpec pubKeySpecs = new DHPublicKeySpec(mpi, MODULUS, GENERATOR);
 		try {
 			KeyFactory keyFac = KeyFactory.getInstance("DH");
 			return (DHPublicKey) keyFac.generatePublic(pubKeySpecs);
@@ -111,8 +99,7 @@ public class OtrCryptoEngineImpl implements OtrCryptoEngine {
 		return this.sha256Hmac(b, key, 0);
 	}
 
-	public byte[] sha256Hmac(byte[] b, byte[] key, int length)
-			throws OtrCryptoException {
+	public byte[] sha256Hmac(byte[] b, byte[] key, int length) throws OtrCryptoException {
 
 		SecretKeySpec keyspec = new SecretKeySpec(key, "HmacSHA256");
 		javax.crypto.Mac mac;
@@ -139,8 +126,7 @@ public class OtrCryptoEngineImpl implements OtrCryptoEngine {
 		}
 	}
 
-	public byte[] sha1Hmac(byte[] b, byte[] key, int length)
-			throws OtrCryptoException {
+	public byte[] sha1Hmac(byte[] b, byte[] key, int length) throws OtrCryptoException {
 
 		try {
 			SecretKeySpec keyspec = new SecretKeySpec(key, "HmacSHA1");
@@ -186,18 +172,15 @@ public class OtrCryptoEngineImpl implements OtrCryptoEngine {
 		}
 	}
 
-	public byte[] aesDecrypt(byte[] key, byte[] ctr, byte[] b)
-			throws OtrCryptoException {
+	public byte[] aesDecrypt(byte[] key, byte[] ctr, byte[] b) throws OtrCryptoException {
 
 		AESFastEngine aesDec = new AESFastEngine();
 		SICBlockCipher sicAesDec = new SICBlockCipher(aesDec);
 		BufferedBlockCipher bufSicAesDec = new BufferedBlockCipher(sicAesDec);
 
 		// Create initial counter value 0.
-		if (ctr == null)
-			ctr = ZERO_CTR;
-		bufSicAesDec.init(false, new ParametersWithIV(new KeyParameter(key),
-				ctr));
+		if (ctr == null) ctr = ZERO_CTR;
+		bufSicAesDec.init(false, new ParametersWithIV(new KeyParameter(key), ctr));
 		byte[] aesOutLwDec = new byte[b.length];
 		int done = bufSicAesDec.processBytes(b, 0, b.length, aesOutLwDec, 0);
 		try {
@@ -209,18 +192,15 @@ public class OtrCryptoEngineImpl implements OtrCryptoEngine {
 		return aesOutLwDec;
 	}
 
-	public byte[] aesEncrypt(byte[] key, byte[] ctr, byte[] b)
-			throws OtrCryptoException {
+	public byte[] aesEncrypt(byte[] key, byte[] ctr, byte[] b) throws OtrCryptoException {
 
 		AESFastEngine aesEnc = new AESFastEngine();
 		SICBlockCipher sicAesEnc = new SICBlockCipher(aesEnc);
 		BufferedBlockCipher bufSicAesEnc = new BufferedBlockCipher(sicAesEnc);
 
 		// Create initial counter value 0.
-		if (ctr == null)
-			ctr = ZERO_CTR;
-		bufSicAesEnc.init(true,
-				new ParametersWithIV(new KeyParameter(key), ctr));
+		if (ctr == null) ctr = ZERO_CTR;
+		bufSicAesEnc.init(true, new ParametersWithIV(new KeyParameter(key), ctr));
 		byte[] aesOutLwEnc = new byte[b.length];
 		int done = bufSicAesEnc.processBytes(b, 0, b.length, aesOutLwEnc, 0);
 		try {
@@ -231,8 +211,7 @@ public class OtrCryptoEngineImpl implements OtrCryptoEngine {
 		return aesOutLwEnc;
 	}
 
-	public BigInteger generateSecret(PrivateKey privKey, PublicKey pubKey)
-			throws OtrCryptoException {
+	public BigInteger generateSecret(PrivateKey privKey, PublicKey pubKey) throws OtrCryptoException {
 		try {
 			KeyAgreement ka = KeyAgreement.getInstance("DH");
 			ka.init(privKey);
@@ -246,19 +225,16 @@ public class OtrCryptoEngineImpl implements OtrCryptoEngine {
 		}
 	}
 
-	public byte[] sign(byte[] b, PrivateKey privatekey)
-			throws OtrCryptoException {
+	public byte[] sign(byte[] b, PrivateKey privatekey) throws OtrCryptoException {
 
-		if (!(privatekey instanceof DSAPrivateKey))
-			throw new IllegalArgumentException();
+		if (!(privatekey instanceof DSAPrivateKey)) throw new IllegalArgumentException();
 
 		DSAParams dsaParams = ((DSAPrivateKey) privatekey).getParams();
-		DSAParameters bcDSAParameters = new DSAParameters(dsaParams.getP(),
-				dsaParams.getQ(), dsaParams.getG());
+		DSAParameters bcDSAParameters = new DSAParameters(dsaParams.getP(), dsaParams.getQ(), dsaParams.getG());
 
 		DSAPrivateKey dsaPrivateKey = (DSAPrivateKey) privatekey;
-		DSAPrivateKeyParameters bcDSAPrivateKeyParms = new DSAPrivateKeyParameters(
-				dsaPrivateKey.getX(), bcDSAParameters);
+		DSAPrivateKeyParameters bcDSAPrivateKeyParms = new DSAPrivateKeyParameters(dsaPrivateKey.getX(),
+				bcDSAParameters);
 
 		DSASigner dsaSigner = new DSASigner();
 		dsaSigner.init(true, bcDSAPrivateKeyParms);
@@ -271,8 +247,7 @@ public class OtrCryptoEngineImpl implements OtrCryptoEngine {
 		// should be well.
 		// ref: Interop problems with libotr - DSA signature
 		BigInteger bmpi = new BigInteger(1, b);
-		BigInteger[] rs = dsaSigner.generateSignature(BigIntegers
-				.asUnsignedByteArray(bmpi.mod(q)));
+		BigInteger[] rs = dsaSigner.generateSignature(BigIntegers.asUnsignedByteArray(bmpi.mod(q)));
 
 		int siglen = q.bitLength() / 4;
 		int rslen = siglen / 2;
@@ -285,24 +260,20 @@ public class OtrCryptoEngineImpl implements OtrCryptoEngine {
 		Boolean writeS = false;
 		for (int i = 0; i < siglen; i++) {
 			if (i < rslen) {
-				if (!writeR)
-					writeR = rb.length >= rslen - i;
+				if (!writeR) writeR = rb.length >= rslen - i;
 				sig[i] = (writeR) ? rb[i] : (byte) 0x0;
 			} else {
 				int j = i - rslen; // Rebase.
-				if (!writeS)
-					writeS = sb.length >= rslen - j;
+				if (!writeS) writeS = sb.length >= rslen - j;
 				sig[i] = (writeS) ? sb[j] : (byte) 0x0;
 			}
 		}
 		return sig;
 	}
 
-	public boolean verify(byte[] b, PublicKey pubKey, byte[] rs)
-			throws OtrCryptoException {
+	public boolean verify(byte[] b, PublicKey pubKey, byte[] rs) throws OtrCryptoException {
 
-		if (!(pubKey instanceof DSAPublicKey))
-			throw new IllegalArgumentException();
+		if (!(pubKey instanceof DSAPublicKey)) throw new IllegalArgumentException();
 
 		DSAParams dsaParams = ((DSAPublicKey) pubKey).getParams();
 		int qlen = dsaParams.getQ().bitLength() / 8;
@@ -314,28 +285,22 @@ public class OtrCryptoEngineImpl implements OtrCryptoEngine {
 		return verify(b, pubKey, r, s);
 	}
 
-	private Boolean verify(byte[] b, PublicKey pubKey, byte[] r, byte[] s)
-			throws OtrCryptoException {
-		Boolean result = verify(b, pubKey, new BigInteger(1, r),
-				new BigInteger(1, s));
+	private Boolean verify(byte[] b, PublicKey pubKey, byte[] r, byte[] s) throws OtrCryptoException {
+		Boolean result = verify(b, pubKey, new BigInteger(1, r), new BigInteger(1, s));
 		return result;
 	}
 
-	private Boolean verify(byte[] b, PublicKey pubKey, BigInteger r,
-			BigInteger s) throws OtrCryptoException {
+	private Boolean verify(byte[] b, PublicKey pubKey, BigInteger r, BigInteger s) throws OtrCryptoException {
 
-		if (!(pubKey instanceof DSAPublicKey))
-			throw new IllegalArgumentException();
+		if (!(pubKey instanceof DSAPublicKey)) throw new IllegalArgumentException();
 
 		DSAParams dsaParams = ((DSAPublicKey) pubKey).getParams();
 
 		BigInteger q = dsaParams.getQ();
-		DSAParameters bcDSAParams = new DSAParameters(dsaParams.getP(), q,
-				dsaParams.getG());
+		DSAParameters bcDSAParams = new DSAParameters(dsaParams.getP(), q, dsaParams.getG());
 
 		DSAPublicKey dsaPrivateKey = (DSAPublicKey) pubKey;
-		DSAPublicKeyParameters dsaPrivParms = new DSAPublicKeyParameters(
-				dsaPrivateKey.getY(), bcDSAParams);
+		DSAPublicKeyParameters dsaPrivParms = new DSAPublicKeyParameters(dsaPrivateKey.getY(), bcDSAParams);
 
 		// Ian: Note that if you can get the standard DSA implementation you're
 		// using to not hash its input, you should be able to pass it ((256-bit
@@ -346,8 +311,7 @@ public class OtrCryptoEngineImpl implements OtrCryptoEngine {
 		dsaSigner.init(false, dsaPrivParms);
 
 		BigInteger bmpi = new BigInteger(1, b);
-		Boolean result = dsaSigner.verifySignature(BigIntegers
-				.asUnsignedByteArray(bmpi.mod(q)), r, s);
+		Boolean result = dsaSigner.verifySignature(BigIntegers.asUnsignedByteArray(bmpi.mod(q)), r, s);
 		return result;
 	}
 
@@ -360,8 +324,7 @@ public class OtrCryptoEngineImpl implements OtrCryptoEngine {
 				byte[] trimmed = new byte[bRemotePubKey.length - 2];
 				System.arraycopy(bRemotePubKey, 2, trimmed, 0, trimmed.length);
 				b = new OtrCryptoEngineImpl().sha1Hash(trimmed);
-			} else
-				b = new OtrCryptoEngineImpl().sha1Hash(bRemotePubKey);
+			} else b = new OtrCryptoEngineImpl().sha1Hash(bRemotePubKey);
 		} catch (IOException e) {
 			throw new OtrCryptoException(e);
 		}
@@ -371,10 +334,8 @@ public class OtrCryptoEngineImpl implements OtrCryptoEngine {
 	private String byteArrayToHexString(byte in[]) {
 		byte ch = 0x00;
 		int i = 0;
-		if (in == null || in.length <= 0)
-			return null;
-		String pseudo[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-				"A", "B", "C", "D", "E", "F" };
+		if (in == null || in.length <= 0) return null;
+		String pseudo[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
 		StringBuffer out = new StringBuffer(in.length * 2);
 		while (i < in.length) {
 			ch = (byte) (in[i] & 0xF0);

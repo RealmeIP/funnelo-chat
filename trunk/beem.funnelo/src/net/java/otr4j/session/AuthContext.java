@@ -1,6 +1,5 @@
 /*
  * otr4j, the open source java otr library.
- *
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
@@ -16,7 +15,6 @@ import net.java.otr4j.OtrException;
 import net.java.otr4j.io.messages.AbstractMessage;
 
 /**
- * 
  * @author George Politis
  */
 interface AuthContext {
@@ -42,8 +40,7 @@ interface AuthContext {
 
 	public abstract BigInteger getS() throws OtrException;
 
-	public abstract void handleReceivingMessage(AbstractMessage m)
-			throws OtrException;
+	public abstract void handleReceivingMessage(AbstractMessage m) throws OtrException;
 
 	public abstract void startV2Auth() throws OtrException;
 

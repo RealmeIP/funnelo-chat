@@ -52,7 +52,7 @@ public class ChatList extends AlertDialog.Builder {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param context
 	 *            context activity.
 	 * @param openedChats
@@ -66,7 +66,11 @@ public class ChatList extends AlertDialog.Builder {
 
 			int i = 0;
 			for (Contact c : openedChats) {
-				items[i++] = c.getName();
+				if (c.isMUC()) {
+					items[i++] = "[C] " + c.getJID();
+				} else {
+					items[i++] = c.getJIDWithRes();
+				}
 			}
 			setTitle(R.string.chat_dialog_change_chat_title);
 			setItems(items, new DialogInterface.OnClickListener() {

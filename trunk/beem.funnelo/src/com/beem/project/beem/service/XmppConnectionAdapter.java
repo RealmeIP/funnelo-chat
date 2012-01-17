@@ -36,6 +36,23 @@ package com.beem.project.beem.service;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.ConnectionListener;
+import org.jivesoftware.smack.PacketListener;
+import org.jivesoftware.smack.PrivacyListManager;
+import org.jivesoftware.smack.Roster;
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.filter.PacketFilter;
+import org.jivesoftware.smack.filter.PacketTypeFilter;
+import org.jivesoftware.smack.packet.IQ;
+import org.jivesoftware.smack.packet.Packet;
+import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.util.StringUtils;
+import org.jivesoftware.smackx.ChatStateManager;
+import org.jivesoftware.smackx.ServiceDiscoveryManager;
+import org.jivesoftware.smackx.packet.DiscoverInfo;
+
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -62,26 +79,9 @@ import com.beem.project.beem.ui.Subscription;
 import com.beem.project.beem.utils.BeemBroadcastReceiver;
 import com.beem.project.beem.utils.Status;
 
-import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.ConnectionListener;
-import org.jivesoftware.smack.PacketListener;
-import org.jivesoftware.smack.PrivacyListManager;
-import org.jivesoftware.smack.Roster;
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.filter.PacketFilter;
-import org.jivesoftware.smack.filter.PacketTypeFilter;
-import org.jivesoftware.smack.packet.IQ;
-import org.jivesoftware.smack.packet.Packet;
-import org.jivesoftware.smack.packet.Presence;
-import org.jivesoftware.smack.util.StringUtils;
-import org.jivesoftware.smackx.ChatStateManager;
-import org.jivesoftware.smackx.ServiceDiscoveryManager;
-import org.jivesoftware.smackx.packet.DiscoverInfo;
-
 /**
  * This class implements an adapter for XMPPConnection.
- * 
+ *
  * @author darisk
  */
 public class XmppConnectionAdapter extends IXmppConnection.Stub {
@@ -98,6 +98,7 @@ public class XmppConnectionAdapter extends IXmppConnection.Stub {
 	private final String mLogin;
 	private final String mPassword;
 	private String mResource;
+	private String mDefaultNickname;
 	private String mErrorMsg;
 	private RosterAdapter mRoster;
 	private int mPreviousPriority;
@@ -121,7 +122,7 @@ public class XmppConnectionAdapter extends IXmppConnection.Stub {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param config
 	 *            Configuration to use in order to connect
 	 * @param login
@@ -138,7 +139,7 @@ public class XmppConnectionAdapter extends IXmppConnection.Stub {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param serviceName
 	 *            name of the service to connect to
 	 * @param login
@@ -155,7 +156,7 @@ public class XmppConnectionAdapter extends IXmppConnection.Stub {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param con
 	 *            The connection to adapt
 	 * @param login
@@ -333,7 +334,7 @@ public class XmppConnectionAdapter extends IXmppConnection.Stub {
 
 	/**
 	 * Get the AvatarManager of this connection.
-	 * 
+	 *
 	 * @return the AvatarManager or null if there is not
 	 */
 	public BeemAvatarManager getAvatarManager() {
@@ -342,7 +343,7 @@ public class XmppConnectionAdapter extends IXmppConnection.Stub {
 
 	/**
 	 * get the previous status.
-	 * 
+	 *
 	 * @return previous status.
 	 */
 	public String getPreviousStatus() {
@@ -351,7 +352,7 @@ public class XmppConnectionAdapter extends IXmppConnection.Stub {
 
 	/**
 	 * get the previous mode.
-	 * 
+	 *
 	 * @return previous mode.
 	 */
 	public int getPreviousMode() {
@@ -360,7 +361,7 @@ public class XmppConnectionAdapter extends IXmppConnection.Stub {
 
 	/**
 	 * Update the notification for the Beem status.
-	 * 
+	 *
 	 * @param text
 	 *            the text to display.
 	 */
@@ -388,7 +389,7 @@ public class XmppConnectionAdapter extends IXmppConnection.Stub {
 
 	/**
 	 * Get the Smack XmppConnection.
-	 * 
+	 *
 	 * @return Smack XmppConnection
 	 */
 	public XMPPConnection getAdaptee() {
@@ -417,7 +418,7 @@ public class XmppConnectionAdapter extends IXmppConnection.Stub {
 
 	/**
 	 * Get the user informations.
-	 * 
+	 *
 	 * @return the user infos or null if not logged
 	 */
 	public UserInfo getUserInfo() {
@@ -426,7 +427,7 @@ public class XmppConnectionAdapter extends IXmppConnection.Stub {
 
 	/**
 	 * Returns true if currently authenticated by successfully calling the login method.
-	 * 
+	 *
 	 * @return true when successfully authenticated
 	 */
 	public boolean isAuthentificated() {
@@ -443,7 +444,7 @@ public class XmppConnectionAdapter extends IXmppConnection.Stub {
 
 	/**
 	 * PrivacyListManagerAdapter mutator.
-	 * 
+	 *
 	 * @param privacyListManager
 	 *            the privacy list manager
 	 */
@@ -453,7 +454,7 @@ public class XmppConnectionAdapter extends IXmppConnection.Stub {
 
 	/**
 	 * PrivacyListManagerAdapter accessor.
-	 * 
+	 *
 	 * @return the mPrivacyList
 	 */
 	public PrivacyListManagerAdapter getPrivacyListManager() {
@@ -577,7 +578,7 @@ public class XmppConnectionAdapter extends IXmppConnection.Stub {
 
 		/**
 		 * Connection failed callback.
-		 * 
+		 *
 		 * @param errorMsg
 		 *            smack failure message
 		 */
@@ -697,7 +698,7 @@ public class XmppConnectionAdapter extends IXmppConnection.Stub {
 
 	/**
 	 * This PacketListener will set a notification when you got a subscribtion request.
-	 * 
+	 *
 	 * @author Da Risk <da_risk@elyzion.net>
 	 */
 	private class SubscribePacketListener implements PacketListener {
@@ -717,7 +718,7 @@ public class XmppConnectionAdapter extends IXmppConnection.Stub {
 					R.string.AcceptContactRequest, from), System.currentTimeMillis());
 			notification.flags = Notification.FLAG_AUTO_CANCEL;
 			Intent intent = new Intent(mService, Subscription.class);
-			intent.setData(Contact.makeXmppUri(from));
+			intent.setData(Contact.makeXmppUri(from, false));
 			notification.setLatestEventInfo(mService, from,
 					mService.getString(R.string.AcceptContactRequestFrom, from), PendingIntent.getActivity(mService, 0,
 							intent, PendingIntent.FLAG_ONE_SHOT));

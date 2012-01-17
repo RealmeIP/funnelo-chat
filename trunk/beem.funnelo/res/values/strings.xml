@@ -27,6 +27,7 @@
 
 	<!--  ContactDialog class -->
 	<string name="CDChat">Chat</string>
+	<string name="CDJoinMUC">Join MUC</string>
 	<string name="CDCall">Call</string>
 	<string name="CDInfos">Manage User</string>
 
@@ -83,8 +84,10 @@
 	<string name="SettingsAdvancedPortOpt">Edit the server port</string>
 	<string name="SettingsResourceTitle">Resource</string>
 	<string name="SettingsPriorityTitle">Priority</string>
+	<string name="SettingsNicknameTitle">Default nickname for MUC</string>
 	<string name="SettingsResourceSummary">Set the XMPP resource of your client </string>
 	<string name="SettingsPrioritySummary">Set the priority of your client</string>
+	<string name="SettingsNicknameSummary">Set the default nickname when joining MUC</string>
 	<string name="contact_list_preferences">Buddy list</string>
 	<string name="contact_list_preferences_sum">A set of display options for your buddy list
 	</string>
@@ -312,6 +315,9 @@
 	<string name="privacy_list_delete_dialog_no">No</string>
 
 	<string name="UpdateButton">Update</string>
+
+	<string name="Room">Room</string>
+	<string name="Nick">Nickname</string>
 
 	<!-- MemorizingTrustManager library -->
 	<string name="mtm_accept_cert">Accept Unknown Certificate?</string>

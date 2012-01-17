@@ -49,7 +49,7 @@ import com.beem.project.beem.utils.Status;
 
 /**
  * This class contains informations on a jabber contact.
- * 
+ *
  * @author darisk
  */
 public class Contact implements Parcelable {
@@ -76,11 +76,12 @@ public class Contact implements Parcelable {
 	private List<String> mRes;
 	private final List<String> mGroups = new ArrayList<String>();
 	private String mName;
+	private boolean mIsMUC;
 	private String mAvatarId;
 
 	/**
 	 * Construct a contact from a parcel.
-	 * 
+	 *
 	 * @param in
 	 *            parcel to use for construction
 	 */
@@ -99,7 +100,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param jid
 	 *            JID of the contact
 	 */
@@ -116,7 +117,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Create a contact from a Uri.
-	 * 
+	 *
 	 * @param uri
 	 *            an uri for the contact
 	 * @throws IllegalArgumentException
@@ -125,7 +126,14 @@ public class Contact implements Parcelable {
 	public Contact(final Uri uri) {
 		if (!"xmpp".equals(uri.getScheme())) throw new IllegalArgumentException();
 		String enduri = uri.getEncodedSchemeSpecificPart();
-		mJID = StringUtils.parseBareAddress(enduri);
+		String fjid = StringUtils.parseBareAddress(enduri);
+		if (fjid.charAt(0) == '$') {
+			mJID = fjid.substring(1);
+			mIsMUC = true;
+		} else {
+			mJID = fjid;
+			mIsMUC = false;
+		}
 		mName = mJID;
 		mStatus = Status.CONTACT_STATUS_DISCONNECT;
 		mMsgState = null;
@@ -135,15 +143,21 @@ public class Contact implements Parcelable {
 		mRes.add(res);
 	}
 
+	public Contact(final String jid, boolean isMuc) {
+		this(jid);
+		this.mIsMUC = true;
+	}
+
 	/**
 	 * Make an xmpp uri for a spcific jid.
-	 * 
+	 *
 	 * @param jid
 	 *            the jid to represent as an uri
 	 * @return an uri representing this jid.
 	 */
-	public static Uri makeXmppUri(String jid) {
+	public static Uri makeXmppUri(String jid, boolean isMUC) {
 		StringBuilder build = new StringBuilder("xmpp:");
+		if (isMUC) build.append("$");
 		String name = StringUtils.parseName(jid);
 		build.append(name);
 		if (!"".equals(name)) build.append('@');
@@ -175,7 +189,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Add a group for the contact.
-	 * 
+	 *
 	 * @param group
 	 *            the group
 	 */
@@ -185,7 +199,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Remove the contact from a group.
-	 * 
+	 *
 	 * @param group
 	 *            the group to delete the contact from.
 	 */
@@ -195,7 +209,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Add a resource for this contact.
-	 * 
+	 *
 	 * @param res
 	 *            the resource to add
 	 */
@@ -205,7 +219,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Delete a resource for this contact.
-	 * 
+	 *
 	 * @param res
 	 *            the resource de delete
 	 */
@@ -223,7 +237,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Get the groups the contact is in.
-	 * 
+	 *
 	 * @return the mGroups
 	 */
 	public List<String> getGroups() {
@@ -232,7 +246,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Get the id of the contact on the phone contact list.
-	 * 
+	 *
 	 * @return the mID
 	 */
 	public int getID() {
@@ -241,7 +255,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Get the Jabber ID of the contact.
-	 * 
+	 *
 	 * @return the Jabber ID
 	 */
 	public String getJID() {
@@ -250,7 +264,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Get selected resource.
-	 * 
+	 *
 	 * @return the selected resource.
 	 */
 	public String getSelectedRes() {
@@ -259,7 +273,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Get the list of resource for the contact.
-	 * 
+	 *
 	 * @return the mRes
 	 */
 	public List<String> getMRes() {
@@ -268,7 +282,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Get the message status of the contact.
-	 * 
+	 *
 	 * @return the message status of the contact.
 	 */
 	public String getMsgState() {
@@ -277,7 +291,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Get the name of the contact.
-	 * 
+	 *
 	 * @return the mName
 	 */
 	public String getName() {
@@ -286,7 +300,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Get the status of the contact.
-	 * 
+	 *
 	 * @return the mStatus
 	 */
 	public int getStatus() {
@@ -294,8 +308,15 @@ public class Contact implements Parcelable {
 	}
 
 	/**
+	 * Return whether the contact is a MUC room or not
+	 */
+	public boolean isMUC() {
+		return mIsMUC;
+	}
+
+	/**
 	 * Get the avatar id of the contact.
-	 * 
+	 *
 	 * @return the avatar id or null if there is not
 	 */
 	public String getAvatarId() {
@@ -304,7 +325,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Set the groups the contact is in.
-	 * 
+	 *
 	 * @param groups
 	 *            list of groups
 	 */
@@ -317,7 +338,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Set the groups the contact is in.
-	 * 
+	 *
 	 * @param groups
 	 *            the mGroups to set
 	 */
@@ -328,7 +349,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * set the id of te contact on the phone contact list.
-	 * 
+	 *
 	 * @param mid
 	 *            the mID to set
 	 */
@@ -338,7 +359,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Set the avatar id of the contact.
-	 * 
+	 *
 	 * @param avatarId
 	 *            the avatar id
 	 */
@@ -348,7 +369,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Set the resource of the contact.
-	 * 
+	 *
 	 * @param resource
 	 *            to set.
 	 */
@@ -358,7 +379,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Set a list of resource for the contact.
-	 * 
+	 *
 	 * @param mRes
 	 *            the mRes to set
 	 */
@@ -368,7 +389,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Set the message status of the contact.
-	 * 
+	 *
 	 * @param msgState
 	 *            the message status of the contact to set
 	 */
@@ -378,7 +399,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Set the name of the contact.
-	 * 
+	 *
 	 * @param name
 	 *            the mName to set
 	 */
@@ -394,7 +415,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Set the status of the contact.
-	 * 
+	 *
 	 * @param status
 	 *            the mStatus to set
 	 */
@@ -404,7 +425,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Set the status of the contact using a presence packet.
-	 * 
+	 *
 	 * @param presence
 	 *            the presence containing status
 	 */
@@ -415,7 +436,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Set status for the contact.
-	 * 
+	 *
 	 * @param presence
 	 *            The presence packet which contains the status
 	 */
@@ -435,22 +456,23 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Get a URI to access the contact.
-	 * 
+	 *
 	 * @return the URI
 	 */
 	public Uri toUri() {
-		return makeXmppUri(mJID);
+		return makeXmppUri(mJID, isMUC());
 	}
 
 	/**
 	 * Get a URI to access the specific contact on this resource.
-	 * 
+	 *
 	 * @param resource
 	 *            the resource of the contact
 	 * @return the URI
 	 */
 	public Uri toUri(String resource) {
 		StringBuilder build = new StringBuilder("xmpp:");
+		if (this.isMUC()) build.append("$");
 		String name = StringUtils.parseName(mJID);
 		build.append(name);
 		if (!"".equals(name)) build.append('@');
@@ -465,7 +487,7 @@ public class Contact implements Parcelable {
 
 	/**
 	 * Get a JID to access the specific contact on this resource.
-	 * 
+	 *
 	 * @return the JID.
 	 */
 	public String getJIDWithRes() {

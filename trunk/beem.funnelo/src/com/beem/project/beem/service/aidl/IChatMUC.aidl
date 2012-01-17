@@ -44,60 +44,42 @@
 package com.beem.project.beem.service.aidl;
 
 import  com.beem.project.beem.service.Contact;
-import  com.beem.project.beem.service.aidl.IChat;
-import  com.beem.project.beem.service.aidl.IChatMUC;
+import  com.beem.project.beem.service.Message;
 import  com.beem.project.beem.service.aidl.IMessageListener;
-import  com.beem.project.beem.service.aidl.IChatManagerListener;
 
 /**
- * Aidl interface for a chat manager.
- * The chat manager will manage all the chat sessions.
+ * An aidl interface for ChatMUC session.
  */
-interface IChatManager {
-
-    	/**
-    	 * Create a chat session with a contact.
-    	 * @param contact	the contact to chat with
-    	 * @param listener	the callback to call when a new message comes from this chat session
-    	 * @return 		the chat session
-    	 */
-	IChat createChat(in Contact contact, in IMessageListener listener);
-	IChatMUC createMUCChat(in Contact contact, in IMessageListener listener);
-
+interface IChatMUC {
 	/**
-	 * Get an existing Chat session with a contact.
-	 * @return null if the chat session does not exist.
+	 * Send a message.
+	 * @param message	the message to send
 	 */
-	IChat getChat(in Contact contact);
-	IChatMUC getMUCChat(in Contact contact);
-
+	void sendMessage(in Message message);
+	
+	Contact getRoom() ;
 	/**
-    	 * Destroy a chat session with a contact.
-    	 * @param chat	the chat session
-    	 */
-	void destroyChat(in IChat chat);
-	void destroyMUCChat(in IChatMUC chat);
-
-        /**
-	 * @param chat the chat.
-         */
-	void deleteChatNotification(in IChat chat);
-
-	/**
-	 * Register a callback to call when a new chat session is created.
-	 * @param listener	the callback to add
+	 * Add a message listener.
+	 * @param listener the listener to add.
 	 */
-	void addChatCreationListener(in IChatManagerListener listener);
+	void addMessageListener(in IMessageListener listener);
 
 	/**
-	 * Remove a callback for the creation of new chat session.
-	 * @param listener	the callback to remove.
+	 * Remove a message listener.
+	 * @param listener the listener to remove.
 	 */
-	void removeChatCreationListener(in IChatManagerListener listener);
+	void removeMessageListener(in IMessageListener listener);
 
-	/**
-	 * Get a list of contact which we are currently chatting.
-	 * @return list of contact.
-	 */
-	List<Contact> getOpenedChatList();
+	String getState();
+
+	void setOpen(in boolean isOpen);
+
+	boolean isOpen();
+
+	void setState(in String state);
+
+	List<Message> getMessages();
+
+	List<Contact> getMembers();
+
 }

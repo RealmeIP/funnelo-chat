@@ -1,0 +1,22 @@
+Funnelo Chat 
+----------------
+
+Features Whishes
+----------------
+- Room Chat (Minimal : 500 users)
+	- User can create Room, Invite, Join, Leave
+	- Send file in Room
+- User one-to-one file transfer
+- Encrypted (SASL/SSL) Support
+- Small footprint
+- Small IP Traffic / Compressed
+
+Another Whishes
+---------------
+- Room chat di jadikan aplikasi terpisah agar tidak selalu aktif bersamaan dengan 
+- Login ID menggunakan ID khusus
+- Setiap orang boleh memiliki ID > 1
+- Interface dibuat simple & Lite
+- Avatar User berada pojok kiri/kanan atas, disamping status
+- Avatar Contact
+- Avatar bisa GIF animasi

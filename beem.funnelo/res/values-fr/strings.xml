@@ -322,6 +322,9 @@
 
 	<string name="mtm_notification">Certificate Verification</string>
 	
+	<string name="Room">Salon</string>
+	<string name="Nick">Pseudo</string>
+	
 	<!-- Error messages -->
 	<string name="error_login_authentication">Erreur lors de l\'authenfitication, mauvais login ou password</string>
 	<string name="interna_server_error">Erreur survenu sur le serveur</string>

@@ -66,6 +66,9 @@
 		<EditTextPreference android:key="connection_priority"
 			android:title="@string/SettingsPriorityTitle" android:summary="@string/SettingsPrioritySummary"
 			android:numeric="signed" android:defaultValue="0" />
+		<EditTextPreference android:key="settings_key_nickname"
+			android:title="@string/SettingsNicknameTitle" android:summary="@string/SettingsNicknameSummary"
+			android:defaultValue="BeemGuest" />
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/network_preferences">
 		<PreferenceScreen android:key="proxy" android:title="@string/SettingsProxy"

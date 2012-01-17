@@ -92,6 +92,7 @@ import com.beem.project.beem.service.aidl.IXmppFacade;
 import com.beem.project.beem.ui.dialogs.builders.Alias;
 import com.beem.project.beem.ui.dialogs.builders.ChatList;
 import com.beem.project.beem.ui.dialogs.builders.DeleteContact;
+import com.beem.project.beem.ui.dialogs.builders.JoinMUC;
 import com.beem.project.beem.ui.dialogs.builders.ResendSubscription;
 import com.beem.project.beem.utils.BeemBroadcastReceiver;
 import com.beem.project.beem.utils.SortedList;
@@ -140,7 +141,7 @@ public class ContactList extends Activity {
 
 	/**
 	 * Callback for menu creation.
-	 * 
+	 *
 	 * @param menu
 	 *            the menu created
 	 * @return true on success, false otherwise
@@ -180,6 +181,11 @@ public class ContactList extends Activity {
 			stopService(SERVICE_INTENT);
 			finish();
 			return true;
+		case R.id.muc:
+			Dialog joinmuc = new JoinMUC(ContactList.this).create();
+			joinmuc.show();
+			return true;
+
 		default:
 			return false;
 		}
@@ -256,6 +262,13 @@ public class ContactList extends Activity {
 				delete.show();
 				result = true;
 				break;
+			case R.id.contact_list_context_menu_joinasmuc_item:
+				Contact c = new Contact(mSelectedContact.getJID(), true);
+				Intent i = new Intent(ContactList.this, Chat.class);
+				i.setData(c.toUri(mSettings.getString("settings_key_nickname", "BeemGuest")));
+				startActivity(i);
+				result = true;
+				break;
 			default:
 				result = super.onContextItemSelected(item);
 				break;
@@ -318,7 +331,7 @@ public class ContactList extends Activity {
 
 	/**
 	 * Build and display the contact list.
-	 * 
+	 *
 	 * @param group
 	 *            name of the contact list.
 	 */
@@ -516,7 +529,7 @@ public class ContactList extends Activity {
 		 * Add a contact to the special list No Group and All contacts.
 		 * The contact will be added if the list is not the current list otherwise
 		 * the list must be modified in a Handler.
-		 * 
+		 *
 		 * @param contact
 		 *            the contact to add.
 		 */
@@ -534,7 +547,7 @@ public class ContactList extends Activity {
 
 		/**
 		 * Update the current list with the status of contact.
-		 * 
+		 *
 		 * @param listName
 		 *            name of the current list
 		 * @param contact
@@ -565,7 +578,7 @@ public class ContactList extends Activity {
 
 		/**
 		 * Remove old groups on the banner.
-		 * 
+		 *
 		 * @throws RemoteException
 		 *             if an error occur when communicating with the service
 		 */
@@ -643,7 +656,7 @@ public class ContactList extends Activity {
 
 		/**
 		 * Adapte curContact to the view.
-		 * 
+		 *
 		 * @param view
 		 *            the row view.
 		 * @param curContact
@@ -667,7 +680,7 @@ public class ContactList extends Activity {
 		/**
 		 * Get a LayerDrawable containing the avatar and the status icon.
 		 * The status icon will change with the level of the drawable.
-		 * 
+		 *
 		 * @param avatarId
 		 *            the avatar id to retrieve or null to get default
 		 * @return a LayerDrawable
@@ -742,7 +755,7 @@ public class ContactList extends Activity {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param inflater
 		 *            the inflater use to create the view for the banner
 		 * @param groups
@@ -835,7 +848,7 @@ public class ContactList extends Activity {
 		/**
 		 * Assign the differents contact to their groups.
 		 * This methods will fill the mContactOnGroup map.
-		 * 
+		 *
 		 * @param contacts
 		 *            list of contacts
 		 * @param groupNames
@@ -869,7 +882,7 @@ public class ContactList extends Activity {
 
 		/**
 		 * Make the List of the map became Insertion sorted list.
-		 * 
+		 *
 		 * @param map
 		 *            the map to convert.
 		 */

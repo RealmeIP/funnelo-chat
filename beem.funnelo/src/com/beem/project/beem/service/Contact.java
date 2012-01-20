@@ -76,8 +76,8 @@ public class Contact implements Parcelable {
 	private List<String> mRes;
 	private final List<String> mGroups = new ArrayList<String>();
 	private String mName;
-	private boolean mIsMUC;
 	private String mAvatarId;
+	private boolean mIsMUC;
 
 	/**
 	 * Construct a contact from a parcel.

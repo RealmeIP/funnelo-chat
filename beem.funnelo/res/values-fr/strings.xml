@@ -49,7 +49,7 @@
 	<string name="ChangeStatusMessage">Mon message personnel</string>
 	<string name="OpenContactList">Ouvrir la liste des contacts</string>
 
-	
+
 	<string name="MenuAddContact">Ajouter un nouveau contact</string>
 	<string name="MenuAccountAbout">Beem Project</string>
 	<string name="MenuAccountCreate">Créer un compte</string>
@@ -78,7 +78,7 @@
 	<string name="SettingsAdvanced">Options avancées</string>
 	<string name="SettingsAdvancedRecoDelay">Modifier le délai de reconnexion</string>
 	<string name="SettingsAdvancedOptions">Options spécifiques</string>
-	<string name="SettingsAdvancedSpecOpt">Cochez cette option pour utiliser un serveur spécifique </string>	
+	<string name="SettingsAdvancedSpecOpt">Cochez cette option pour utiliser un serveur spécifique </string>
 	<string name="SettingsAdvancedAddOpt">Saisissez l\'adresse du serveur à joindre</string>
 	<string name="SettingsAdvancedPortOpt">Saisissez le port du serveur</string>
 	<string name="SettingsResourceTitle">Ressource</string>
@@ -88,7 +88,7 @@
 	<string name="contact_list_preferences">Liste d\'ami(e)s</string>
 	<string name="contact_list_preferences_sum">Une série d\'options d\'affichage de votre liste
 		d\'ami(e)s</string>
-	<string name="CLP_hide_groups">Cachez les groupes</string>	
+	<string name="CLP_hide_groups">Cachez les groupes</string>
 	<string name="CLP_hide_groups_sum">Cochez cette option pour cacher les groupes</string>
 	<string name="CLP_hidden_contact">Cachez les contacts</string>
 	<string name="CLP_hidden_contact_sum">Cochez cette option pour cacher les contacts déconnectés</string>
@@ -104,7 +104,7 @@
 	<string name="settings_xmpp_port">Port</string>
 	<string name="comments_xmpp_port">Default: 5222</string>
 	<string name="settings_xmpp_use_tls">SSL/TLS obligatoire</string>
-	<string name="settings_reco_delay">Délai de reconnexion</string>	
+	<string name="settings_reco_delay">Délai de reconnexion</string>
 	<string name="settings_proxy_sum">Paramètrez un serveur proxy</string>
 	<string name="settings_proxy_use">Utiliser un proxy</string>
 	<string name="settings_proxy_type_prompt">Choisir un type de proxy</string>
@@ -136,7 +136,7 @@
 	<string name="settings_smack_debug">Activer le debugger XMPP</string>
 	<string name="settings_full_jid_login">Utiliser le JID entier en tant que login</string>
 	<string name="settings_full_jid_login_sum">Nécessaire pour certains serveurs (Google Talk)</string>
-	
+
 	<!-- Subscription class -->
 	<string name="SubscriptAccept">Inscription acceptée</string>
 	<string name="SubscriptError">Erreur d\'inscription</string>
@@ -230,7 +230,7 @@
 	<string name="settings_tab_label_proxy">Proxy</string>
 	<string name="history_preferences">Historique</string>
 	<string name="chat_layout_option">Fenêtre de chat</string>
-	
+
 
 	<!-- wizard activities -->
 	<string name="account_wizard_text1"><b>Bienvenue sur BEEM.</b>\n\nVous n\'avez pas encore configuré de compte XMPP (Jabber).\nChoisissez une des options suivantes :</string>
@@ -253,7 +253,7 @@
 	<string name="create_account_confirm_password">Confirmation du mot de passe</string>
 
 	<!--
-		ContactList Activity 
+		ContactList Activity
 	 -->
 	<string name="contact_list_menu_add_contact">Ajouter un contact</string>
 	<string name="contact_list_menu_status">Changer son status</string>
@@ -263,7 +263,7 @@
 	<string name="contact_list_no_group">Aucun groupe</string>
 
 
-	<!-- 
+	<!--
 		UserInfo Activity
 	-->
 	<string name="userinfo_label_alias">Alias</string>
@@ -276,7 +276,7 @@
 	<string name="userinfo_yes">Oui</string>
 	<string name="userinfo_no">Non</string>
 	<string name="userinfo_sureresend">Etes vous sûr de vouloir renvoyer l\'invitation ?</string>
-	
+
 	<string name="chat_input_default_value">Saisissez votre message</string>
 	<string name="chat_name">Beem - Chat</string>
 	<string name="chat_self">Moi</string>
@@ -321,10 +321,10 @@
 	<string name="mtm_decision_abort">Annuler</string>
 
 	<string name="mtm_notification">Certificate Verification</string>
-	
+
 	<string name="Room">Salon</string>
 	<string name="Nick">Pseudo</string>
-	
+
 	<!-- Error messages -->
 	<string name="error_login_authentication">Erreur lors de l\'authenfitication, mauvais login ou password</string>
 	<string name="interna_server_error">Erreur survenu sur le serveur</string>

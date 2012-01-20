@@ -452,7 +452,7 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 			String fromBareJid = StringUtils.parseBareAddress(m.getFrom());
 			if (m.getType() == Message.MSG_TYPE_ERROR) {
 				lastMessage = null;
-				result.add(new MessageText(fromBareJid, name, m.getBody(), true, m.getTimestamp()));
+				result.add(new MessageText(fromBareJid, name, m.getBody(), true, false, m.getTimestamp()));
 			} else if (m.getType() == Message.MSG_TYPE_INFO) {
 				lastMessage = new MessageText("", "", m.getBody(), false);
 				result.add(lastMessage);
@@ -471,7 +471,7 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 							&& lastMessage.getName().equals(name)) {
 						lastMessage.setMessage(lastMessage.getMessage().concat("\n" + m.getBody()));
 					} else {
-						lastMessage = new MessageText(fromBareJid, name, m.getBody(), false, m.getTimestamp());
+						lastMessage = new MessageText(fromBareJid, name, m.getBody(), false, false, m.getTimestamp());
 						result.add(lastMessage);
 					}
 				}
@@ -605,7 +605,7 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 					@Override
 					public void run() {
 						if (msg.getType() == Message.MSG_TYPE_ERROR) {
-							mListMessages.add(new MessageText(fromBareJid, mContact.getName(), msg.getBody(), true, msg
+							mListMessages.add(new MessageText(fromBareJid, mContact.getName(), msg.getBody(), true, false, msg
 									.getTimestamp()));
 							mMessagesListAdapter.notifyDataSetChanged();
 						} else if (msg.getBody() != null) {
@@ -625,7 +625,7 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 								lastMessage.setTimestamp(msg.getTimestamp());
 								mListMessages.set(mListMessages.size() - 1, lastMessage);
 							} else if (msg.getBody() != null) mListMessages.add(new MessageText(fromBareJid, name, msg
-									.getBody(), false, msg.getTimestamp()));
+									.getBody(), false, false, msg.getTimestamp()));
 							mMessagesListAdapter.notifyDataSetChanged();
 						}
 					}
@@ -852,7 +852,7 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 			MessageText msg = mListMessages.get(position);
 			TextView msgName = (TextView) sv.findViewById(R.id.chatmessagename);
 			msgName.setText(msg.getName());
-			msgName.setTextColor(Color.WHITE);
+			msgName.setTextColor(msg.isHL() ? Color.RED : Color.WHITE);
 			msgName.setError(null);
 			TextView msgText = (TextView) sv.findViewById(R.id.chatmessagetext);
 			msgText.setText(msg.getMessage());
@@ -883,6 +883,7 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 		private String mName;
 		private String mMessage;
 		private boolean mIsError;
+		private boolean mHL;
 		private Date mTimestamp;
 
 		/**
@@ -936,11 +937,12 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 		 *            the time of the message.
 		 */
 		public MessageText(final String bareJid, final String name, final String message, final boolean isError,
-				final Date date) {
+				final boolean isHL, final Date date) {
 			mBareJid = bareJid;
 			mName = name;
 			mMessage = message;
 			mIsError = isError;
+			mHL = isHL;
 			mTimestamp = date;
 		}
 
@@ -1031,6 +1033,14 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 			return mTimestamp;
 		}
 
+		public boolean isHL() {
+			return mHL;
+		}
+
+		public void setHL(boolean hl) {
+			mHL = hl ;
+		}
+
 	}
 
 	/**
@@ -1080,7 +1090,7 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 						lastMessage.setMessage(lastMessage.getMessage().concat("\n" + inputContent));
 						lastMessage.setTimestamp(new Date());
 					} else {
-						mListMessages.add(new MessageText(self, self, inputContent, false, new Date()));
+						mListMessages.add(new MessageText(self, self, inputContent, false, false, new Date()));
 					}
 				}
 			} catch (RemoteException e) {

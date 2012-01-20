@@ -51,6 +51,7 @@ import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.ChatStateManager;
 import org.jivesoftware.smackx.ServiceDiscoveryManager;
+import org.jivesoftware.smackx.bookmark.BookmarkManager;
 import org.jivesoftware.smackx.packet.DiscoverInfo;
 
 import android.app.Notification;

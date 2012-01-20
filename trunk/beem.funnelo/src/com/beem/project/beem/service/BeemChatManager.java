@@ -418,15 +418,18 @@ public class BeemChatManager extends IChatManager.Stub {
 			}
 		}
 
-		@Override
-		public void stateChanged(final IChat chat) {}
+	    @Override
+	    public void processMUCMessage(IChatMUC chat, Message message)
+	        throws RemoteException {
+	        String body = message.getBody();
+			boolean onlyhl = PreferenceManager.getDefaultSharedPreferences(mService).getBoolean("notification_hls", false) ;
+			if (!chat.isOpen() && message.getBody() != null && ( message.isHL() || !onlyhl)) {
+	             notifyMUCChat(chat, body) ;
+	        }
+	    }
 
 		@Override
-		public void processMUCMessage(IChatMUC chat, Message message) throws RemoteException {
-			if (!chat.isOpen() && message.getBody() != null) {
-				notifyMUCChat(chat, message.getBody());
-			}
-		}
+		public void stateChanged(final IChat chat) {}
 
 		@Override
 		public void otrStateChanged(String otrState) throws RemoteException {

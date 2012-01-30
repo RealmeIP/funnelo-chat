@@ -43,7 +43,7 @@
 	android:layout_height="wrap_content"
 	android:layout_width="fill_parent"
 	android:background="@drawable/bottombar" >
-
+	<!--  by Adit -->
 	<Button
             android:id="@+id/manual_setup"
             android:text="@string/AccountConfigureManualConfiguration"
@@ -52,6 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+           	android:visibility="invisible"
             />
 
 	<Button
@@ -63,8 +64,6 @@
 	    android:drawableRight="@drawable/button_indicator_next"
 	    android:layout_alignParentRight="true"
 	    android:layout_centerVertical="true"
-	    android:enabled="false"
-	    
 	    />
     </RelativeLayout>
 

@@ -146,6 +146,7 @@ public class AccountConfigure extends Activity implements OnClickListener {
 	 * @param username
 	 *            the username to check.
 	 */
+	/*
 	private void checkUsername(String username) {
 		String name = StringUtils.parseName(username);
 		String server = StringUtils.parseServer(username);
@@ -154,6 +155,12 @@ public class AccountConfigure extends Activity implements OnClickListener {
 		} else {
 			mValidJid = true;
 		}
+	}
+	*/
+	// by Adit
+	private void checkUsername(String username) {
+		if (username.length() > 0) mValidJid = true;
+		else mValidJid = false;
 	}
 
 	/**
@@ -203,8 +210,7 @@ public class AccountConfigure extends Activity implements OnClickListener {
 		@Override
 		public void afterTextChanged(Editable s) {
 			checkUsername(s.toString());
-			// mNextButton.setEnabled(mValidJid && mValidPassword);
-			mNextButton.setEnabled(mValidJid=true && mValidPassword);  // by Adit
+			mNextButton.setEnabled(mValidJid && mValidPassword);
 		}
 
 		@Override

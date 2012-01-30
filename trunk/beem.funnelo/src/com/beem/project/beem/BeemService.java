@@ -36,6 +36,7 @@ package com.beem.project.beem;
 import java.security.GeneralSecurityException;
 import javax.net.ssl.SSLContext;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
@@ -52,6 +53,7 @@ import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.beem.project.beem.service.XmppConnectionAdapter;
 import com.beem.project.beem.service.XmppFacade;
@@ -99,6 +101,9 @@ public class BeemService extends Service {
 
 	private static final String TAG = "BeemService";
 	private static final int DEFAULT_XMPP_PORT = 5222;
+	private static final String DEFAULT_XMPP_SRV = "funnelo.co.cc"; // By Adit
+	private static final String DEFAULT_XMPP_SVC = "funnelo.com"; // By Adit
+	
 	// private static final String COMMAND_NAMESPACE = "http://jabber.org/protocol/commands";
 
 	private NotificationManager mNotificationManager;
@@ -108,6 +113,8 @@ public class BeemService extends Service {
 	private String mPassword;
 	private String mHost;
 	private String mService;
+	// private String mHost = DEFAULT_XMPP_SRV;	// by Adit
+	//private String mService = DEFAULT_XMPP_SVC; // by Adit
 	private int mPort;
 	private ConnectionConfiguration mConnectionConfiguration;
 	private ProxyInfo mProxyInfo;
@@ -143,10 +150,14 @@ public class BeemService extends Service {
 		} else {
 			mProxyInfo = ProxyInfo.forNoProxy();
 		}
+		/*
 		if (mSettings.getBoolean("settings_key_specific_server", false)) mConnectionConfiguration = new ConnectionConfiguration(
 				mHost, mPort, mService, mProxyInfo);
 		else mConnectionConfiguration = new ConnectionConfiguration(mService, mProxyInfo);
-
+		*/
+		mConnectionConfiguration = new ConnectionConfiguration(
+				mHost, mPort, mService, mProxyInfo);  // by Adit
+		
 		if (mSettings.getBoolean("settings_key_xmpp_tls_use", false)
 				|| mSettings.getBoolean("settings_key_gmail", false)) {
 			mConnectionConfiguration.setSecurityMode(SecurityMode.required);
@@ -193,18 +204,32 @@ public class BeemService extends Service {
 			registerReceiver(mOnOffReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
 		}
 		String tmpJid = mSettings.getString(BeemApplication.ACCOUNT_USERNAME_KEY, "").trim();
-		mLogin = StringUtils.parseName(tmpJid);
+		// mLogin = StringUtils.parseName(tmpJid);
+		mLogin = StringUtils.parseName(tmpJid+"@"+DEFAULT_XMPP_SVC);  // by Adit
 		mPassword = mSettings.getString(BeemApplication.ACCOUNT_PASSWORD_KEY, "");
 		mPort = DEFAULT_XMPP_PORT;
 		mService = StringUtils.parseServer(tmpJid);
 		mHost = mService;
+		
+		// Toast.makeText(this, "INI JID : "+tmpJid, Toast.LENGTH_LONG).show(); // by Adit
 
+		/*
 		if (mSettings.getBoolean("settings_key_specific_server", false)) {
 			mHost = mSettings.getString("settings_key_xmpp_server", "").trim();
 			if ("".equals(mHost)) mHost = mService;
 			String tmpPort = mSettings.getString("settings_key_xmpp_port", "5222");
 			if (!"".equals(tmpPort)) mPort = Integer.parseInt(tmpPort);
 		}
+		*/
+		
+		// By Adit
+		mHost = DEFAULT_XMPP_SRV.trim();	// by Adit
+		if ("".equals(mHost)) mHost = mService;
+		mService = DEFAULT_XMPP_SVC; // by Adit
+
+		// Toast.makeText(this, mLogin+"@"+DEFAULT_XMPP_SVC, Toast.LENGTH_LONG).show(); // by Adit
+		// Toast.makeText(this, "INI : "+mHost+" "+mService ,Toast.LENGTH_LONG).show();
+		
 		if (mSettings.getBoolean(BeemApplication.FULL_JID_LOGIN_KEY, false) || "gmail.com".equals(mService)
 				|| "googlemail.com".equals(mService)) {
 			mLogin = tmpJid;

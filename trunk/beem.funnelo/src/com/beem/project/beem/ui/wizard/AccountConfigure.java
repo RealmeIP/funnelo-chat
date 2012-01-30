@@ -203,7 +203,8 @@ public class AccountConfigure extends Activity implements OnClickListener {
 		@Override
 		public void afterTextChanged(Editable s) {
 			checkUsername(s.toString());
-			mNextButton.setEnabled(mValidJid && mValidPassword);
+			// mNextButton.setEnabled(mValidJid && mValidPassword);
+			mNextButton.setEnabled(mValidJid=true && mValidPassword);  // by Adit
 		}
 
 		@Override

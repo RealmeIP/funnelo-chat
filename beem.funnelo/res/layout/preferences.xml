@@ -122,6 +122,7 @@
 					android:summary="@string/SettingsAdvancedRecoDelay" android:key="settings_key_reco_delay"
 					android:defaultValue="10" />
 			</PreferenceCategory>
+			
 			<CheckBoxPreference android:title="@string/SettingsAdvancedOptions"
 				android:defaultValue="false" android:summary="@string/SettingsAdvancedSpecOpt"
 				android:key="settings_key_specific_server" />
@@ -137,6 +138,7 @@
 			<CheckBoxPreference android:title="@string/settings_full_jid_login"
 				android:defaultValue="false" android:summary="@string/settings_full_jid_login_sum"
 				android:key="full_jid_login" />
+			 
 		</PreferenceScreen>
 	</PreferenceCategory>
 </PreferenceScreen>

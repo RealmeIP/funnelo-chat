@@ -24,7 +24,7 @@
 		android:inputType="textEmailAddress" android:imeOptions="actionNext"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:singleLine="true" 
-		android:hint="user@funnelo.com "
+		android:hint=""
 		android:contentDescription="@string/JabberID"/>
 	    <TextView
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -64,6 +64,7 @@
 	    android:layout_alignParentRight="true"
 	    android:layout_centerVertical="true"
 	    android:enabled="false"
+	    
 	    />
     </RelativeLayout>
 

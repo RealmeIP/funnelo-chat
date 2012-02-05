@@ -33,6 +33,8 @@
  */
 package com.beem.project.beem.ui.wizard;
 
+import org.jivesoftware.smack.util.StringUtils;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -48,16 +50,16 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-import org.jivesoftware.smack.util.StringUtils;
-
+import com.beem.project.beem.BeemApplication;
+import com.beem.project.beem.BeemService;
+import com.beem.project.beem.R;
 import com.beem.project.beem.ui.Login;
 import com.beem.project.beem.ui.Settings;
-import com.beem.project.beem.BeemApplication;
-import com.beem.project.beem.R;
 
 /**
- * Activity to enter the information required in order to configure a XMPP account.
- * 
+ * Activity to enter the information required in order to configure a XMPP
+ * account.
+ *
  * @author Da Risk <darisk972@gmail.com>
  */
 public class AccountConfigure extends Activity implements OnClickListener {
@@ -75,7 +77,8 @@ public class AccountConfigure extends Activity implements OnClickListener {
 	/**
 	 * Constructor.
 	 */
-	public AccountConfigure() {}
+	public AccountConfigure() {
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +87,7 @@ public class AccountConfigure extends Activity implements OnClickListener {
 		mManualConfigButton = (Button) findViewById(R.id.manual_setup);
 		mManualConfigButton.setOnClickListener(this);
 		mNextButton = (Button) findViewById(R.id.next);
+		mNextButton.setEnabled(false);
 		mNextButton.setOnClickListener(this);
 		mAccountJID = (EditText) findViewById(R.id.account_username);
 		mAccountPassword = (EditText) findViewById(R.id.account_password);
@@ -135,43 +139,47 @@ public class AccountConfigure extends Activity implements OnClickListener {
 	private void configureAccount() {
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 		SharedPreferences.Editor edit = settings.edit();
-		edit.putString(BeemApplication.ACCOUNT_USERNAME_KEY, mAccountJID.getText().toString());
+		String jid = mAccountJID.getText().toString();
+		if (jid.indexOf("@") < 0) // this will trick empty
+			// StringUtils.parseName() anomaly problem
+			jid += "@";
+		edit.putString(BeemApplication.ACCOUNT_USERNAME_KEY, StringUtils.parseName(jid));
 		edit.putString(BeemApplication.ACCOUNT_PASSWORD_KEY, mAccountPassword.getText().toString());
 		edit.commit();
 	}
 
 	/**
 	 * Check that the username is really a JID.
-	 * 
+	 *
 	 * @param username
 	 *            the username to check.
 	 */
-	/*
 	private void checkUsername(String username) {
+		if (username.indexOf("@") < 0) // this will trick empty
+			// StringUtils.parseName() anomaly problem
+			username += "@";
 		String name = StringUtils.parseName(username);
-		String server = StringUtils.parseServer(username);
-		if (TextUtils.isEmpty(name) || TextUtils.isEmpty(server)) {
-			mValidJid = false;
-		} else {
-			mValidJid = true;
-		}
-	}
-	*/
-	// by Adit
-	private void checkUsername(String username) {
-		if (username.length() > 0) mValidJid = true;
-		else mValidJid = false;
+		String service = StringUtils.parseServer(username);
+		mValidJid = !TextUtils.isEmpty(name);
+		if (!mValidJid)
+			return;
+		mValidJid = TextUtils.isEmpty(service);
+		if (mValidJid)
+			return;
+		mValidJid = BeemService.DEFAULT_XMPP_SVC.equals(service);
 	}
 
 	/**
 	 * Check password.
-	 * 
+	 *
 	 * @param password
 	 *            the password to check.
 	 */
 	private void checkPassword(String password) {
-		if (password.length() > 0) mValidPassword = true;
-		else mValidPassword = false;
+		if (password.length() > 0)
+			mValidPassword = true;
+		else
+			mValidPassword = false;
 	}
 
 	/**
@@ -182,7 +190,8 @@ public class AccountConfigure extends Activity implements OnClickListener {
 		/**
 		 * Constructor.
 		 */
-		public PasswordTextWatcher() {}
+		public PasswordTextWatcher() {
+		}
 
 		@Override
 		public void afterTextChanged(Editable s) {
@@ -191,10 +200,12 @@ public class AccountConfigure extends Activity implements OnClickListener {
 		}
 
 		@Override
-		public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+		}
 
 		@Override
-		public void onTextChanged(CharSequence s, int start, int before, int count) {}
+		public void onTextChanged(CharSequence s, int start, int before, int count) {
+		}
 	}
 
 	/**
@@ -205,7 +216,8 @@ public class AccountConfigure extends Activity implements OnClickListener {
 		/**
 		 * Constructor.
 		 */
-		public JidTextWatcher() {}
+		public JidTextWatcher() {
+		}
 
 		@Override
 		public void afterTextChanged(Editable s) {
@@ -214,9 +226,11 @@ public class AccountConfigure extends Activity implements OnClickListener {
 		}
 
 		@Override
-		public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+		}
 
 		@Override
-		public void onTextChanged(CharSequence s, int start, int before, int count) {}
+		public void onTextChanged(CharSequence s, int start, int before, int count) {
+		}
 	}
 }

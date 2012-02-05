@@ -61,8 +61,9 @@ import com.beem.project.beem.service.aidl.IXmppFacade;
 import de.duenndns.ssl.MemorizingTrustManager;
 
 /**
- * This class is an activity which display an animation during the connection with the server.
- * 
+ * This class is an activity which display an animation during the connection
+ * with the server.
+ *
  * @author Da Risk <darisk972@gmail.com>
  */
 public class LoginAnim extends Activity {
@@ -86,10 +87,12 @@ public class LoginAnim extends Activity {
 	/**
 	 * Constructor.
 	 */
-	public LoginAnim() {}
+	public LoginAnim() {
+	}
 
 	/*
 	 * (non-Javadoc)
+	 *
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -118,14 +121,17 @@ public class LoginAnim extends Activity {
 
 	/*
 	 * (non-Javadoc)
+	 *
 	 * @see android.app.Activity#onStart()
 	 */
 	@Override
 	protected void onStart() {
 		super.onStart();
 		mLogo.startAnimation(mRotateAnim);
-		if (mTask == null) mTask = new LoginTask();
-		if (!mBinded) mBinded = bindService(LoginAnim.SERVICE_INTENT, mServConn, BIND_AUTO_CREATE);
+		if (mTask == null)
+			mTask = new LoginTask();
+		if (!mBinded)
+			mBinded = bindService(LoginAnim.SERVICE_INTENT, mServConn, BIND_AUTO_CREATE);
 		IntentFilter filter = new IntentFilter(MemorizingTrustManager.INTERCEPT_DECISION_INTENT + "/"
 				+ getPackageName());
 		filter.setPriority(RECEIVER_PRIORITY);
@@ -135,6 +141,7 @@ public class LoginAnim extends Activity {
 
 	/*
 	 * (non-Javadoc)
+	 *
 	 * @see android.app.Activity#onPause()
 	 */
 	@Override
@@ -150,6 +157,7 @@ public class LoginAnim extends Activity {
 
 	/*
 	 * (non-Javadoc)
+	 *
 	 * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
 	 */
 	@Override
@@ -172,7 +180,8 @@ public class LoginAnim extends Activity {
 		/**
 		 * Constructor.
 		 */
-		ClickListener() {}
+		ClickListener() {
+		}
 
 		@Override
 		public void onClick(View v) {
@@ -194,10 +203,12 @@ public class LoginAnim extends Activity {
 		/**
 		 * Constructor.
 		 */
-		LoginTask() {}
+		LoginTask() {
+		}
 
 		/*
 		 * (non-Javadoc)
+		 *
 		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
 		 */
 		@Override
@@ -208,7 +219,8 @@ public class LoginAnim extends Activity {
 					Intent i = new Intent();
 					i.putExtra("message", getErrorMessage());
 					LoginAnim.this.setResult(Activity.RESULT_CANCELED, i);
-				} else LoginAnim.this.setResult(Activity.RESULT_CANCELED);
+				} else
+					LoginAnim.this.setResult(Activity.RESULT_CANCELED);
 				LoginAnim.this.finish();
 			} else {
 				mCancelBt.setEnabled(false);
@@ -225,6 +237,7 @@ public class LoginAnim extends Activity {
 
 		/*
 		 * (non-Javadoc)
+		 *
 		 * @see android.os.AsyncTask#onCancelled()
 		 */
 		@Override
@@ -243,12 +256,14 @@ public class LoginAnim extends Activity {
 		/**
 		 * Constructor.
 		 */
-		public LoginServiceConnection() {}
+		public LoginServiceConnection() {
+		}
 
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			mXmppFacade = IXmppFacade.Stub.asInterface(service);
-			if (mTask.getStatus() == AsyncTask.Status.PENDING) mTask = mTask.execute(mXmppFacade);
+			if (mTask.getStatus() == AsyncTask.Status.PENDING)
+				mTask = mTask.execute(mXmppFacade);
 		}
 
 		@Override

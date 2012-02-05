@@ -33,12 +33,9 @@
  */
 package com.beem.project.beem.ui;
 
-import java.util.regex.Pattern;
-
 import org.jivesoftware.smack.AccountManager;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.proxy.ProxyInfo;
 import org.jivesoftware.smack.util.StringUtils;
 
@@ -48,6 +45,8 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,11 +54,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.beem.project.beem.BeemApplication;
+import com.beem.project.beem.BeemService;
 import com.beem.project.beem.R;
 
 /**
- * This class represents an activity which allows the user to create an account on the XMPP server saved in settings.
- * 
+ * This class represents an activity which allows the user to create an account
+ * on the XMPP server saved in settings.
+ *
  * @author Jean-Manuel Da Silva <dasilvj at beem-project dot com>
  */
 public class CreateAccount extends Activity {
@@ -76,7 +77,8 @@ public class CreateAccount extends Activity {
 	/**
 	 * Constructor.
 	 */
-	public CreateAccount() {}
+	public CreateAccount() {
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -91,7 +93,7 @@ public class CreateAccount extends Activity {
 
 	/**
 	 * Create an account on the XMPP server specified in settings.
-	 * 
+	 *
 	 * @param username
 	 *            the username of the account.
 	 * @param password
@@ -102,23 +104,32 @@ public class CreateAccount extends Activity {
 		XMPPConnection xmppConnection = null;
 		ConnectionConfiguration connectionConfiguration = null;
 		ProxyInfo pi = getRegisteredProxy();
+		String server = getXMPPServer();
+		int port = getXMPPPort();
 		if (pi != null) {
-			connectionConfiguration = new ConnectionConfiguration(getXMPPServer(), getXMPPPort(), pi);
+			connectionConfiguration = new ConnectionConfiguration(server, port, pi);
 		} else {
-			connectionConfiguration = new ConnectionConfiguration(getXMPPServer(), getXMPPPort());
+			connectionConfiguration = new ConnectionConfiguration(server, port);
 		}
-		if (getRegisteredXMPPTLSUse()) connectionConfiguration
-				.setSecurityMode(ConnectionConfiguration.SecurityMode.required);
+		connectionConfiguration.setServiceName(mSettings.getString(BeemApplication.CONNECTION_SERVICE_KEY,
+				BeemService.DEFAULT_XMPP_SVC));
+		if (getRegisteredXMPPTLSUse())
+			connectionConfiguration.setSecurityMode(ConnectionConfiguration.SecurityMode.required);
 
 		xmppConnection = new XMPPConnection(connectionConfiguration);
+		Log.i("createAccount", "Connecting to '" + server + ":" + port + "'...");
 		try {
 			xmppConnection.connect();
+			for (int i = 0; i < 5 && !xmppConnection.isConnected(); i++)
+				Thread.sleep(1000);
 			AccountManager accountManager = new AccountManager(xmppConnection);
+			Log.i("createAccount", "Creating new account: '" + username + "'...");
 			accountManager.createAccount(username, password);
 			Toast toast = Toast.makeText(getApplicationContext(), String.format(
 					getString(R.string.create_account_successfull_after), username), NOTIFICATION_DURATION);
 			toast.show();
-		} catch (XMPPException e) {
+		} catch (Exception e) {
+			Log.w("createAccount", e.getMessage());
 			createErrorDialog(e.getMessage());
 			return false;
 		}
@@ -128,7 +139,7 @@ public class CreateAccount extends Activity {
 
 	/**
 	 * Create a dialog containing an error message.
-	 * 
+	 *
 	 * @param errMsg
 	 *            the error message
 	 */
@@ -149,7 +160,7 @@ public class CreateAccount extends Activity {
 
 	/**
 	 * Retrive proxy informations from the preferences.
-	 * 
+	 *
 	 * @return Registered proxy informations
 	 */
 	private ProxyInfo getRegisteredProxy() {
@@ -163,7 +174,7 @@ public class CreateAccount extends Activity {
 
 	/**
 	 * Retrieve proxy password from the preferences.
-	 * 
+	 *
 	 * @return Registered proxy password
 	 */
 	private String getRegisteredProxyPassword() {
@@ -172,7 +183,7 @@ public class CreateAccount extends Activity {
 
 	/**
 	 * Retrieve proxy port from the preferences.
-	 * 
+	 *
 	 * @return Registered proxy port
 	 */
 	private int getRegisteredProxyPort() {
@@ -181,7 +192,7 @@ public class CreateAccount extends Activity {
 
 	/**
 	 * Retrieve proxy server from the preferences.
-	 * 
+	 *
 	 * @return Registered proxy server
 	 */
 	private String getRegisteredProxyServer() {
@@ -190,24 +201,28 @@ public class CreateAccount extends Activity {
 
 	/**
 	 * Retrieve proxy type from the preferences.
-	 * 
+	 *
 	 * @return Registered proxy type
 	 */
 	private ProxyInfo.ProxyType getRegisteredProxyType() {
 		ProxyInfo.ProxyType result = ProxyInfo.ProxyType.NONE;
 		if (mSettings.getBoolean(BeemApplication.PROXY_USE_KEY, false)) {
 			String type = mSettings.getString(BeemApplication.PROXY_TYPE_KEY, "none");
-			if ("HTTP".equals(type)) result = ProxyInfo.ProxyType.HTTP;
-			else if ("SOCKS4".equals(type)) result = ProxyInfo.ProxyType.SOCKS4;
-			else if ("SOCKS5".equals(type)) result = ProxyInfo.ProxyType.SOCKS5;
-			else result = ProxyInfo.ProxyType.NONE;
+			if ("HTTP".equals(type))
+				result = ProxyInfo.ProxyType.HTTP;
+			else if ("SOCKS4".equals(type))
+				result = ProxyInfo.ProxyType.SOCKS4;
+			else if ("SOCKS5".equals(type))
+				result = ProxyInfo.ProxyType.SOCKS5;
+			else
+				result = ProxyInfo.ProxyType.NONE;
 		}
 		return result;
 	}
 
 	/**
 	 * Retrieve proxy use from the preferences.
-	 * 
+	 *
 	 * @return Registered proxy use
 	 */
 	private boolean getRegisteredProxyUse() {
@@ -216,7 +231,7 @@ public class CreateAccount extends Activity {
 
 	/**
 	 * Retrieve proxy username from the preferences.
-	 * 
+	 *
 	 * @return Registered proxy username
 	 */
 	private String getRegisteredProxyUsername() {
@@ -225,33 +240,28 @@ public class CreateAccount extends Activity {
 
 	/**
 	 * Retrieve xmpp port from the preferences.
-	 * 
+	 *
 	 * @return Registered xmpp port
 	 */
 	private int getXMPPPort() {
 		int port = DEFAULT_XMPP_PORT;
-		if (mSettings.getBoolean("settings_key_specific_server", false)) port = Integer.parseInt(mSettings.getString(
-				"settings_key_xmpp_port", "5222"));
+		if (mSettings.getBoolean("settings_key_specific_server", false))
+			port = Integer.parseInt(mSettings.getString("settings_key_xmpp_port", "5222"));
 		return port;
 	}
 
 	/**
 	 * Retrieve xmpp server from the preferences.
-	 * 
+	 *
 	 * @return Registered xmpp server
 	 */
 	private String getXMPPServer() {
-		TextView xmppServerTextView = (TextView) findViewById(R.id.create_account_username);
-		String xmppServer = "";
-		if (mSettings.getBoolean("settings_key_specific_server", false)) xmppServer = mSettings.getString(
-				"settings_key_xmpp_server", "");
-		else xmppServer = StringUtils.parseServer(xmppServerTextView.getText().toString());
-		return xmppServer;
+		return mSettings.getString("settings_key_xmpp_server", BeemService.DEFAULT_XMPP_SRV);
 	}
 
 	/**
 	 * Retrieve TLS use from the preferences.
-	 * 
+	 *
 	 * @return Registered TLS use
 	 */
 	private boolean getRegisteredXMPPTLSUse() {
@@ -260,8 +270,9 @@ public class CreateAccount extends Activity {
 
 	/**
 	 * Check if the fields password and confirm password match.
-	 * 
-	 * @return return true if password & confirm password fields match, else false
+	 *
+	 * @return return true if password & confirm password fields match, else
+	 *         false
 	 */
 	private boolean checkPasswords() {
 		final String passwordFieldValue = ((EditText) findViewById(R.id.create_account_password)).getText().toString();
@@ -273,16 +284,28 @@ public class CreateAccount extends Activity {
 
 	/**
 	 * Check the format of the email.
-	 * 
+	 *
 	 * @return true if the email is valid.
 	 */
 	private boolean checkEmail() {
-		String email = ((TextView) findViewById(R.id.create_account_username)).getText().toString();
-		return Pattern.matches("[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+.)+[a-zA-Z]{2,4}", email);
+		TextView tView = (TextView) findViewById(R.id.create_account_username);
+		String email = tView.getText().toString();
+		if (email.indexOf("@") < 0)
+			return true;
+		String service = StringUtils.parseServer(email);
+		if (TextUtils.isEmpty(service))
+			return true;
+		if (service.equals(BeemService.DEFAULT_XMPP_SVC))
+			return true;
+		return false;
+		// return
+		// Pattern.matches("[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+.)+[a-zA-Z]{2,4}",
+		// email);
 	}
 
 	/**
-	 * Initialize the "Create this account" button which allows the user to create an account.
+	 * Initialize the "Create this account" button which allows the user to
+	 * create an account.
 	 */
 	private void initCreateAccountButton() {
 		mCreateAccountButton = (Button) findViewById(R.id.create_account_button);
@@ -293,11 +316,18 @@ public class CreateAccount extends Activity {
 						.toString();
 				String passwordFieldValue = ((EditText) findViewById(R.id.create_account_password)).getText()
 						.toString();
-				String username = StringUtils.parseName(usernameFieldValue);
-				if (!checkEmail()) createErrorDialog(getString(R.string.create_account_err_username));
-				else if (!checkPasswords()) createErrorDialog(getString(R.string.create_account_err_passwords));
+				if (!checkEmail())
+					createErrorDialog(getString(R.string.create_account_err_username));
+				else if (!checkPasswords())
+					createErrorDialog(getString(R.string.create_account_err_passwords));
 				else {
-					if (createAccount(username, passwordFieldValue)) finish();
+					if (usernameFieldValue.indexOf("@") < 0) // this will trick
+						// empty
+						// StringUtils.parseName() anomaly problem
+						usernameFieldValue += "@";
+					String username = StringUtils.parseName(usernameFieldValue);
+					if (createAccount(username, passwordFieldValue))
+						finish();
 				}
 
 			}
@@ -308,15 +338,21 @@ public class CreateAccount extends Activity {
 			public void onClick(View v) {
 				String usernameFieldValue = ((EditText) findViewById(R.id.create_account_username)).getText()
 						.toString();
-				String username = StringUtils.parseName(usernameFieldValue);
 				String passwordFieldValue = ((EditText) findViewById(R.id.create_account_password)).getText()
 						.toString();
-				if (!checkEmail()) createErrorDialog(getString(R.string.create_account_err_username));
-				else if (!checkPasswords()) createErrorDialog(getString(R.string.create_account_err_passwords));
+				if (!checkEmail())
+					createErrorDialog(getString(R.string.create_account_err_username));
+				else if (!checkPasswords())
+					createErrorDialog(getString(R.string.create_account_err_passwords));
 				else {
+					if (usernameFieldValue.indexOf("@") < 0) // this will trick
+						// empty
+						// StringUtils.parseName() anomaly problem
+						usernameFieldValue += "@";
+					String username = StringUtils.parseName(usernameFieldValue);
 					if (createAccount(username, passwordFieldValue)) {
 						SharedPreferences.Editor settingsEditor = mSettings.edit();
-						settingsEditor.putString(BeemApplication.ACCOUNT_USERNAME_KEY, usernameFieldValue);
+						settingsEditor.putString(BeemApplication.ACCOUNT_USERNAME_KEY, username);
 						settingsEditor.putString(BeemApplication.ACCOUNT_PASSWORD_KEY, passwordFieldValue);
 						settingsEditor.putBoolean("settings_key_gmail", false);
 						settingsEditor.commit();

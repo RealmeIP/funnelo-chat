@@ -49,7 +49,7 @@
 	<string name="ChangeStatusType">My status</string>
 	<string name="ChangeStatusMessage">My personal message</string>
 	<string name="OpenContactList">Open contact list</string>
-	
+
 	<string name="MenuAddContact">Add new contact</string>
 	<string name="MenuAccountAbout">Funnelo Project</string>
 	<string name="MenuAccountCreate">Create account</string>
@@ -93,7 +93,7 @@
 	<string name="contact_list_preferences">Buddy list</string>
 	<string name="contact_list_preferences_sum">A set of display options for your buddy list
 	</string>
-	<string name="CLP_hide_groups">Hide groups</string>	
+	<string name="CLP_hide_groups">Hide groups</string>
 	<string name="CLP_hide_groups_sum">Check this option to hide groups</string>
 	<string name="CLP_hidden_contact">Hide buddies</string>
 	<string name="CLP_hidden_contact_sum">Check this option to hide unconnected buddies
@@ -106,8 +106,10 @@
 	<string name="settings_advanced_service_behaviour">Service behaviour</string>
 	<string name="settings_advanced_sum">A set of options for advanced users</string>
 	<string name="settings_xmpp_server">Address</string>
-	<string name="comments_xmpp_server">chat.funnelo.com</string>
-	<string name="settings_xmpp_port">Port</string>
+	<string name="comments_xmpp_server">funnelo.co.cc</string>
+	<string name="settings_xmpp_service">Address</string>
+    <string name="comments_xmpp_service">chat.funnelo.com</string>
+   	<string name="settings_xmpp_port">Port</string>
 	<string name="settings_xmpp_use_tls">Require SSL/TLS</string>
 	<string name="settings_reco_delay">Reconnection delay</string>
 	<string name="comments_xmpp_port">Default: 5222</string>
@@ -221,7 +223,7 @@
 	<string name="proxy_user_settings">Proxy settings</string>
 	<string name="history_preferences">History</string>
 	<string name="chat_layout_option">Chat layout</string>
-	
+
 
 	<!-- EditSettings Activity Tabs -->
 	<string name="settings_tab_tag_account">edit_settings_tab_account</string>
@@ -296,7 +298,7 @@
 	<string name="chat_otr_verify_key" formatted="false">
 	Authenticating a buddy helps ensure that the person you are talking to is who they claim to be.\n\n
 	To verify the fingerprint, contact your buddy via some <i>other</i> authenticated channel, such as the telephone or GPG-signed email.  Each of you should tell your fingerprint to the other.\n\n
-	If everything matches up, you should indicate in the above dialog that you <b>have</b> verified the fingerprint.\n\n	
+	If everything matches up, you should indicate in the above dialog that you <b>have</b> verified the fingerprint.\n\n
 	Local fingerprint %s\n\nRemote fingerprint %s\n\nVerify fingerprint ?</string>
 
 	<string name="contact_status_msg_available">Available</string>
@@ -333,9 +335,9 @@
 	<string name="mtm_notification">Certificate Verification</string>
 
 	<!-- Error messages -->
-	
+
 	<string name="error_login_authentication">Error during authentication, bad login or password.</string>
-	
+
 	<string name="interna_server_error">Remote server error</string>
 	<string name="bad_request">bad-request</string>
 	<string name="forbidden">forbidden</string>

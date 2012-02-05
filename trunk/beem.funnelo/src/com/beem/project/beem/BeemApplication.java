@@ -41,14 +41,13 @@ import android.preference.PreferenceManager;
 /**
  * This class contains informations that needs to be global in the application.
  * Theses informations must be necessary for the activities and the service.
- * 
+ *
  * @author Da Risk <darisk972@gmail.com>
  */
 public class BeemApplication extends Application {
 
 	/*
-	 * Constants for PREFERENCE_KEY
-	 * The format of the Preference key is :
+	 * Constants for PREFERENCE_KEY The format of the Preference key is :
 	 * $name_KEY = "$name"
 	 */
 	/** Preference key for account username. */
@@ -60,6 +59,9 @@ public class BeemApplication extends Application {
 	/** Preference key for status message. */
 	public static final String STATUS_TEXT_KEY = "status_text";
 	/** Preference key for connection resource . */
+	public static final String CONNECTION_PORT_KEY = "settings_key_xmpp_port";
+	public static final String CONNECTION_SERVER_KEY = "settings_key_xmpp_server";
+	public static final String CONNECTION_SERVICE_KEY = "settings_key_xmpp_service";
 	public static final String CONNECTION_RESOURCE_KEY = "connection_resource";
 	/** Preference key for connection priority. */
 	public static final String CONNECTION_PRIORITY_KEY = "connection_priority";
@@ -107,7 +109,8 @@ public class BeemApplication extends Application {
 	/**
 	 * Constructor.
 	 */
-	public BeemApplication() {}
+	public BeemApplication() {
+	}
 
 	@Override
 	public void onCreate() {
@@ -127,7 +130,7 @@ public class BeemApplication extends Application {
 
 	/**
 	 * Tell if Beem is connected to a XMPP server.
-	 * 
+	 *
 	 * @return false if not connected.
 	 */
 	public boolean isConnected() {
@@ -136,7 +139,7 @@ public class BeemApplication extends Application {
 
 	/**
 	 * Set the status of the connection to a XMPP server of BEEM.
-	 * 
+	 *
 	 * @param isConnected
 	 *            set for the state of the connection.
 	 */
@@ -146,7 +149,7 @@ public class BeemApplication extends Application {
 
 	/**
 	 * Tell if a XMPP account is configured.
-	 * 
+	 *
 	 * @return false if there is no account configured.
 	 */
 	public boolean isAccountConfigured() {
@@ -155,7 +158,7 @@ public class BeemApplication extends Application {
 
 	/**
 	 * Enable Pep in the application context.
-	 * 
+	 *
 	 * @param enabled
 	 *            true to enable pep
 	 */
@@ -165,7 +168,7 @@ public class BeemApplication extends Application {
 
 	/**
 	 * Check if Pep is enabled.
-	 * 
+	 *
 	 * @return true if enabled
 	 */
 	public boolean isPepEnabled() {
@@ -173,14 +176,16 @@ public class BeemApplication extends Application {
 	}
 
 	/**
-	 * A listener for all the change in the preference file. It is used to maintain the global state of the application.
+	 * A listener for all the change in the preference file. It is used to
+	 * maintain the global state of the application.
 	 */
 	private class PreferenceListener implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 		/**
 		 * Constructor.
 		 */
-		public PreferenceListener() {}
+		public PreferenceListener() {
+		}
 
 		@Override
 		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {

@@ -59,9 +59,6 @@ public class BeemApplication extends Application {
 	/** Preference key for status message. */
 	public static final String STATUS_TEXT_KEY = "status_text";
 	/** Preference key for connection resource . */
-	public static final String CONNECTION_PORT_KEY = "settings_key_xmpp_port";
-	public static final String CONNECTION_SERVER_KEY = "settings_key_xmpp_server";
-	public static final String CONNECTION_SERVICE_KEY = "settings_key_xmpp_service";
 	public static final String CONNECTION_RESOURCE_KEY = "connection_resource";
 	/** Preference key for connection priority. */
 	public static final String CONNECTION_PRIORITY_KEY = "connection_priority";

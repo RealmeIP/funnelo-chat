@@ -67,7 +67,6 @@ public class CreateAccount extends Activity {
 
 	private static final boolean DEFAULT_BOOLEAN_VALUE = false;
 	private static final String DEFAULT_STRING_VALUE = "";
-	private static final int DEFAULT_XMPP_PORT = 5222;
 
 	private static final int NOTIFICATION_DURATION = Toast.LENGTH_SHORT;
 
@@ -111,8 +110,7 @@ public class CreateAccount extends Activity {
 		} else {
 			connectionConfiguration = new ConnectionConfiguration(server, port);
 		}
-		connectionConfiguration.setServiceName(mSettings.getString(BeemApplication.CONNECTION_SERVICE_KEY,
-				BeemService.DEFAULT_XMPP_SVC));
+		connectionConfiguration.setServiceName(BeemService.DEFAULT_XMPP_SERVICE);
 		if (getRegisteredXMPPTLSUse())
 			connectionConfiguration.setSecurityMode(ConnectionConfiguration.SecurityMode.required);
 
@@ -244,10 +242,7 @@ public class CreateAccount extends Activity {
 	 * @return Registered xmpp port
 	 */
 	private int getXMPPPort() {
-		int port = DEFAULT_XMPP_PORT;
-		if (mSettings.getBoolean("settings_key_specific_server", false))
-			port = Integer.parseInt(mSettings.getString("settings_key_xmpp_port", "5222"));
-		return port;
+		return BeemService.DEFAULT_XMPP_PORT;
 	}
 
 	/**
@@ -256,7 +251,7 @@ public class CreateAccount extends Activity {
 	 * @return Registered xmpp server
 	 */
 	private String getXMPPServer() {
-		return mSettings.getString("settings_key_xmpp_server", BeemService.DEFAULT_XMPP_SRV);
+		return BeemService.DEFAULT_XMPP_SERVER;
 	}
 
 	/**
@@ -295,7 +290,7 @@ public class CreateAccount extends Activity {
 		String service = StringUtils.parseServer(email);
 		if (TextUtils.isEmpty(service))
 			return true;
-		if (service.equals(BeemService.DEFAULT_XMPP_SVC))
+		if (service.equals(BeemService.DEFAULT_XMPP_SERVICE))
 			return true;
 		return false;
 		// return

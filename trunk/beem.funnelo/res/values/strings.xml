@@ -99,7 +99,7 @@
 	<string name="CLP_hidden_contact_sum">Check this option to hide unconnected buddies
 	</string>
 	<string name="settings_account_username">Funnelo ID</string>
-	<string name="login_username_info_default">user@funnelo.com</string>
+	<string name="login_username_info_default">user@chat.funnelo.com</string>
 	<string name="settings_account_password">Password</string>
 	<string name="settings_account_server">Server</string>
 	<string name="settings_account_port">Port</string>

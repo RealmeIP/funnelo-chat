@@ -373,7 +373,7 @@ public class XmppConnectionAdapter extends IXmppConnection.Stub {
 		mStatusNotification.defaults = Notification.DEFAULT_LIGHTS;
 		mStatusNotification.flags = Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
 
-		mStatusNotification.setLatestEventInfo(mService, "Beem Status", text, PendingIntent.getActivity(mService, 0,
+		mStatusNotification.setLatestEventInfo(mService, "Funnelo Status", text, PendingIntent.getActivity(mService, 0,
 				new Intent(mService, ChangeStatus.class), 0));
 		// bypass the preferences for notification
 		mService.getNotificationManager().notify(BeemService.NOTIFICATION_STATUS_ID, mStatusNotification);

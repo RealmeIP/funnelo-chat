@@ -239,45 +239,6 @@
             </PreferenceCategory>
 
             <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="settings_key_specific_server"
-                android:summary="@string/SettingsAdvancedSpecOpt"
-                android:title="@string/SettingsAdvancedOptions"
-                android:visibility="invisible" />
-
-            <EditTextPreference
-                android:dependency="settings_key_specific_server"
-                android:hint="@string/comments_xmpp_server"
-                android:key="settings_key_xmpp_server"
-                android:name="address"
-                android:singleLine="true"
-                android:summary="@string/SettingsAdvancedAddOpt"
-                android:title="@string/settings_xmpp_server"
-                android:visibility="invisible" />
-
-            <EditTextPreference
-                android:dependency="settings_key_specific_server"
-                android:hint="@string/comments_xmpp_service"
-                android:key="settings_key_xmpp_service"
-                android:name="service"
-                android:singleLine="true"
-                android:summary="@string/SettingsAdvancedAddOpt"
-                android:title="@string/settings_xmpp_service"
-                android:visibility="invisible" />
-
-            <EditTextPreference
-                android:defaultValue="5222"
-                android:dependency="settings_key_specific_server"
-                android:hint="@string/comments_xmpp_port"
-                android:key="settings_key_xmpp_port"
-                android:name="port"
-                android:numeric="signed"
-                android:singleLine="true"
-                android:summary="@string/SettingsAdvancedPortOpt"
-                android:title="@string/settings_xmpp_port"
-                android:visibility="invisible" />
-
-            <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="full_jid_login"
                 android:summary="@string/settings_full_jid_login_sum"

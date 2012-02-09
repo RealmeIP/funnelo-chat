@@ -43,14 +43,21 @@
  */
 package com.beem.project.beem.ui.dialogs.builders;
 
+import java.util.regex.Pattern;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.beem.project.beem.BeemApplication;
+import com.beem.project.beem.BeemService;
 import com.beem.project.beem.R;
 import com.beem.project.beem.service.Contact;
 import com.beem.project.beem.ui.Chat;
@@ -66,6 +73,8 @@ public class JoinMUC extends AlertDialog.Builder {
 	private EditText mEditTextRoom;
 	private EditText mEditTextPseudo;
 
+	private SharedPreferences mSettings;
+
 	/**
 	 * Constructor.
 	 *
@@ -80,11 +89,15 @@ public class JoinMUC extends AlertDialog.Builder {
 		super(context);
 		this.context = context;
 		LayoutInflater factory = LayoutInflater.from(context);
-		final View textEntryView = factory.inflate(R.layout.joinmucdialog, null);
+		final View textEntryView = factory
+				.inflate(R.layout.joinmucdialog, null);
 		setTitle("Join MUC");
 		setView(textEntryView);
-		mEditTextRoom = (EditText) textEntryView.findViewById(R.id.CDRoomDialogName);
-		mEditTextPseudo = (EditText) textEntryView.findViewById(R.id.CDNickDialogName);
+		mEditTextRoom = (EditText) textEntryView
+				.findViewById(R.id.CDRoomDialogName);
+		mEditTextPseudo = (EditText) textEntryView
+				.findViewById(R.id.CDNickDialogName);
+		mSettings = PreferenceManager.getDefaultSharedPreferences(context);
 		setPositiveButton(R.string.OkButton, new DialogClickListener());
 		setNegativeButton(R.string.CancelButton, new DialogClickListener());
 	}
@@ -104,7 +117,20 @@ public class JoinMUC extends AlertDialog.Builder {
 		public void onClick(final DialogInterface dialog, final int which) {
 			if (which == DialogInterface.BUTTON_POSITIVE) {
 				String room = mEditTextRoom.getText().toString();
+				boolean isEmail = Pattern.matches("[a-zA-Z0-9._%+-]+", room);
+				if (!isEmail) {
+					Toast.makeText(context, "Invalid room name.",
+							Toast.LENGTH_SHORT).show();
+					return;
+				}
+				room += "@conference." + BeemService.DEFAULT_XMPP_SERVICE;
 				String pseudo = mEditTextPseudo.getText().toString();
+				String nick = mSettings.getString(
+						BeemApplication.ACCOUNT_USERNAME_KEY, "").trim();
+				if (pseudo == null)
+					pseudo = nick;
+				else if (pseudo.length() == 0)
+					pseudo = nick;
 				Contact c = new Contact(room, true);
 				Intent i = new Intent(context, Chat.class);
 				i.setData(c.toUri(pseudo));

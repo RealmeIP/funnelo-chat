@@ -96,12 +96,10 @@ public class BeemService extends Service {
 	/** The id to use for status notification. */
 	public static final int NOTIFICATION_STATUS_ID = 100;
 
-	public static final String DEFAULT_XMPP_SRV = "funnelo.co.cc"; // By Adit
-	public static final String DEFAULT_XMPP_SVC = "chat.funnelo.com"; // By Adit
-																		// &
-																		// Lukluk
+	public static final String DEFAULT_XMPP_SERVER = "funnelo.co.cc"; // By Adit
+	public static final String DEFAULT_XMPP_SERVICE = "chat.funnelo.com"; // By Adit
+	public static final int DEFAULT_XMPP_PORT = 5222;
 
-	private static final int DEFAULT_XMPP_PORT = 5222;
 	private static final String TAG = "BeemService";
 
 	// private static final String COMMAND_NAMESPACE =
@@ -151,12 +149,8 @@ public class BeemService extends Service {
 			mProxyInfo = ProxyInfo.forNoProxy();
 		}
 
-		if (mSettings.getBoolean("settings_key_specific_server", false))
-			mConnectionConfiguration = new ConnectionConfiguration(mHost, mPort, mService, mProxyInfo);
-		else
-			mConnectionConfiguration = new ConnectionConfiguration(mService, mProxyInfo);
-		mConnectionConfiguration.setServiceName(mSettings.getString(BeemApplication.CONNECTION_SERVICE_KEY,
-				DEFAULT_XMPP_SVC));
+		mConnectionConfiguration = new ConnectionConfiguration(mHost, mPort, mService, mProxyInfo);
+		mConnectionConfiguration.setServiceName(DEFAULT_XMPP_SERVICE);
 
 		if (mSettings.getBoolean("settings_key_xmpp_tls_use", false)
 				|| mSettings.getBoolean("settings_key_gmail", false)) {
@@ -204,11 +198,11 @@ public class BeemService extends Service {
 			registerReceiver(mOnOffReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
 			registerReceiver(mOnOffReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
 		}
-		mHost = mSettings.getString(BeemApplication.CONNECTION_SERVER_KEY, DEFAULT_XMPP_SRV);
-		mService = mSettings.getString(BeemApplication.CONNECTION_SERVICE_KEY, DEFAULT_XMPP_SRV);
+		mHost = DEFAULT_XMPP_SERVER;
+		mService = DEFAULT_XMPP_SERVER;
 		mLogin = mSettings.getString(BeemApplication.ACCOUNT_USERNAME_KEY, "").trim();
 		mPassword = mSettings.getString(BeemApplication.ACCOUNT_PASSWORD_KEY, "");
-		mPort = mSettings.getInt(BeemApplication.CONNECTION_PORT_KEY, DEFAULT_XMPP_PORT);
+		mPort = DEFAULT_XMPP_PORT;
 
 		// Toast.makeText(this, "INI JID : "+tmpJid, Toast.LENGTH_LONG).show();
 		// // by Adit

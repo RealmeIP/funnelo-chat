@@ -59,7 +59,7 @@ import com.beem.project.beem.utils.BeemBroadcastReceiver;
 
 /**
  * This activity is used to add a contact.
- * 
+ *
  * @author nikita
  */
 public class AddContact extends Activity {
@@ -153,7 +153,7 @@ public class AddContact extends Activity {
 
 	/**
 	 * Get the text of a widget.
-	 * 
+	 *
 	 * @param id
 	 *            the id of the widget.
 	 * @return the text of the widget.
@@ -181,24 +181,26 @@ public class AddContact extends Activity {
 				Toast.makeText(AddContact.this, getString(R.string.AddCBadForm), Toast.LENGTH_SHORT).show();
 				return;
 			}
-			boolean isEmail = Pattern.matches("[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+.)+[a-zA-Z]{2,4}", login);
+			// boolean isEmail = Pattern.matches("[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+.)+[a-zA-Z]{2,4}", login);
+			boolean isEmail = Pattern.matches("[a-zA-Z0-9._%+-]+", login);
 			if (!isEmail) {
 				Toast.makeText(AddContact.this, getString(R.string.AddCContactAddedLoginError), Toast.LENGTH_SHORT)
 						.show();
 				return;
 			}
+			String _login = login + "@" + BeemService.DEFAULT_XMPP_SERVICE;
 			String alias;
 			alias = getWidgetText(R.id.addc_alias);
 			if (getWidgetText(R.id.addc_group).length() != 0) mGroup.add(getWidgetText(R.id.addc_group));
 			try {
 				if (mXmppFacade != null) {
-					if (mXmppFacade.getRoster().getContact(login) != null) {
-						mGroup.addAll(mXmppFacade.getRoster().getContact(login).getGroups());
+					if (mXmppFacade.getRoster().getContact(_login) != null) {
+						mGroup.addAll(mXmppFacade.getRoster().getContact(_login).getGroups());
 						Toast.makeText(AddContact.this, getString(R.string.AddCContactAlready), Toast.LENGTH_SHORT)
 								.show();
 						return;
 					}
-					if (mXmppFacade.getRoster().addContact(login, alias, mGroup.toArray(new String[mGroup.size()])) == null) {
+					if (mXmppFacade.getRoster().addContact(_login, alias, mGroup.toArray(new String[mGroup.size()])) == null) {
 						Toast.makeText(AddContact.this, getString(R.string.AddCContactAddedError), Toast.LENGTH_SHORT)
 								.show();
 						return;

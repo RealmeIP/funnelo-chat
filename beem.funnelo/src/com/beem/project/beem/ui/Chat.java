@@ -101,7 +101,8 @@ import com.beem.project.beem.utils.BeemBroadcastReceiver;
 import com.beem.project.beem.utils.Status;
 
 /**
- * This class represents an activity which allows the user to chat with his/her contacts.
+ * This class represents an activity which allows the user to chat with his/her
+ * contacts.
  *
  * @author Jean-Manuel Da Silva <dasilvj at beem-project dot com>
  */
@@ -110,7 +111,8 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 	private static final String TAG = "Chat";
 	private static final Intent SERVICE_INTENT = new Intent();
 	static {
-		SERVICE_INTENT.setComponent(new ComponentName("com.beem.project.beem", "com.beem.project.beem.BeemService"));
+		SERVICE_INTENT.setComponent(new ComponentName("com.beem.project.beem",
+				"com.beem.project.beem.BeemService"));
 	}
 	private Handler mHandler = new Handler();
 
@@ -156,9 +158,12 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 	@Override
 	protected void onCreate(Bundle savedBundle) {
 		super.onCreate(savedBundle);
-		this.registerReceiver(mBroadcastReceiver, new IntentFilter(BeemBroadcastReceiver.BEEM_CONNECTION_CLOSED));
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-		mCompact = settings.getBoolean(BeemApplication.USE_COMPACT_CHAT_UI_KEY, false);
+		this.registerReceiver(mBroadcastReceiver, new IntentFilter(
+				BeemBroadcastReceiver.BEEM_CONNECTION_CLOSED));
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		mCompact = settings.getBoolean(BeemApplication.USE_COMPACT_CHAT_UI_KEY,
+				false);
 		// UI
 		if (!mCompact) {
 			setContentView(R.layout.chat);
@@ -166,7 +171,8 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 			mContactStatusMsgTextView = (TextView) findViewById(R.id.chat_contact_status_msg);
 			mContactChatState = (TextView) findViewById(R.id.chat_contact_chat_state);
 			mContactStatusIcon = (ImageView) findViewById(R.id.chat_contact_status_icon);
-			mAvatarStatusDrawable = (LayerDrawable) mContactStatusIcon.getDrawable();
+			mAvatarStatusDrawable = (LayerDrawable) mContactStatusIcon
+					.getDrawable();
 			mContactOtrState = (TextView) findViewById(R.id.chat_contact_otr_state);
 			mAvatarStatusDrawable.setLayerInset(1, 36, 36, 0, 0);
 		} else {
@@ -225,8 +231,10 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 				mChatMUC.setOpen(false);
 				mChatMUC.removeMessageListener(mMessageListener);
 			}
-			if (mRoster != null) mRoster.removeRosterListener(mBeemRosterListener);
-			if (mChatManager != null) mChatManager.removeChatCreationListener(mChatManagerListener);
+			if (mRoster != null)
+				mRoster.removeRosterListener(mBeemRosterListener);
+			if (mChatManager != null)
+				mChatManager.removeChatCreationListener(mChatManagerListener);
 		} catch (RemoteException e) {
 			Log.e(TAG, e.getMessage());
 		}
@@ -283,12 +291,14 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 		switch (item.getItemId()) {
 		case R.id.chat_menu_contacts_list:
 			Intent contactListIntent = new Intent(this, ContactList.class);
-			contactListIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			contactListIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+					| Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			startActivity(contactListIntent);
 			break;
 		case R.id.chat_menu_change_chat:
 			try {
-				final List<Contact> openedChats = mChatManager.getOpenedChatList();
+				final List<Contact> openedChats = mChatManager
+						.getOpenedChatList();
 				Dialog chatList = new ChatList(Chat.this, openedChats).create();
 				chatList.show();
 			} catch (RemoteException e) {
@@ -343,7 +353,8 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 						mChat.setOpen(true);
 					}
 				}
-				Dialog otrDialog = new DisplayOtrFingerprint(this, mChat).create();
+				Dialog otrDialog = new DisplayOtrFingerprint(this, mChat)
+						.create();
 				otrDialog.show();
 			} catch (RemoteException e) {
 				Log.e(TAG, "start otr chats failed " + mContact, e);
@@ -396,7 +407,8 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 		}
 
 		String res = contact.getSelectedRes();
-		if (mContact == null) mContact = contact;
+		if (mContact == null)
+			mContact = contact;
 		if (!"".equals(res)) {
 			mContact.setSelectedRes(res);
 		}
@@ -407,7 +419,8 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 	}
 
 	/**
-	 * Get all messages from the current chat and refresh the activity with them.
+	 * Get all messages from the current chat and refresh the activity with
+	 * them.
 	 *
 	 * @throws RemoteException
 	 *             If a Binder remote-invocation error occurred.
@@ -435,14 +448,16 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 	}
 
 	/**
-	 * Convert a list of Message coming from the service to a list of MessageText that can be displayed in UI.
+	 * Convert a list of Message coming from the service to a list of
+	 * MessageText that can be displayed in UI.
 	 *
 	 * @param chatMessages
 	 *            the list of Message
 	 * @return a list of message that can be displayed.
 	 */
 	private List<MessageText> convertMessagesList(List<Message> chatMessages) {
-		List<MessageText> result = new ArrayList<MessageText>(chatMessages.size());
+		List<MessageText> result = new ArrayList<MessageText>(chatMessages
+				.size());
 		String remoteName = mContact.getName();
 		String localName = getString(R.string.chat_self);
 		MessageText lastMessage = null;
@@ -452,12 +467,14 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 			String fromBareJid = StringUtils.parseBareAddress(m.getFrom());
 			if (m.getType() == Message.MSG_TYPE_ERROR) {
 				lastMessage = null;
-				result.add(new MessageText(fromBareJid, name, m.getBody(), true, false, m.getTimestamp()));
+				result.add(new MessageText(fromBareJid, name, m.getBody(),
+						true, false, m.getTimestamp()));
 			} else if (m.getType() == Message.MSG_TYPE_INFO) {
 				lastMessage = new MessageText("", "", m.getBody(), false);
 				result.add(lastMessage);
 
-			} else if (m.getType() == Message.MSG_TYPE_CHAT || m.getType() == Message.MSG_TYPE_GROUP_CHAT) {
+			} else if (m.getType() == Message.MSG_TYPE_CHAT
+					|| m.getType() == Message.MSG_TYPE_GROUP_CHAT) {
 				if (m.getType() == Message.MSG_TYPE_GROUP_CHAT) {
 					name = StringUtils.parseResource(m.getFrom());
 				}
@@ -467,11 +484,14 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 				}
 
 				if (m.getBody() != null) {
-					if (lastMessage != null && lastMessage.getBareJid().equals(fromBareJid)
+					if (lastMessage != null
+							&& lastMessage.getBareJid().equals(fromBareJid)
 							&& lastMessage.getName().equals(name)) {
-						lastMessage.setMessage(lastMessage.getMessage().concat("\n" + m.getBody()));
+						lastMessage.setMessage(lastMessage.getMessage().concat(
+								"\n" + m.getBody()));
 					} else {
-						lastMessage = new MessageText(fromBareJid, name, m.getBody(), false, false, m.getTimestamp());
+						lastMessage = new MessageText(fromBareJid, name, m
+								.getBody(), false, false, m.getTimestamp());
 						result.add(lastMessage);
 					}
 				}
@@ -488,7 +508,8 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 		/**
 		 * Constructor.
 		 */
-		public BeemServiceConnection() {}
+		public BeemServiceConnection() {
+		}
 
 		/**
 		 * {@inheritDoc}.
@@ -498,7 +519,8 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 			mXmppFacade = IXmppFacade.Stub.asInterface(service);
 			try {
 				mRoster = mXmppFacade.getRoster();
-				if (mRoster != null) mRoster.addRosterListener(mBeemRosterListener);
+				if (mRoster != null)
+					mRoster.addRosterListener(mBeemRosterListener);
 				mChatManager = mXmppFacade.getChatManager();
 				if (mChatManager != null) {
 					mChatManager.addChatCreationListener(mChatManagerListener);
@@ -507,8 +529,10 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 				if (mContact != null && mContact.isMUC()) {
 					IChatMUC muc = mChatManager.getMUCChat(mContact);
 					if (muc == null) {
-						Log.d(TAG, "Service connected : " + mContact.getJIDWithRes());
-						IChatMUC mChatMUC = mChatManager.createMUCChat(mContact, mMessageListener);
+						Log.d(TAG, "Service connected : "
+								+ mContact.getJIDWithRes());
+						IChatMUC mChatMUC = mChatManager.createMUCChat(
+								mContact, mMessageListener);
 						mChatMUC.addMessageListener(mMessageListener);
 						mChatMUC.setOpen(true);
 					}
@@ -542,32 +566,41 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 		/**
 		 * Constructor.
 		 */
-		public BeemRosterListener() {}
+		public BeemRosterListener() {
+		}
 
 		/**
 		 * {@inheritDoc}.
 		 */
 		@Override
-		public void onEntriesAdded(List<String> addresses) throws RemoteException {}
+		public void onEntriesAdded(List<String> addresses)
+				throws RemoteException {
+		}
 
 		/**
 		 * {@inheritDoc}.
 		 */
 		@Override
-		public void onEntriesDeleted(List<String> addresses) throws RemoteException {}
+		public void onEntriesDeleted(List<String> addresses)
+				throws RemoteException {
+		}
 
 		/**
 		 * {@inheritDoc}.
 		 */
 		@Override
-		public void onEntriesUpdated(List<String> addresses) throws RemoteException {}
+		public void onEntriesUpdated(List<String> addresses)
+				throws RemoteException {
+		}
 
 		/**
 		 * {@inheritDoc}.
 		 */
 		@Override
-		public void onPresenceChanged(final PresenceAdapter presence) throws RemoteException {
-			if (mContact.getJID().equals(StringUtils.parseBareAddress(presence.getFrom()))) {
+		public void onPresenceChanged(final PresenceAdapter presence)
+				throws RemoteException {
+			if (mContact.getJID().equals(
+					StringUtils.parseBareAddress(presence.getFrom()))) {
 				mHandler.post(new Runnable() {
 
 					@Override
@@ -590,14 +623,17 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 		/**
 		 * Constructor.
 		 */
-		public OnMessageListener() {}
+		public OnMessageListener() {
+		}
 
 		/**
 		 * {@inheritDoc}.
 		 */
 		@Override
-		public void processMessage(IChat chat, final Message msg) throws RemoteException {
-			final String fromBareJid = StringUtils.parseBareAddress(msg.getFrom());
+		public void processMessage(IChat chat, final Message msg)
+				throws RemoteException {
+			final String fromBareJid = StringUtils.parseBareAddress(msg
+					.getFrom());
 
 			if (mContact.getJID().equals(fromBareJid)) {
 				mHandler.post(new Runnable() {
@@ -605,12 +641,15 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 					@Override
 					public void run() {
 						if (msg.getType() == Message.MSG_TYPE_ERROR) {
-							mListMessages.add(new MessageText(fromBareJid, mContact.getName(), msg.getBody(), true, false, msg
-									.getTimestamp()));
+							mListMessages.add(new MessageText(fromBareJid,
+									mContact.getName(), msg.getBody(), true,
+									false, msg.getTimestamp()));
 							mMessagesListAdapter.notifyDataSetChanged();
 						} else if (msg.getBody() != null) {
 							MessageText lastMessage = null;
-							if (mListMessages.size() != 0) lastMessage = mListMessages.get(mListMessages.size() - 1);
+							if (mListMessages.size() != 0)
+								lastMessage = mListMessages.get(mListMessages
+										.size() - 1);
 
 							String name;
 							if (mContact.isMUC()) {
@@ -619,13 +658,19 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 								name = mContact.getName();
 							}
 
-							if (lastMessage != null && lastMessage.getBareJid().equals(fromBareJid)
+							if (lastMessage != null
+									&& lastMessage.getBareJid().equals(
+											fromBareJid)
 									&& lastMessage.getName().equals(name)) {
-								lastMessage.setMessage(lastMessage.getMessage().concat("\n" + msg.getBody()));
+								lastMessage.setMessage(lastMessage.getMessage()
+										.concat("\n" + msg.getBody()));
 								lastMessage.setTimestamp(msg.getTimestamp());
-								mListMessages.set(mListMessages.size() - 1, lastMessage);
-							} else if (msg.getBody() != null) mListMessages.add(new MessageText(fromBareJid, name, msg
-									.getBody(), false, false, msg.getTimestamp()));
+								mListMessages.set(mListMessages.size() - 1,
+										lastMessage);
+							} else if (msg.getBody() != null)
+								mListMessages.add(new MessageText(fromBareJid,
+										name, msg.getBody(), false, false, msg
+												.getTimestamp()));
 							mMessagesListAdapter.notifyDataSetChanged();
 						}
 					}
@@ -634,7 +679,8 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 		}
 
 		@Override
-		public void processMUCMessage(IChatMUC chat, final Message msg) throws RemoteException {
+		public void processMUCMessage(IChatMUC chat, final Message msg)
+				throws RemoteException {
 			processMessage(null, msg);
 		}
 
@@ -652,22 +698,26 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 					if ("active".equals(state)) {
 						text = Chat.this.getString(R.string.chat_state_active);
 					} else if ("composing".equals(state)) {
-						text = Chat.this.getString(R.string.chat_state_composing);
+						text = Chat.this
+								.getString(R.string.chat_state_composing);
 					} else if ("gone".equals(state)) {
 						text = Chat.this.getString(R.string.chat_state_gone);
 					} else if ("inactive".equals(state)) {
-						text = Chat.this.getString(R.string.chat_state_inactive);
+						text = Chat.this
+								.getString(R.string.chat_state_inactive);
 					} else if ("paused".equals(state)) {
 						text = Chat.this.getString(R.string.chat_state_active);
 					}
-					if (!mCompact) mContactChatState.setText(text);
+					if (!mCompact)
+						mContactChatState.setText(text);
 				}
 			});
 
 		}
 
 		@Override
-		public void otrStateChanged(final String otrState) throws RemoteException {
+		public void otrStateChanged(final String otrState)
+				throws RemoteException {
 			mHandler.post(new Runnable() {
 
 				@Override
@@ -688,19 +738,25 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 		// Check for a contact name update
 		String name = mContact.getName();
 		String res = mContact.getSelectedRes();
-		if (!"".equals(res)) name += "(" + res + ")";
+		if (!"".equals(res))
+			name += "(" + res + ")";
 		if (!mCompact) {
-			if (!(mContactNameTextView.getText().toString().equals(name))) mContactNameTextView.setText(name);
+			if (!(mContactNameTextView.getText().toString().equals(name)))
+				mContactNameTextView.setText(name);
 			// Check for a contact status message update
-			if (!(mContactStatusMsgTextView.getText().toString().equals(mContact.getMsgState()))) {
+			if (!(mContactStatusMsgTextView.getText().toString()
+					.equals(mContact.getMsgState()))) {
 				mContactStatusMsgTextView.setText(mContact.getMsgState());
 				Linkify.addLinks(mContactStatusMsgTextView, Linkify.WEB_URLS);
 			}
 		} else {
 			Mode m = Status.getPresenceModeFromStatus(mContact.getStatus());
-			if (m == null) setTitle(getString(R.string.chat_name) + " " + name + " ("
-					+ getString(R.string.contact_status_msg_offline) + ")");
-			else setTitle(getString(R.string.chat_name) + " " + name + " (" + m.name() + ")");
+			if (m == null)
+				setTitle(getString(R.string.chat_name) + " " + name + " ("
+						+ getString(R.string.contact_status_msg_offline) + ")");
+			else
+				setTitle(getString(R.string.chat_name) + " " + name + " ("
+						+ m.name() + ")");
 		}
 	}
 
@@ -728,9 +784,11 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 	 * Update the contact status icon.
 	 */
 	private void updateContactStatusIcon() {
-		if (mCompact) return;
+		if (mCompact)
+			return;
 		String id = mContact.getAvatarId();
-		if (id == null) id = "";
+		if (id == null)
+			id = "";
 		Log.d(TAG, "update contact icon  : " + id);
 		if (!id.equals(mCurrentAvatarId)) {
 			Drawable avatar = getAvatarDrawable(mContact.getAvatarId());
@@ -750,20 +808,24 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 	private Drawable getAvatarDrawable(String avatarId) {
 		Drawable avatarDrawable = null;
 		if (avatarId != null) {
-			Uri uri = AvatarProvider.CONTENT_URI.buildUpon().appendPath(avatarId).build();
+			Uri uri = AvatarProvider.CONTENT_URI.buildUpon().appendPath(
+					avatarId).build();
 			InputStream in = null;
 			try {
 				try {
 					in = getContentResolver().openInputStream(uri);
 					avatarDrawable = Drawable.createFromStream(in, avatarId);
 				} finally {
-					if (in != null) in.close();
+					if (in != null)
+						in.close();
 				}
 			} catch (IOException e) {
 				Log.w(TAG, "Error while setting the avatar", e);
 			}
 		}
-		if (avatarDrawable == null) avatarDrawable = getResources().getDrawable(R.drawable.beem_launcher_icon_silver);
+		if (avatarDrawable == null)
+			avatarDrawable = getResources().getDrawable(
+					R.drawable.beem_launcher_icon_silver);
 		return avatarDrawable;
 	}
 
@@ -771,18 +833,23 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 	 * Prepare the status icons map.
 	 */
 	private void prepareIconsStatus() {
-		mStatusIconsMap.put(Status.CONTACT_STATUS_AVAILABLE, BitmapFactory.decodeResource(getResources(),
-				android.R.drawable.presence_online));
-		mStatusIconsMap.put(Status.CONTACT_STATUS_AVAILABLE_FOR_CHAT, BitmapFactory.decodeResource(getResources(),
-				android.R.drawable.presence_online));
-		mStatusIconsMap.put(Status.CONTACT_STATUS_AWAY, BitmapFactory.decodeResource(getResources(),
-				android.R.drawable.presence_away));
-		mStatusIconsMap.put(Status.CONTACT_STATUS_BUSY, BitmapFactory.decodeResource(getResources(),
-				android.R.drawable.presence_busy));
-		mStatusIconsMap.put(Status.CONTACT_STATUS_DISCONNECT, BitmapFactory.decodeResource(getResources(),
-				android.R.drawable.presence_offline));
-		mStatusIconsMap.put(Status.CONTACT_STATUS_UNAVAILABLE, BitmapFactory.decodeResource(getResources(),
-				R.drawable.status_requested));
+		mStatusIconsMap.put(Status.CONTACT_STATUS_AVAILABLE, BitmapFactory
+				.decodeResource(getResources(),
+						android.R.drawable.presence_online));
+		mStatusIconsMap.put(Status.CONTACT_STATUS_AVAILABLE_FOR_CHAT,
+				BitmapFactory.decodeResource(getResources(),
+						android.R.drawable.presence_online));
+		mStatusIconsMap.put(Status.CONTACT_STATUS_AWAY, BitmapFactory
+				.decodeResource(getResources(),
+						android.R.drawable.presence_away));
+		mStatusIconsMap.put(Status.CONTACT_STATUS_BUSY, BitmapFactory
+				.decodeResource(getResources(),
+						android.R.drawable.presence_busy));
+		mStatusIconsMap.put(Status.CONTACT_STATUS_DISCONNECT, BitmapFactory
+				.decodeResource(getResources(),
+						android.R.drawable.presence_offline));
+		mStatusIconsMap.put(Status.CONTACT_STATUS_UNAVAILABLE, BitmapFactory
+				.decodeResource(getResources(), R.drawable.status_requested));
 	}
 
 	/**
@@ -793,7 +860,8 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 		/**
 		 * Constructor.
 		 */
-		public MessagesListAdapter() {}
+		public MessagesListAdapter() {
+		}
 
 		/**
 		 * Returns the number of messages contained in the messages list.
@@ -806,7 +874,8 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 		}
 
 		/**
-		 * Return an item from the messages list that is positioned at the position passed by parameter.
+		 * Return an item from the messages list that is positioned at the
+		 * position passed by parameter.
 		 *
 		 * @param position
 		 *            The position of the requested item.
@@ -818,11 +887,13 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 		}
 
 		/**
-		 * Return the id of an item from the messages list that is positioned at the position passed by parameter.
+		 * Return the id of an item from the messages list that is positioned at
+		 * the position passed by parameter.
 		 *
 		 * @param position
 		 *            The position of the requested item.
-		 * @return The id of an item from the messages list at the requested position.
+		 * @return The id of an item from the messages list at the requested
+		 *         position.
 		 */
 		@Override
 		public long getItemId(int position) {
@@ -848,7 +919,8 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 			} else {
 				sv = convertView;
 			}
-			DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM);
+			DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT,
+					DateFormat.MEDIUM);
 			MessageText msg = mListMessages.get(position);
 			TextView msgName = (TextView) sv.findViewById(R.id.chatmessagename);
 			msgName.setText(msg.getName());
@@ -896,7 +968,8 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 		 * @param message
 		 *            A String containing the message.
 		 */
-		public MessageText(final String bareJid, final String name, final String message) {
+		public MessageText(final String bareJid, final String name,
+				final String message) {
 			mBareJid = bareJid;
 			mName = name;
 			mMessage = message;
@@ -915,7 +988,8 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 		 * @param isError
 		 *            if the message is an error message.
 		 */
-		public MessageText(final String bareJid, final String name, final String message, final boolean isError) {
+		public MessageText(final String bareJid, final String name,
+				final String message, final boolean isError) {
 			mBareJid = bareJid;
 			mName = name;
 			mMessage = message;
@@ -936,7 +1010,8 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 		 * @param date
 		 *            the time of the message.
 		 */
-		public MessageText(final String bareJid, final String name, final String message, final boolean isError,
+		public MessageText(final String bareJid, final String name,
+				final String message, final boolean isError,
 				final boolean isHL, final Date date) {
 			mBareJid = bareJid;
 			mName = name;
@@ -1027,7 +1102,8 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 		/**
 		 * Get the Date of the message.
 		 *
-		 * @return if it is a delayed message get the date the message was sended.
+		 * @return if it is a delayed message get the date the message was
+		 *         sended.
 		 */
 		public Date getTimestamp() {
 			return mTimestamp;
@@ -1038,7 +1114,7 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 		}
 
 		public void setHL(boolean hl) {
-			mHL = hl ;
+			mHL = hl;
 		}
 
 	}
@@ -1064,9 +1140,11 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 		if (!"".equals(inputContent)) {
 			Message msgToSend;
 			if (mContact.isMUC()) {
-				msgToSend = new Message(mContact.getJID(), Message.MSG_TYPE_GROUP_CHAT);
+				msgToSend = new Message(mContact.getJID(),
+						Message.MSG_TYPE_GROUP_CHAT);
 			} else {
-				msgToSend = new Message(mContact.getJIDWithRes(), Message.MSG_TYPE_CHAT);
+				msgToSend = new Message(mContact.getJIDWithRes(),
+						Message.MSG_TYPE_CHAT);
 			}
 
 			msgToSend.setBody(inputContent);
@@ -1078,19 +1156,25 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 				} else {
 					IChat mChat = mChatManager.getChat(mContact);
 					if (mChat == null) {
-						mChat = mChatManager.createChat(mContact, mMessageListener);
+						mChat = mChatManager.createChat(mContact,
+								mMessageListener);
 						mChat.setOpen(true);
 					}
 					mChat.sendMessage(msgToSend);
 					final String self = getString(R.string.chat_self);
 					MessageText lastMessage = null;
-					if (mListMessages.size() != 0) lastMessage = mListMessages.get(mListMessages.size() - 1);
+					if (mListMessages.size() != 0)
+						lastMessage = mListMessages
+								.get(mListMessages.size() - 1);
 
-					if (lastMessage != null && lastMessage.getName().equals(self)) {
-						lastMessage.setMessage(lastMessage.getMessage().concat("\n" + inputContent));
+					if (lastMessage != null
+							&& lastMessage.getName().equals(self)) {
+						lastMessage.setMessage(lastMessage.getMessage().concat(
+								"\n" + inputContent));
 						lastMessage.setTimestamp(new Date());
 					} else {
-						mListMessages.add(new MessageText(self, self, inputContent, false, false, new Date()));
+						mListMessages.add(new MessageText(self, self,
+								inputContent, false, false, new Date()));
 					}
 				}
 			} catch (RemoteException e) {
@@ -1103,18 +1187,21 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 	}
 
 	/**
-	 * This class is in charge of getting the new chat in the activity if someone talk to you.
+	 * This class is in charge of getting the new chat in the activity if
+	 * someone talk to you.
 	 */
 	private class ChatManagerListener extends IChatManagerListener.Stub {
 
 		/**
 		 * Constructor.
 		 */
-		public ChatManagerListener() {}
+		public ChatManagerListener() {
+		}
 
 		@Override
 		public void chatCreated(IChat chat, boolean locally) {
-			if (locally) return;
+			if (locally)
+				return;
 			try {
 				String contactJid = mContact.getJIDWithRes();
 				String chatJid = chat.getParticipant().getJIDWithRes();
@@ -1131,7 +1218,11 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 					mChatManager.deleteChatNotification(mChat);
 				}
 			} catch (RemoteException ex) {
-				Log.e(TAG, "A remote exception occurs during the creation of a chat", ex);
+				Log
+						.e(
+								TAG,
+								"A remote exception occurs during the creation of a chat",
+								ex);
 			}
 		}
 	}

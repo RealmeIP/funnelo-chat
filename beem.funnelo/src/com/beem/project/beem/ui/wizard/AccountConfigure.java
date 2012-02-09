@@ -166,7 +166,7 @@ public class AccountConfigure extends Activity implements OnClickListener {
 		mValidJid = TextUtils.isEmpty(service);
 		if (mValidJid)
 			return;
-		mValidJid = BeemService.DEFAULT_XMPP_SVC.equals(service);
+		mValidJid = BeemService.DEFAULT_XMPP_SERVICE.equals(service);
 	}
 
 	/**

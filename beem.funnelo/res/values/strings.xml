@@ -27,9 +27,10 @@
 
 	<!--  ContactDialog class -->
 	<string name="CDChat">Chat</string>
-	<string name="CDJoinMUC">Join MUC</string>
+	<string name="CDJoinMUC">Join Chat Room</string>
 	<string name="CDCall">Call</string>
 	<string name="CDInfos">Manage User</string>
+	<string name="JoinMUC">Join Chat Room</string>
 
 	<!-- AddContact class -->
 	<string name="AddCActTitle">Funnelo - Add a contact</string>
@@ -84,11 +85,11 @@
 	<string name="SettingsAdvancedPortOpt">Edit the server port</string>
 	<string name="SettingsResourceTitle">Resource</string>
 	<string name="SettingsPriorityTitle">Priority</string>
-	<string name="SettingsNicknameTitle">Default nickname for MUC</string>
+	<string name="SettingsNicknameTitle">Chat Room Nickname</string>
 	<string name="SettingsHLSTitle">Highlights</string>
 	<string name="SettingsResourceSummary">Set the XMPP resource of your client </string>
 	<string name="SettingsPrioritySummary">Set the priority of your client</string>
-	<string name="SettingsNicknameSummary">Set the default nickname when joining MUC</string>
+	<string name="SettingsNicknameSummary">Set the default nickname when joining Chat Room</string>
 	<string name="SettingsHLSSummary">Comma-separated list of words (other than your nickname) that will highlight you</string>
 	<string name="contact_list_preferences">Buddy list</string>
 	<string name="contact_list_preferences_sum">A set of display options for your buddy list
@@ -217,7 +218,7 @@
 	<string name="general_preferences">General preferences</string>
 	<string name="user_preferences">User settings (required)</string>
 	<string name="user_preferences_advanced">User settings advanced (optional)</string>
-	<string name="muc_preferences">MUC settings (optional)</string>
+	<string name="muc_preferences">Chat Room settings (optional)</string>
 	<string name="network_preferences">Network options</string>
 	<string name="proxy_proxy_settings">Proxy settings</string>
 	<string name="proxy_user_settings">Proxy settings</string>
@@ -256,7 +257,7 @@
 	<string name="contact_list_menu_add_contact">Add a contact</string>
 	<string name="contact_list_menu_status">Change status</string>
 	<string name="contact_list_menu_settings">Settings</string>
-	<string name="contact_list_menu_disconnect">Disconnect</string>
+	<string name="contact_list_menu_disconnect">Exit</string>
 	<string name="contact_list_all_contact">All contacts</string>
 	<string name="contact_list_no_group">No group</string>
 

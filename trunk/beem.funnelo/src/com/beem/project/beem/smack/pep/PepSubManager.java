@@ -58,7 +58,7 @@ public class PepSubManager extends PubSubManager {
 
 	/**
 	 * Create a PepSubManager.
-	 * 
+	 *
 	 * @param connection
 	 *            the connection
 	 */
@@ -70,7 +70,7 @@ public class PepSubManager extends PubSubManager {
 	/**
 	 * Create a PepSubManager associated to the specified connection where the pubsub
 	 * requests require a specific to address for packets.
-	 * 
+	 *
 	 * @param connection
 	 *            the connection
 	 * @param toAddress
@@ -83,7 +83,7 @@ public class PepSubManager extends PubSubManager {
 
 	/**
 	 * Add a listener to PEP event.
-	 * 
+	 *
 	 * @param listener
 	 *            the listener
 	 */
@@ -93,7 +93,7 @@ public class PepSubManager extends PubSubManager {
 
 	/**
 	 * Remove a listener to PEP event.
-	 * 
+	 *
 	 * @param listener
 	 *            the listener
 	 */
@@ -104,7 +104,7 @@ public class PepSubManager extends PubSubManager {
 	/**
 	 * Get a PepNode.
 	 * This node is obtain without checking its existence as PEP should auto create it.
-	 * 
+	 *
 	 * @param nodeName
 	 *            the node name
 	 * @return the node
@@ -117,7 +117,7 @@ public class PepSubManager extends PubSubManager {
 
 	/**
 	 * Initialize the PepSubManager.
-	 * 
+	 *
 	 * @param con
 	 *            the connection
 	 */
@@ -139,7 +139,7 @@ public class PepSubManager extends PubSubManager {
 
 	/**
 	 * Fire the PEP listeners.
-	 * 
+	 *
 	 * @param from
 	 *            the JID of the user who send the event
 	 * @param node

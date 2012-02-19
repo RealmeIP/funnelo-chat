@@ -45,14 +45,27 @@ import org.jivesoftware.smack.Roster.SubscriptionMode;
 import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smack.proxy.ProxyInfo;
 import org.jivesoftware.smack.proxy.ProxyInfo.ProxyType;
+import org.jivesoftware.smackx.GroupChatInvitation;
 import org.jivesoftware.smackx.packet.ChatStateExtension;
-import org.jivesoftware.smackx.provider.DelayInfoProvider;
+import org.jivesoftware.smackx.packet.LastActivity;
+import org.jivesoftware.smackx.packet.OfflineMessageInfo;
+import org.jivesoftware.smackx.packet.OfflineMessageRequest;
+import org.jivesoftware.smackx.packet.SharedGroupsInfo;
+import org.jivesoftware.smackx.provider.BytestreamsProvider;
+import org.jivesoftware.smackx.provider.DataFormProvider;
+import org.jivesoftware.smackx.provider.DelayInformationProvider;
 import org.jivesoftware.smackx.provider.DiscoverInfoProvider;
 import org.jivesoftware.smackx.provider.DiscoverItemsProvider;
-import org.jivesoftware.smackx.pubsub.provider.EventProvider;
-import org.jivesoftware.smackx.pubsub.provider.ItemProvider;
-import org.jivesoftware.smackx.pubsub.provider.ItemsProvider;
-import org.jivesoftware.smackx.pubsub.provider.PubSubProvider;
+import org.jivesoftware.smackx.provider.MUCAdminProvider;
+import org.jivesoftware.smackx.provider.MUCOwnerProvider;
+import org.jivesoftware.smackx.provider.MUCUserProvider;
+import org.jivesoftware.smackx.provider.MessageEventProvider;
+import org.jivesoftware.smackx.provider.MultipleAddressesProvider;
+import org.jivesoftware.smackx.provider.RosterExchangeProvider;
+import org.jivesoftware.smackx.provider.StreamInitiationProvider;
+import org.jivesoftware.smackx.provider.VCardProvider;
+import org.jivesoftware.smackx.provider.XHTMLExtensionProvider;
+import org.jivesoftware.smackx.search.UserSearch;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -76,7 +89,6 @@ import com.beem.project.beem.service.XmppFacade;
 import com.beem.project.beem.service.aidl.IXmppFacade;
 import com.beem.project.beem.smack.avatar.AvatarMetadataProvider;
 import com.beem.project.beem.smack.avatar.AvatarProvider;
-import com.beem.project.beem.smack.caps.CapsProvider;
 import com.beem.project.beem.smack.ping.PingExtension;
 import com.beem.project.beem.utils.BeemBroadcastReceiver;
 import com.beem.project.beem.utils.BeemConnectivity;
@@ -97,7 +109,8 @@ public class BeemService extends Service {
 	public static final int NOTIFICATION_STATUS_ID = 100;
 
 	public static final String DEFAULT_XMPP_SERVER = "funnelo.co.cc"; // By Adit
-	public static final String DEFAULT_XMPP_SERVICE = "chat.funnelo.com"; // By Adit
+	public static final String DEFAULT_XMPP_SERVICE = "chat.funnelo.com"; // By
+	// Adit
 	public static final int DEFAULT_XMPP_PORT = 5222;
 
 	private static final String TAG = "BeemService";
@@ -138,18 +151,24 @@ public class BeemService extends Service {
 		// SmackConfiguration.setPacketReplyTimeout(30000);
 		mUseProxy = mSettings.getBoolean(BeemApplication.PROXY_USE_KEY, false);
 		if (mUseProxy) {
-			String stype = mSettings.getString(BeemApplication.PROXY_TYPE_KEY, "HTTP");
-			String phost = mSettings.getString(BeemApplication.PROXY_SERVER_KEY, "");
-			String puser = mSettings.getString(BeemApplication.PROXY_USERNAME_KEY, "");
-			String ppass = mSettings.getString(BeemApplication.PROXY_PASSWORD_KEY, "");
-			int pport = Integer.parseInt(mSettings.getString(BeemApplication.PROXY_PORT_KEY, "1080"));
+			String stype = mSettings.getString(BeemApplication.PROXY_TYPE_KEY,
+					"HTTP");
+			String phost = mSettings.getString(
+					BeemApplication.PROXY_SERVER_KEY, "");
+			String puser = mSettings.getString(
+					BeemApplication.PROXY_USERNAME_KEY, "");
+			String ppass = mSettings.getString(
+					BeemApplication.PROXY_PASSWORD_KEY, "");
+			int pport = Integer.parseInt(mSettings.getString(
+					BeemApplication.PROXY_PORT_KEY, "1080"));
 			ProxyInfo.ProxyType type = ProxyType.valueOf(stype);
 			mProxyInfo = new ProxyInfo(type, phost, pport, puser, ppass);
 		} else {
 			mProxyInfo = ProxyInfo.forNoProxy();
 		}
 
-		mConnectionConfiguration = new ConnectionConfiguration(mHost, mPort, mService, mProxyInfo);
+		mConnectionConfiguration = new ConnectionConfiguration(mHost, mPort,
+				mService, mProxyInfo);
 		mConnectionConfiguration.setServiceName(DEFAULT_XMPP_SERVICE);
 
 		if (mSettings.getBoolean("settings_key_xmpp_tls_use", false)
@@ -162,7 +181,8 @@ public class BeemService extends Service {
 		// maybe not the universal path, but it works on most devices (Samsung
 		// Galaxy, Google Nexus One)
 		mConnectionConfiguration.setTruststoreType("BKS");
-		mConnectionConfiguration.setTruststorePath("/system/etc/security/cacerts.bks");
+		mConnectionConfiguration
+				.setTruststorePath("/system/etc/security/cacerts.bks");
 		installMemorizingTrustManager(mConnectionConfiguration);
 	}
 
@@ -190,37 +210,27 @@ public class BeemService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		registerReceiver(mReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+		registerReceiver(mReceiver, new IntentFilter(
+				ConnectivityManager.CONNECTIVITY_ACTION));
 		mSettings = PreferenceManager.getDefaultSharedPreferences(this);
 		mSettings.registerOnSharedPreferenceChangeListener(mPreferenceListener);
 		if (mSettings.getBoolean(BeemApplication.USE_AUTO_AWAY_KEY, false)) {
 			mOnOffReceiverIsRegistered = true;
-			registerReceiver(mOnOffReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
-			registerReceiver(mOnOffReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
+			registerReceiver(mOnOffReceiver, new IntentFilter(
+					Intent.ACTION_SCREEN_OFF));
+			registerReceiver(mOnOffReceiver, new IntentFilter(
+					Intent.ACTION_SCREEN_ON));
 		}
 		mHost = DEFAULT_XMPP_SERVER;
 		mService = DEFAULT_XMPP_SERVER;
-		mLogin = mSettings.getString(BeemApplication.ACCOUNT_USERNAME_KEY, "").trim();
-		mPassword = mSettings.getString(BeemApplication.ACCOUNT_PASSWORD_KEY, "");
+		mLogin = mSettings.getString(BeemApplication.ACCOUNT_USERNAME_KEY, "")
+				.trim();
+		mPassword = mSettings.getString(BeemApplication.ACCOUNT_PASSWORD_KEY,
+				"");
 		mPort = DEFAULT_XMPP_PORT;
 
-		// Toast.makeText(this, "INI JID : "+tmpJid, Toast.LENGTH_LONG).show();
-		// // by Adit
-
-		/*
-		 * if (mSettings.getBoolean("settings_key_specific_server", false)) {
-		 * mHost = mSettings.getString("settings_key_xmpp_server", "").trim();
-		 * if ("".equals(mHost)) mHost = mService; String tmpPort =
-		 * mSettings.getString("settings_key_xmpp_port", "5222"); if
-		 * (!"".equals(tmpPort)) mPort = Integer.parseInt(tmpPort); }
-		 */
-
-		// Toast.makeText(this, mLogin+"@"+DEFAULT_XMPP_SVC,
-		// Toast.LENGTH_LONG).show(); // by Adit
-		// Toast.makeText(this, "INI : "+mHost+" "+mService
-		// ,Toast.LENGTH_LONG).show();
-
-		if (mSettings.getBoolean(BeemApplication.FULL_JID_LOGIN_KEY, false) || "gmail.com".equals(mService)
+		if (mSettings.getBoolean(BeemApplication.FULL_JID_LOGIN_KEY, false)
+				|| "gmail.com".equals(mService)
 				|| "googlemail.com".equals(mService)) {
 			mLogin += '@' + mService;
 		}
@@ -229,7 +239,8 @@ public class BeemService extends Service {
 		configure(ProviderManager.getInstance());
 
 		mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		mConnection = new XmppConnectionAdapter(mConnectionConfiguration, mLogin, mPassword, this);
+		mConnection = new XmppConnectionAdapter(mConnectionConfiguration,
+				mLogin, mPassword, this);
 
 		Roster.setDefaultSubscriptionMode(SubscriptionMode.manual);
 		mBind = new XmppFacade(mConnection);
@@ -244,10 +255,12 @@ public class BeemService extends Service {
 		super.onDestroy();
 		mNotificationManager.cancelAll();
 		unregisterReceiver(mReceiver);
-		mSettings.unregisterOnSharedPreferenceChangeListener(mPreferenceListener);
+		mSettings
+				.unregisterOnSharedPreferenceChangeListener(mPreferenceListener);
 		if (mOnOffReceiverIsRegistered)
 			unregisterReceiver(mOnOffReceiver);
-		if (mConnection.isAuthentificated() && BeemConnectivity.isConnected(this))
+		if (mConnection.isAuthentificated()
+				&& BeemConnectivity.isConnected(this))
 			mConnection.disconnect();
 		Log.i(TAG, "Stopping the service");
 	}
@@ -275,13 +288,15 @@ public class BeemService extends Service {
 	 *            the notification to show
 	 */
 	public void sendNotification(int id, Notification notif) {
-		if (mSettings.getBoolean(BeemApplication.NOTIFICATION_VIBRATE_KEY, true))
+		if (mSettings
+				.getBoolean(BeemApplication.NOTIFICATION_VIBRATE_KEY, true))
 			notif.defaults |= Notification.DEFAULT_VIBRATE;
 		notif.ledARGB = 0xff0000ff; // Blue color
 		notif.ledOnMS = 1000;
 		notif.ledOffMS = 1000;
 		notif.defaults |= Notification.DEFAULT_LIGHTS;
-		String ringtoneStr = mSettings.getString(BeemApplication.NOTIFICATION_SOUND_KEY,
+		String ringtoneStr = mSettings.getString(
+				BeemApplication.NOTIFICATION_SOUND_KEY,
 				Settings.System.DEFAULT_NOTIFICATION_URI.toString());
 		notif.sound = Uri.parse(ringtoneStr);
 		mNotificationManager.notify(id, notif);
@@ -356,8 +371,9 @@ public class BeemService extends Service {
 	private void installMemorizingTrustManager(ConnectionConfiguration config) {
 		try {
 			SSLContext sc = SSLContext.getInstance("TLS");
-			sc.init(null, MemorizingTrustManager.getInstanceList(this), new java.security.SecureRandom());
-			config.setCustomSSLContext(sc);
+			sc.init(null, MemorizingTrustManager.getInstanceList(this),
+					new java.security.SecureRandom());
+			// config.setCustomSSLContext(sc);
 		} catch (GeneralSecurityException e) {
 			Log.w(TAG, "Unable to use MemorizingTrustManager", e);
 		}
@@ -373,123 +389,131 @@ public class BeemService extends Service {
 	 */
 	private void configure(ProviderManager pm) {
 		Log.d(TAG, "configure");
-		// Service Discovery # Items
-		pm.addIQProvider("query", "http://jabber.org/protocol/disco#items", new DiscoverItemsProvider());
-		// Service Discovery # Info
-		pm.addIQProvider("query", "http://jabber.org/protocol/disco#info", new DiscoverInfoProvider());
 
-		// Privacy
-		// pm.addIQProvider("query", "jabber:iq:privacy", new
-		// PrivacyProvider());
-		// Delayed Delivery only the new version
-		pm.addExtensionProvider("delay", "urn:xmpp:delay", new DelayInfoProvider());
+		// Time
+		try {
+			pm.addIQProvider("query", "jabber:iq:time", Class
+					.forName("org.jivesoftware.smackx.packet.Time"));
+		} catch (ClassNotFoundException e) {
+			Log.w(TAG,
+					"Can't load class for org.jivesoftware.smackx.packet.Time");
+		}
 
-		// Service Discovery # Items
-		pm.addIQProvider("query", "http://jabber.org/protocol/disco#items", new DiscoverItemsProvider());
-		// Service Discovery # Info
-		pm.addIQProvider("query", "http://jabber.org/protocol/disco#info", new DiscoverInfoProvider());
+		// XHTML
+		pm.addExtensionProvider("html", "http://jabber.org/protocol/xhtml-im",
+				new XHTMLExtensionProvider());
+
+		// Roster Exchange
+		pm.addExtensionProvider("x", "jabber:x:roster",
+				new RosterExchangeProvider());
+
+		// Message Events
+		pm.addExtensionProvider("x", "jabber:x:event",
+				new MessageEventProvider());
 
 		// Chat State
-		ChatStateExtension.Provider chatState = new ChatStateExtension.Provider();
-		pm.addExtensionProvider("active", "http://jabber.org/protocol/chatstates", chatState);
-		pm.addExtensionProvider("composing", "http://jabber.org/protocol/chatstates", chatState);
-		pm.addExtensionProvider("paused", "http://jabber.org/protocol/chatstates", chatState);
-		pm.addExtensionProvider("inactive", "http://jabber.org/protocol/chatstates", chatState);
-		pm.addExtensionProvider("gone", "http://jabber.org/protocol/chatstates", chatState);
-		// capabilities
-		pm.addExtensionProvider("c", "http://jabber.org/protocol/caps", new CapsProvider());
-		// Pubsub
-		pm.addIQProvider("pubsub", "http://jabber.org/protocol/pubsub", new PubSubProvider());
-		pm.addExtensionProvider("items", "http://jabber.org/protocol/pubsub", new ItemsProvider());
-		pm.addExtensionProvider("items", "http://jabber.org/protocol/pubsub", new ItemsProvider());
-		pm.addExtensionProvider("item", "http://jabber.org/protocol/pubsub", new ItemProvider());
+		pm.addExtensionProvider("active",
+				"http://jabber.org/protocol/chatstates",
+				new ChatStateExtension.Provider());
+		pm.addExtensionProvider("composing",
+				"http://jabber.org/protocol/chatstates",
+				new ChatStateExtension.Provider());
+		pm.addExtensionProvider("paused",
+				"http://jabber.org/protocol/chatstates",
+				new ChatStateExtension.Provider());
+		pm.addExtensionProvider("inactive",
+				"http://jabber.org/protocol/chatstates",
+				new ChatStateExtension.Provider());
+		pm.addExtensionProvider("gone",
+				"http://jabber.org/protocol/chatstates",
+				new ChatStateExtension.Provider());
 
-		pm.addExtensionProvider("items", "http://jabber.org/protocol/pubsub#event", new ItemsProvider());
-		pm.addExtensionProvider("item", "http://jabber.org/protocol/pubsub#event", new ItemProvider());
-		pm.addExtensionProvider("event", "http://jabber.org/protocol/pubsub#event", new EventProvider());
-		// TODO rajouter les manquants pour du full pubsub
+		// FileTransfer
+		pm.addIQProvider("si", "http://jabber.org/protocol/si",
+				new StreamInitiationProvider());
+		pm.addIQProvider("query", "http://jabber.org/protocol/bytestreams",
+				new BytestreamsProvider());
+
+		// Group Chat Invitations
+		pm.addExtensionProvider("x", "jabber:x:conference",
+				new GroupChatInvitation.Provider());
+
+		// Service Discovery
+		pm.addIQProvider("query", "http://jabber.org/protocol/disco#items",
+				new DiscoverItemsProvider());
+		pm.addIQProvider("query", "http://jabber.org/protocol/disco#info",
+				new DiscoverInfoProvider());
+		// Data Forms
+		pm.addExtensionProvider("x", "jabber:x:data", new DataFormProvider());
+		// MUC User
+		pm.addExtensionProvider("x", "http://jabber.org/protocol/muc#user",
+				new MUCUserProvider());
+		// MUC Admin
+		pm.addIQProvider("query", "http://jabber.org/protocol/muc#admin",
+				new MUCAdminProvider());
+		// MUC Owner
+		pm.addIQProvider("query", "http://jabber.org/protocol/muc#owner",
+				new MUCOwnerProvider());
+		// Delayed Delivery
+		pm.addExtensionProvider("x", "jabber:x:delay",
+				new DelayInformationProvider());
+		// Version
+		try {
+			pm.addIQProvider("query", "jabber:iq:version", Class
+					.forName("org.jivesoftware.smackx.packet.Version"));
+		} catch (ClassNotFoundException e) {
+			Log
+					.w(TAG,
+							"Can't load class for org.jivesoftware.smackx.packet.Version");
+		}
+
+		// VCard
+		pm.addIQProvider("vCard", "vcard-temp", new VCardProvider());
+
+		// Offline Message Requests
+		pm.addIQProvider("offline", "http://jabber.org/protocol/offline",
+				new OfflineMessageRequest.Provider());
+		// Offline Message Indicator
+		pm.addExtensionProvider("offline",
+				"http://jabber.org/protocol/offline",
+				new OfflineMessageInfo.Provider());
+
+		// Last Activity
+		pm
+				.addIQProvider("query", "jabber:iq:last",
+						new LastActivity.Provider());
+
+		// User Search
+		pm
+				.addIQProvider("query", "jabber:iq:search",
+						new UserSearch.Provider());
+
+		// SharedGroupsInfo
+		pm.addIQProvider("sharedgroup",
+				"http://www.jivesoftware.org/protocol/sharedgroup",
+				new SharedGroupsInfo.Provider());
+
+		// JEP-33: Extended Stanza Addressing
+		pm.addExtensionProvider("addresses",
+				"http://jabber.org/protocol/address",
+				new MultipleAddressesProvider());
 
 		// PEP avatar
-		pm.addExtensionProvider("metadata", "urn:xmpp:avatar:metadata", new AvatarMetadataProvider());
-		pm.addExtensionProvider("data", "urn:xmpp:avatar:data", new AvatarProvider());
+		pm.addExtensionProvider("metadata", "urn:xmpp:avatar:metadata",
+				new AvatarMetadataProvider());
+		pm.addExtensionProvider("data", "urn:xmpp:avatar:data",
+				new AvatarProvider());
 
-		// PEPProvider pep = new PEPProvider();
-		// AvatarMetadataProvider avaMeta = new AvatarMetadataProvider();
-		// pep.registerPEPParserExtension("urn:xmpp:avatar:metadata", avaMeta);
-		// pm.addExtensionProvider("event",
-		// "http://jabber.org/protocol/pubsub#event", pep);
-
-		// ping
-		pm.addIQProvider(PingExtension.ELEMENT, PingExtension.NAMESPACE, PingExtension.class);
-
-		/*
-		 * // Private Data Storage pm.addIQProvider("query",
-		 * "jabber:iq:private", new PrivateDataManager.PrivateDataIQProvider());
-		 * // Time try { pm.addIQProvider("query", "jabber:iq:time",
-		 * Class.forName("org.jivesoftware.smackx.packet.Time")); } catch
-		 * (ClassNotFoundException e) { Log.w("TestClient",
-		 * "Can't load class for org.jivesoftware.smackx.packet.Time"); } //
-		 * Roster Exchange pm.addExtensionProvider("x", "jabber:x:roster", new
-		 * RosterExchangeProvider()); // Message Events
-		 * pm.addExtensionProvider("x", "jabber:x:event", new
-		 * MessageEventProvider()); // XHTML pm.addExtensionProvider("html",
-		 * "http://jabber.org/protocol/xhtml-im", new XHTMLExtensionProvider());
-		 * // Group Chat Invitations pm.addExtensionProvider("x",
-		 * "jabber:x:conference", new GroupChatInvitation.Provider()); // Data
-		 * Forms pm.addExtensionProvider("x", "jabber:x:data", new
-		 * DataFormProvider()); // MUC User pm.addExtensionProvider("x",
-		 * "http://jabber.org/protocol/muc#user", new MUCUserProvider()); // MUC
-		 * Admin pm.addIQProvider("query",
-		 * "http://jabber.org/protocol/muc#admin", new MUCAdminProvider()); //
-		 * MUC Owner pm.addIQProvider("query",
-		 * "http://jabber.org/protocol/muc#owner", new MUCOwnerProvider()); //
-		 * Version try { pm.addIQProvider("query", "jabber:iq:version",
-		 * Class.forName("org.jivesoftware.smackx.packet.Version")); } catch
-		 * (ClassNotFoundException e) { // Not sure what's happening here.
-		 * Log.w("TestClient",
-		 * "Can't load class for org.jivesoftware.smackx.packet.Version"); } //
-		 * VCard pm.addIQProvider("vCard", "vcard-temp", new VCardProvider());
-		 * // Offline Message Requests pm.addIQProvider("offline",
-		 * "http://jabber.org/protocol/offline", new
-		 * OfflineMessageRequest.Provider()); // Offline Message Indicator
-		 * pm.addExtensionProvider("offline",
-		 * "http://jabber.org/protocol/offline", new
-		 * OfflineMessageInfo.Provider()); // Last Activity
-		 * pm.addIQProvider("query", "jabber:iq:last", new
-		 * LastActivity.Provider()); // User Search pm.addIQProvider("query",
-		 * "jabber:iq:search", new UserSearch.Provider()); // SharedGroupsInfo
-		 * pm.addIQProvider("sharedgroup",
-		 * "http://www.jivesoftware.org/protocol/sharedgroup", new
-		 * SharedGroupsInfo.Provider()); // JEP-33: Extended Stanza Addressing
-		 * pm.addExtensionProvider("addresses",
-		 * "http://jabber.org/protocol/address", new
-		 * MultipleAddressesProvider()); // FileTransfer pm.addIQProvider("si",
-		 * "http://jabber.org/protocol/si", new StreamInitiationProvider());
-		 * pm.addIQProvider("query", "http://jabber.org/protocol/bytestreams",
-		 * new BytestreamsProvider()); pm.addIQProvider("open",
-		 * "http://jabber.org/protocol/ibb", new IBBProviders.Open());
-		 * pm.addIQProvider("close", "http://jabber.org/protocol/ibb", new
-		 * IBBProviders.Close()); pm.addExtensionProvider("data",
-		 * "http://jabber.org/protocol/ibb", new IBBProviders.Data());
-		 * pm.addIQProvider("command", COMMAND_NAMESPACE, new
-		 * AdHocCommandDataProvider());
-		 * pm.addExtensionProvider("malformed-action", COMMAND_NAMESPACE, new
-		 * AdHocCommandDataProvider.MalformedActionError());
-		 * pm.addExtensionProvider("bad-locale", COMMAND_NAMESPACE, new
-		 * AdHocCommandDataProvider.BadLocaleError());
-		 * pm.addExtensionProvider("bad-payload", COMMAND_NAMESPACE, new
-		 * AdHocCommandDataProvider.BadPayloadError());
-		 * pm.addExtensionProvider("bad-sessionid", COMMAND_NAMESPACE, new
-		 * AdHocCommandDataProvider.BadSessionIDError());
-		 * pm.addExtensionProvider("session-expired", COMMAND_NAMESPACE, new
-		 * AdHocCommandDataProvider.SessionExpiredError());
-		 */
+		// Ping
+		pm.addIQProvider(PingExtension.ELEMENT, PingExtension.NAMESPACE,
+				PingExtension.class);
 	}
 
 	/**
 	 * Listen on preference changes.
 	 */
-	private class BeemServicePreferenceListener implements SharedPreferences.OnSharedPreferenceChangeListener {
+	private class BeemServicePreferenceListener implements
+			SharedPreferences.OnSharedPreferenceChangeListener {
 
 		/**
 		 * ctor.
@@ -498,12 +522,16 @@ public class BeemService extends Service {
 		}
 
 		@Override
-		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		public void onSharedPreferenceChanged(
+				SharedPreferences sharedPreferences, String key) {
 			if (BeemApplication.USE_AUTO_AWAY_KEY.equals(key)) {
-				if (sharedPreferences.getBoolean(BeemApplication.USE_AUTO_AWAY_KEY, false)) {
+				if (sharedPreferences.getBoolean(
+						BeemApplication.USE_AUTO_AWAY_KEY, false)) {
 					mOnOffReceiverIsRegistered = true;
-					registerReceiver(mOnOffReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
-					registerReceiver(mOnOffReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
+					registerReceiver(mOnOffReceiver, new IntentFilter(
+							Intent.ACTION_SCREEN_OFF));
+					registerReceiver(mOnOffReceiver, new IntentFilter(
+							Intent.ACTION_SCREEN_ON));
 				} else {
 					mOnOffReceiverIsRegistered = false;
 					unregisterReceiver(mOnOffReceiver);
@@ -533,8 +561,9 @@ public class BeemService extends Service {
 				mOldMode = mConnection.getPreviousMode();
 				mOldStatus = mConnection.getPreviousStatus();
 				if (mConnection.isAuthentificated())
-					mConnection.changeStatus(Status.CONTACT_STATUS_AWAY, mSettings.getString(
-							BeemApplication.AUTO_AWAY_MSG_KEY, "Away"));
+					mConnection.changeStatus(Status.CONTACT_STATUS_AWAY,
+							mSettings.getString(
+									BeemApplication.AUTO_AWAY_MSG_KEY, "Away"));
 			} else if (intentAction.equals(Intent.ACTION_SCREEN_ON)) {
 				if (mConnection.isAuthentificated())
 					mConnection.changeStatus(mOldMode, mOldStatus);

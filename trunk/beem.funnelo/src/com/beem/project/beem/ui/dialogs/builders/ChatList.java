@@ -35,6 +35,8 @@ package com.beem.project.beem.ui.dialogs.builders;
 
 import java.util.List;
 
+import org.jivesoftware.smack.util.StringUtils;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -67,9 +69,9 @@ public class ChatList extends AlertDialog.Builder {
 			int i = 0;
 			for (Contact c : openedChats) {
 				if (c.isMUC()) {
-					items[i++] = "[C] " + c.getJID();
+					items[i++] = "[C] " + StringUtils.parseName(c.getJID());
 				} else {
-					items[i++] = c.getJIDWithRes();
+					items[i++] = StringUtils.parseName(c.getJIDWithRes());
 				}
 			}
 			setTitle(R.string.chat_dialog_change_chat_title);

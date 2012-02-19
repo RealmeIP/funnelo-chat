@@ -112,7 +112,8 @@ public class Contact implements Parcelable {
 		mRes = new ArrayList<String>();
 		String res = StringUtils.parseResource(jid);
 		mSelectedRes = res;
-		if (!"".equals(res)) mRes.add(res);
+		if (!"".equals(res))
+			mRes.add(res);
 	}
 
 	/**
@@ -124,7 +125,8 @@ public class Contact implements Parcelable {
 	 *             if it is not a xmpp uri
 	 */
 	public Contact(final Uri uri) {
-		if (!"xmpp".equals(uri.getScheme())) throw new IllegalArgumentException();
+		if (!"xmpp".equals(uri.getScheme()))
+			throw new IllegalArgumentException();
 		String enduri = uri.getEncodedSchemeSpecificPart();
 		String fjid = StringUtils.parseBareAddress(enduri);
 		if (fjid.charAt(0) == '$') {
@@ -157,10 +159,12 @@ public class Contact implements Parcelable {
 	 */
 	public static Uri makeXmppUri(String jid, boolean isMUC) {
 		StringBuilder build = new StringBuilder("xmpp:");
-		if (isMUC) build.append("$");
+		if (isMUC)
+			build.append("$");
 		String name = StringUtils.parseName(jid);
 		build.append(name);
-		if (!"".equals(name)) build.append('@');
+		if (!"".equals(name))
+			build.append('@');
 		build.append(StringUtils.parseServer(jid));
 		String resource = StringUtils.parseResource(jid);
 		if (!"".equals(resource)) {
@@ -194,7 +198,8 @@ public class Contact implements Parcelable {
 	 *            the group
 	 */
 	public void addGroup(String group) {
-		if (!mGroups.contains(group)) mGroups.add(group);
+		if (!mGroups.contains(group))
+			mGroups.add(group);
 	}
 
 	/**
@@ -214,7 +219,8 @@ public class Contact implements Parcelable {
 	 *            the resource to add
 	 */
 	public void addRes(String res) {
-		if (!mRes.contains(res)) mRes.add(res);
+		if (!mRes.contains(res))
+			mRes.add(res);
 	}
 
 	/**
@@ -407,7 +413,8 @@ public class Contact implements Parcelable {
 		if (name == null || "".equals(name)) {
 			this.mName = this.mJID;
 			this.mName = StringUtils.parseName(this.mName);
-			if (this.mName == null || "".equals(this.mName)) this.mName = this.mJID;
+			if (this.mName == null || "".equals(this.mName))
+				this.mName = this.mJID;
 		} else {
 			this.mName = name;
 		}
@@ -450,7 +457,8 @@ public class Contact implements Parcelable {
 	 */
 	@Override
 	public String toString() {
-		if (mJID != null) return mJID + "/[" + mRes + "]";
+		if (mJID != null)
+			return mJID + "/[" + mRes + "]";
 		return super.toString();
 	}
 
@@ -472,10 +480,12 @@ public class Contact implements Parcelable {
 	 */
 	public Uri toUri(String resource) {
 		StringBuilder build = new StringBuilder("xmpp:");
-		if (this.isMUC()) build.append("$");
+		if (this.isMUC())
+			build.append("$");
 		String name = StringUtils.parseName(mJID);
 		build.append(name);
-		if (!"".equals(name)) build.append('@');
+		if (!"".equals(name))
+			build.append('@');
 		build.append(StringUtils.parseServer(mJID));
 		if (!"".equals(resource)) {
 			build.append('/');
@@ -492,14 +502,17 @@ public class Contact implements Parcelable {
 	 */
 	public String getJIDWithRes() {
 		StringBuilder build = new StringBuilder(mJID);
-		if (!"".equals(mSelectedRes)) build.append('/').append(mSelectedRes);
+		if (!"".equals(mSelectedRes))
+			build.append('/').append(mSelectedRes);
 		return build.toString();
 	}
 
 	@Override
 	public boolean equals(Object other) {
-		if (!(other instanceof Contact)) return false;
-		if (other == this) return true;
+		if (!(other instanceof Contact))
+			return false;
+		if (other == this)
+			return true;
 		Contact c = (Contact) other;
 		return c.getJID().equals(getJID());
 	}

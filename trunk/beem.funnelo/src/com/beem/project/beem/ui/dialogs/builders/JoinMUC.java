@@ -91,13 +91,14 @@ public class JoinMUC extends AlertDialog.Builder {
 		LayoutInflater factory = LayoutInflater.from(context);
 		final View textEntryView = factory
 				.inflate(R.layout.joinmucdialog, null);
-		setTitle("Join MUC");
 		setView(textEntryView);
 		mEditTextRoom = (EditText) textEntryView
 				.findViewById(R.id.CDRoomDialogName);
 		mEditTextPseudo = (EditText) textEntryView
 				.findViewById(R.id.CDNickDialogName);
 		mSettings = PreferenceManager.getDefaultSharedPreferences(context);
+		String title = mSettings.getString("JoinMUC", "Join Chat Room");
+		setTitle(title);
 		setPositiveButton(R.string.OkButton, new DialogClickListener());
 		setNegativeButton(R.string.CancelButton, new DialogClickListener());
 	}

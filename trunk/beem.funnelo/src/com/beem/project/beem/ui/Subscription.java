@@ -35,6 +35,7 @@ package com.beem.project.beem.ui;
 
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Presence.Type;
+import org.jivesoftware.smack.util.StringUtils;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -59,7 +60,7 @@ import com.beem.project.beem.utils.BeemBroadcastReceiver;
 
 /**
  * This activity is used to accept a subscription request.
- * 
+ *
  * @author nikita
  */
 public class Subscription extends Activity {
@@ -94,7 +95,7 @@ public class Subscription extends Activity {
 		Contact c = new Contact(getIntent().getData());
 		mContact = c.getJID();
 		TextView tv = (TextView) findViewById(R.id.SubscriptionText);
-		String str = String.format(getString(R.string.SubscriptText), mContact);
+		String str = String.format(getString(R.string.SubscriptText), StringUtils.parseName(mContact));
 		tv.setText(str);
 		this.registerReceiver(mReceiver, new IntentFilter(BeemBroadcastReceiver.BEEM_CONNECTION_CLOSED));
 	}
@@ -131,7 +132,7 @@ public class Subscription extends Activity {
 
 	/**
 	 * Send the presence stanza.
-	 * 
+	 *
 	 * @param p
 	 *            presence stanza
 	 */

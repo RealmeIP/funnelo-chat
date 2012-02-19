@@ -55,27 +55,28 @@ import android.util.Log;
 
 import com.beem.project.beem.R;
 import com.beem.project.beem.service.aidl.IBeemRosterListener;
-import com.beem.project.beem.utils.Status;
-import com.beem.project.beem.smack.avatar.AvatarMetadataExtension.Info;
-import com.beem.project.beem.smack.avatar.AvatarManager;
 import com.beem.project.beem.smack.avatar.AvatarListener;
+import com.beem.project.beem.smack.avatar.AvatarManager;
+import com.beem.project.beem.smack.avatar.AvatarMetadataExtension.Info;
+import com.beem.project.beem.utils.Status;
 
 /**
  * This class implement a Roster adapter for BEEM.
  */
-public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.Stub {
+public class RosterAdapter extends
+		com.beem.project.beem.service.aidl.IRoster.Stub {
 
 	private static final String TAG = "RosterAdapter";
 	private final Roster mAdaptee;
 	private final RemoteCallbackList<IBeemRosterListener> mRemoteRosListeners = new RemoteCallbackList<IBeemRosterListener>();
-	private final Map<Integer, String> mDefaultStatusMessages;
+	private Map<Integer, String> mDefaultStatusMessages;
 	private final RosterListenerAdapter mRosterListener = new RosterListenerAdapter();
 	private Map<String, String> mAvatarIdmap = new HashMap<String, String>();
 	private AvatarManager mAvatarManager;
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param roster
 	 *            The roster to adapt.
 	 * @param context
@@ -89,7 +90,7 @@ public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.St
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param roster
 	 *            The roster to adapt.
 	 * @param context
@@ -97,27 +98,32 @@ public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.St
 	 * @param avatarMgr
 	 *            The AvatarManager of the connection
 	 */
-	public RosterAdapter(final Roster roster, final Context context, final AvatarManager avatarMgr) {
+	public RosterAdapter(final Roster roster, final Context context,
+			final AvatarManager avatarMgr) {
 		mAdaptee = roster;
 		roster.addRosterListener(mRosterListener);
 		mDefaultStatusMessages = createDefaultStatusMessagesMap(context);
 		mAvatarManager = avatarMgr;
-		if (mAvatarManager != null) mAvatarManager.addAvatarListener(new AvatarEventListener());
+		if (mAvatarManager != null)
+			mAvatarManager.addAvatarListener(new AvatarEventListener());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void addRosterListener(IBeemRosterListener listen) throws RemoteException {
-		if (listen != null) mRemoteRosListeners.register(listen);
+	public void addRosterListener(IBeemRosterListener listen)
+			throws RemoteException {
+		if (listen != null)
+			mRemoteRosListeners.register(listen);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Contact addContact(String user, String name, String[] groups) throws RemoteException {
+	public Contact addContact(String user, String name, String[] groups)
+			throws RemoteException {
 		RosterEntry contact = mAdaptee.getEntry(user);
 		try {
 			mAdaptee.createEntry(user, name, groups);
@@ -147,7 +153,8 @@ public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.St
 	 */
 	@Override
 	public void createGroup(String groupname) throws RemoteException {
-		if (mAdaptee.getGroup(groupname) == null) mAdaptee.createGroup(groupname);
+		if (mAdaptee.getGroup(groupname) == null)
+			mAdaptee.createGroup(groupname);
 	}
 
 	/**
@@ -155,7 +162,8 @@ public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.St
 	 */
 	@Override
 	public Contact getContact(String jid) throws RemoteException {
-		if (mAdaptee.contains(jid)) return getContactFromRosterEntry(mAdaptee.getEntry(jid));
+		if (mAdaptee.contains(jid))
+			return getContactFromRosterEntry(mAdaptee.getEntry(jid));
 		return null;
 	}
 
@@ -190,8 +198,10 @@ public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.St
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void removeRosterListener(IBeemRosterListener listen) throws RemoteException {
-		if (listen != null) mRemoteRosListeners.unregister(listen);
+	public void removeRosterListener(IBeemRosterListener listen)
+			throws RemoteException {
+		if (listen != null)
+			mRemoteRosListeners.unregister(listen);
 	}
 
 	/**
@@ -204,7 +214,9 @@ public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.St
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.beem.project.beem.service.aidl.IRoster#getPresence(java.lang.String)
+	 *
+	 * @see
+	 * com.beem.project.beem.service.aidl.IRoster#getPresence(java.lang.String)
 	 */
 	@Override
 	public PresenceAdapter getPresence(String jid) throws RemoteException {
@@ -213,10 +225,14 @@ public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.St
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.beem.project.beem.service.aidl.IRoster#addContactToGroup(java.lang.String, java.lang.String)
+	 *
+	 * @see
+	 * com.beem.project.beem.service.aidl.IRoster#addContactToGroup(java.lang
+	 * .String, java.lang.String)
 	 */
 	@Override
-	public void addContactToGroup(String groupName, String jid) throws RemoteException {
+	public void addContactToGroup(String groupName, String jid)
+			throws RemoteException {
 		createGroup(groupName);
 		RosterGroup group = mAdaptee.getGroup(groupName);
 		try {
@@ -228,10 +244,14 @@ public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.St
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.beem.project.beem.service.aidl.IRoster#removeContactFromGroup(java.lang.String, java.lang.String)
+	 *
+	 * @see
+	 * com.beem.project.beem.service.aidl.IRoster#removeContactFromGroup(java
+	 * .lang.String, java.lang.String)
 	 */
 	@Override
-	public void removeContactFromGroup(String groupName, String jid) throws RemoteException {
+	public void removeContactFromGroup(String groupName, String jid)
+			throws RemoteException {
 		RosterGroup group = mAdaptee.getGroup(groupName);
 		try {
 			group.removeEntry(mAdaptee.getEntry(jid));
@@ -242,7 +262,7 @@ public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.St
 
 	/**
 	 * Get a contact from a RosterEntry.
-	 * 
+	 *
 	 * @param entry
 	 *            a roster entry containing information for the contact.
 	 * @return a contact for this entry.
@@ -252,8 +272,9 @@ public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.St
 		Contact c = new Contact(user);
 		Presence p = mAdaptee.getPresence(user);
 
-		if (p.getStatus() == null || "".equals(p.getStatus())) p.setStatus(mDefaultStatusMessages.get(Status
-				.getStatusFromPresence(p)));
+		if (p.getStatus() == null || "".equals(p.getStatus()))
+			p.setStatus(mDefaultStatusMessages.get(Status
+					.getStatusFromPresence(p)));
 		c.setStatus(p);
 		try {
 			c.setGroups(entry.getGroups());
@@ -263,7 +284,8 @@ public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.St
 		Iterator<Presence> iPres = mAdaptee.getPresences(user);
 		while (iPres.hasNext()) {
 			p = iPres.next();
-			if (!p.getType().equals(Presence.Type.unavailable)) c.addRes(StringUtils.parseResource(p.getFrom()));
+			if (!p.getType().equals(Presence.Type.unavailable))
+				c.addRes(StringUtils.parseResource(p.getFrom()));
 		}
 		c.setName(entry.getName());
 		c.setAvatarId(mAvatarIdmap.get(user));
@@ -272,7 +294,7 @@ public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.St
 
 	/**
 	 * Create a map which contains default status messages.
-	 * 
+	 *
 	 * @param context
 	 *            The context of the roster adapter.
 	 * @return A Map<Integer, String> which assigns a status to a message.
@@ -281,20 +303,24 @@ public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.St
 		Map<Integer, String> defaultStatusMessages = new HashMap<Integer, String>();
 		defaultStatusMessages.put(Status.CONTACT_STATUS_AVAILABLE, context
 				.getString(R.string.contact_status_msg_available));
-		defaultStatusMessages.put(Status.CONTACT_STATUS_AVAILABLE_FOR_CHAT, context
-				.getString(R.string.contact_status_msg_available_chat));
-		defaultStatusMessages.put(Status.CONTACT_STATUS_AWAY, context.getString(R.string.contact_status_msg_away));
-		defaultStatusMessages.put(Status.CONTACT_STATUS_BUSY, context.getString(R.string.contact_status_msg_dnd));
+		defaultStatusMessages.put(Status.CONTACT_STATUS_AVAILABLE_FOR_CHAT,
+				context.getString(R.string.contact_status_msg_available_chat));
+		defaultStatusMessages.put(Status.CONTACT_STATUS_AWAY, context
+				.getString(R.string.contact_status_msg_away));
+		defaultStatusMessages.put(Status.CONTACT_STATUS_BUSY, context
+				.getString(R.string.contact_status_msg_dnd));
 		defaultStatusMessages.put(Status.CONTACT_STATUS_DISCONNECT, context
 				.getString(R.string.contact_status_msg_offline));
-		defaultStatusMessages.put(Status.CONTACT_STATUS_UNAVAILABLE, context.getString(R.string.contact_status_msg_xa));
+		defaultStatusMessages.put(Status.CONTACT_STATUS_UNAVAILABLE, context
+				.getString(R.string.contact_status_msg_xa));
 
 		return defaultStatusMessages;
 	}
 
 	/**
-	 * Listener for the roster events. It will call the remote listeners registered.
-	 * 
+	 * Listener for the roster events. It will call the remote listeners
+	 * registered.
+	 *
 	 * @author darisk
 	 */
 	private class RosterListenerAdapter implements RosterListener {
@@ -302,19 +328,22 @@ public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.St
 		/**
 		 * Constructor.
 		 */
-		public RosterListenerAdapter() {}
+		public RosterListenerAdapter() {
+		}
 
 		/**
 		 * {@inheritDoc}
 		 */
 		@Override
 		public void entriesAdded(Collection<String> addresses) {
+			Log.v(TAG, ">>> Entries added!");
 			final int n = mRemoteRosListeners.beginBroadcast();
 
 			List<String> tab = new ArrayList<String>();
 			tab.addAll(addresses);
 			for (int i = 0; i < n; i++) {
-				IBeemRosterListener listener = mRemoteRosListeners.getBroadcastItem(i);
+				IBeemRosterListener listener = mRemoteRosListeners
+						.getBroadcastItem(i);
 				try {
 					listener.onEntriesAdded(tab);
 				} catch (RemoteException e) {
@@ -329,12 +358,14 @@ public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.St
 		 */
 		@Override
 		public void entriesDeleted(Collection<String> addresses) {
+			Log.v(TAG, ">>> Entries deleted!");
 			final int n = mRemoteRosListeners.beginBroadcast();
 
 			List<String> tab = new ArrayList<String>();
 			tab.addAll(addresses);
 			for (int i = 0; i < n; i++) {
-				IBeemRosterListener listener = mRemoteRosListeners.getBroadcastItem(i);
+				IBeemRosterListener listener = mRemoteRosListeners
+						.getBroadcastItem(i);
 				try {
 					listener.onEntriesDeleted(tab);
 				} catch (RemoteException e) {
@@ -349,12 +380,14 @@ public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.St
 		 */
 		@Override
 		public void entriesUpdated(Collection<String> addresses) {
+			Log.v(TAG, ">>> Entries updated!");
 			final int n = mRemoteRosListeners.beginBroadcast();
 
 			List<String> tab = new ArrayList<String>();
 			tab.addAll(addresses);
 			for (int i = 0; i < n; i++) {
-				IBeemRosterListener listener = mRemoteRosListeners.getBroadcastItem(i);
+				IBeemRosterListener listener = mRemoteRosListeners
+						.getBroadcastItem(i);
 				try {
 					listener.onEntriesUpdated(tab);
 				} catch (RemoteException e) {
@@ -369,18 +402,23 @@ public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.St
 		 */
 		@Override
 		public void presenceChanged(Presence presence) {
-			final int n = mRemoteRosListeners.beginBroadcast();
 			Log.v(TAG, ">>> Presence changed for " + presence.getFrom());
 
+			final int n = mRemoteRosListeners.beginBroadcast();
+
 			for (int i = 0; i < n; i++) {
-				IBeemRosterListener listener = mRemoteRosListeners.getBroadcastItem(i);
+				IBeemRosterListener listener = mRemoteRosListeners
+						.getBroadcastItem(i);
 				try {
-					if (presence.getStatus() == null || "".equals(presence.getStatus())) {
-						presence.setStatus(mDefaultStatusMessages.get(Status.getStatusFromPresence(presence)));
+					if (presence.getStatus() == null
+							|| "".equals(presence.getStatus())) {
+						presence.setStatus(mDefaultStatusMessages.get(Status
+								.getStatusFromPresence(presence)));
 					}
 					listener.onPresenceChanged(new PresenceAdapter(presence));
 				} catch (RemoteException e) {
-					Log.w(TAG, "Error while updating roster presence entries", e);
+					Log.w(TAG, "Error while updating roster presence entries",
+							e);
 				}
 			}
 			mRemoteRosListeners.finishBroadcast();
@@ -395,12 +433,15 @@ public class RosterAdapter extends com.beem.project.beem.service.aidl.IRoster.St
 		/**
 		 * Constructor.
 		 */
-		public AvatarEventListener() {}
+		public AvatarEventListener() {
+		}
 
 		@Override
-		public void onAvatarChange(String from, String avatarId, List<Info> avatarInfos) {
+		public void onAvatarChange(String from, String avatarId,
+				List<Info> avatarInfos) {
 			String bare = StringUtils.parseBareAddress(from);
-			if (avatarId == null) mAvatarIdmap.remove(bare);
+			if (avatarId == null)
+				mAvatarIdmap.remove(bare);
 			else if (avatarInfos.size() > 0) {
 				mAvatarIdmap.put(bare, avatarId);
 			}

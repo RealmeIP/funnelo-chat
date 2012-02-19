@@ -81,7 +81,7 @@ import java.text.SimpleDateFormat;
 
 /**
  * This Activity is used to change the status.
- * 
+ *
  * @author nikita
  */
 public class ChangeStatus extends Activity {
@@ -264,7 +264,7 @@ public class ChangeStatus extends Activity {
 
 	/**
 	 * Return the status index from status the settings.
-	 * 
+	 *
 	 * @return the status index from status the settings.
 	 */
 	private int getPreferenceStatusIndex() {
@@ -273,7 +273,7 @@ public class ChangeStatus extends Activity {
 
 	/**
 	 * Return the status text from status the settings.
-	 * 
+	 *
 	 * @param id
 	 *            status text id.
 	 * @return the status text from status the settings.
@@ -284,7 +284,7 @@ public class ChangeStatus extends Activity {
 
 	/**
 	 * convert status text to.
-	 * 
+	 *
 	 * @param item
 	 *            selected item text.
 	 * @return item position in the array.
@@ -319,7 +319,7 @@ public class ChangeStatus extends Activity {
 
 	/**
 	 * ClickListener for the avatarButton.
-	 * 
+	 *
 	 * @param button
 	 *            the avatar button
 	 */
@@ -365,7 +365,7 @@ public class ChangeStatus extends Activity {
 
 	/**
 	 * Creates a dialog offering two options: take a photo or pick a photo from the gallery.
-	 * 
+	 *
 	 * @return the dialog
 	 */
 	private Dialog createPickPhotoDialog() {
@@ -402,7 +402,7 @@ public class ChangeStatus extends Activity {
 
 	/**
 	 * Create a file name for the icon photo using current time.
-	 * 
+	 *
 	 * @return the filename
 	 */
 	private String getPhotoFileName() {
@@ -428,7 +428,7 @@ public class ChangeStatus extends Activity {
 
 	/**
 	 * Constructs an intent for capturing a photo and storing it in a temporary file.
-	 * 
+	 *
 	 * @param f
 	 *            the temporary file to use to store the picture
 	 * @return the intent
@@ -441,7 +441,7 @@ public class ChangeStatus extends Activity {
 
 	/**
 	 * Sends a newly acquired photo to Gallery for cropping.
-	 * 
+	 *
 	 * @param f
 	 *            the image file to crop
 	 */
@@ -469,7 +469,7 @@ public class ChangeStatus extends Activity {
 
 	/**
 	 * Constructs an intent for image cropping.
-	 * 
+	 *
 	 * @param photoUri
 	 *            the uri of the photo to crop
 	 * @return the intent
@@ -501,7 +501,7 @@ public class ChangeStatus extends Activity {
 
 	/**
 	 * Constructs an intent for picking a photo from Gallery, cropping it and returning the bitmap.
-	 * 
+	 *
 	 * @return the intent
 	 */
 	public static Intent getPhotoPickIntent() {
@@ -520,7 +520,7 @@ public class ChangeStatus extends Activity {
 
 	/**
 	 * connection to service.
-	 * 
+	 *
 	 * @author nikita
 	 */
 	private class BeemServiceConnection implements ServiceConnection {
@@ -550,7 +550,7 @@ public class ChangeStatus extends Activity {
 
 	/**
 	 * User have clicked on ok.
-	 * 
+	 *
 	 * @author nikita
 	 */
 	private class MyOnClickListener implements OnClickListener {
@@ -581,6 +581,7 @@ public class ChangeStatus extends Activity {
 				}
 				edit.commit();
 				ChangeStatus.this.finish();
+
 			} else if (v == mClear) {
 				mStatusMessageEditText.setText(null);
 			} else if (v == mContact) {

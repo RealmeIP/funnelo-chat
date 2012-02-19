@@ -737,9 +737,11 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 	private void updateContactInformations() {
 		// Check for a contact name update
 		String name = mContact.getName();
+		if (mContact.isMUC())
+			name = StringUtils.parseName(name);
 		String res = mContact.getSelectedRes();
 		if (!"".equals(res))
-			name += "(" + res + ")";
+			name += " (" + res + ")";
 		if (!mCompact) {
 			if (!(mContactNameTextView.getText().toString().equals(name)))
 				mContactNameTextView.setText(name);
@@ -923,7 +925,7 @@ public class Chat extends Activity implements TextView.OnEditorActionListener {
 					DateFormat.MEDIUM);
 			MessageText msg = mListMessages.get(position);
 			TextView msgName = (TextView) sv.findViewById(R.id.chatmessagename);
-			msgName.setText(msg.getName());
+			msgName.setText(StringUtils.parseName(msg.getName()));
 			msgName.setTextColor(msg.isHL() ? Color.RED : Color.WHITE);
 			msgName.setError(null);
 			TextView msgText = (TextView) sv.findViewById(R.id.chatmessagetext);
